@@ -47,40 +47,40 @@
             --font-scale: 1;
         }
         
-        /* Theme presets */
-        .theme-rose {
-            --accent-color: #d2bcbf;
-            --highlight-color: #a67980;
+        /* Theme presets - Using body class for specificity */
+        body.theme-rose {
+            --accent-color: #d2bcbf !important;
+            --highlight-color: #a67980 !important;
         }
         
-        .theme-sage {
-            --accent-color: #c0ccb8;
-            --highlight-color: #60665c;
+        body.theme-sage {
+            --accent-color: #c0ccb8 !important;
+            --highlight-color: #60665c !important;
         }
         
-        .theme-gold {
-            --accent-color: #e0b558;
-            --highlight-color: #ecd299;
+        body.theme-gold {
+            --accent-color: #e0b558 !important;
+            --highlight-color: #ecd299 !important;
         }
         
-        .theme-ocean {
-            --accent-color: #99b3ec;
-            --highlight-color: #151b73;
+        body.theme-ocean {
+            --accent-color: #99b3ec !important;
+            --highlight-color: #151b73 !important;
         }
         
-        .theme-slate {
-            --accent-color: #8386a4;
-            --highlight-color: #191a22;
+        body.theme-slate {
+            --accent-color: #8386a4 !important;
+            --highlight-color: #191a22 !important;
         }
         
-        .theme-teal {
-            --accent-color: #90b2b8;
-            --highlight-color: #2c4144;
+        body.theme-teal {
+            --accent-color: #90b2b8 !important;
+            --highlight-color: #2c4144 !important;
         }
         
-        .theme-mint {
-            --accent-color: #9cbbbf;
-            --highlight-color: #436266;
+        body.theme-mint {
+            --accent-color: #9cbbbf !important;
+            --highlight-color: #436266 !important;
         }
         
         body.low-contrast { --contrast: 0.85; --brightness: 1.1; }
@@ -693,8 +693,8 @@
         /* Theme selector */
         .theme-selector {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-            gap: 10px;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 12px;
             margin-top: 10px;
         }
         
@@ -702,29 +702,39 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 5px;
-            padding: 10px;
-            border: 2px solid var(--border-color);
+            gap: 6px;
+            padding: 8px;
+            border: 2px solid transparent;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.2s;
+            background: var(--card-bg);
+        }
+        
+        .theme-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
         
         .theme-option.active {
             border-color: var(--accent-color);
-            background: rgba(var(--accent-color-rgb), 0.1);
+            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0));
+            box-shadow: 0 2px 10px var(--shadow-color);
         }
         
         .theme-preview {
-            width: 60px;
-            height: 40px;
-            border-radius: 4px;
+            width: 50px;
+            height: 35px;
+            border-radius: 6px;
             display: flex;
             overflow: hidden;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+            border: 1px solid rgba(0,0,0,0.1);
         }
         
         .theme-preview-left {
             flex: 1;
+            border-right: 1px solid rgba(255,255,255,0.3);
         }
         
         .theme-preview-right {
@@ -732,8 +742,15 @@
         }
         
         .theme-name {
-            font-size: calc(11px * var(--font-scale));
-            color: var(--text-secondary);
+            font-size: calc(10px * var(--font-scale));
+            color: var(--text-color);
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .theme-option.active .theme-name {
+            font-weight: 700;
+            color: var(--accent-color);
         }
         
         /* Sticky Note Styles */
@@ -817,7 +834,7 @@
         }
     </style>
 </head>
-<body class="theme-rose">
+<body>
     <div class="app-container">
         <div class="fixed-header-section">
             <div class="header">
@@ -1075,7 +1092,11 @@
         
         // Apply theme
         function applyTheme(themeName) {
-            document.body.className = document.body.className.replace(/theme-\w+/, '');
+            // Remove all theme classes
+            const themeClasses = ['theme-rose', 'theme-sage', 'theme-gold', 'theme-ocean', 'theme-slate', 'theme-teal', 'theme-mint'];
+            themeClasses.forEach(cls => document.body.classList.remove(cls));
+            
+            // Add new theme class
             document.body.classList.add(`theme-${themeName}`);
             
             // Update theme color meta tag
@@ -1088,6 +1109,11 @@
             // Save to settings
             data.settings.theme = themeName;
             saveData();
+            
+            // Force a repaint to ensure CSS variables update
+            document.body.style.display = 'none';
+            document.body.offsetHeight; // Trigger reflow
+            document.body.style.display = '';
         }
         
         // Data management
@@ -1120,19 +1146,39 @@
         }
         
         function applySettings() {
-            document.body.classList.toggle('night-mode', data.settings.nightMode);
-            
+            // Remove all possible classes first
+            document.body.classList.remove('night-mode');
             document.body.classList.remove('low-contrast', 'normal-contrast', 'high-contrast', 'extra-contrast');
+            document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl');
+            document.body.classList.remove('sat-low', 'sat-normal', 'sat-high', 'sat-vibrant');
+            document.body.classList.remove('theme-rose', 'theme-sage', 'theme-gold', 'theme-ocean', 'theme-slate', 'theme-teal', 'theme-mint');
+            
+            // Apply night mode if enabled
+            if (data.settings.nightMode) {
+                document.body.classList.add('night-mode');
+            }
+            
+            // Apply contrast setting
             document.body.classList.add(`${data.settings.contrast}-contrast`);
             
-            document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl');
+            // Apply font size
             document.body.classList.add(`font-${data.settings.fontSize}`);
             
-            document.body.classList.remove('sat-low', 'sat-normal', 'sat-high', 'sat-vibrant');
+            // Apply saturation
             document.body.classList.add(`sat-${data.settings.saturation}`);
             
-            // Apply theme
-            applyTheme(data.settings.theme || 'rose');
+            // Apply theme - ensure a default if not set
+            const themeName = data.settings.theme || 'rose';
+            document.body.classList.add(`theme-${themeName}`);
+            
+            // Update theme meta tags
+            const theme = themes[themeName];
+            if (theme) {
+                const themeMetaTag = document.querySelector('meta[name="theme-color"]');
+                const msMetaTag = document.querySelector('meta[name="msapplication-navbutton-color"]');
+                if (themeMetaTag) themeMetaTag.content = theme.accent;
+                if (msMetaTag) msMetaTag.content = theme.accent;
+            }
         }
         
         // Render functions
@@ -1911,15 +1957,15 @@
             
             showModal('Settings', `
                 <div class="accessibility-group">
-                    <div class="group-title">Theme Color</div>
+                    <div class="group-title">🎨 Theme Color</div>
                     <div class="theme-selector">
                         ${Object.entries(themes).map(([key, theme]) => `
-                            <div class="theme-option ${data.settings.theme === key ? 'active' : ''}" onclick="applyTheme('${key}')">
-                                <div class="theme-preview">
+                            <div class="theme-option ${data.settings.theme === key ? 'active' : ''}" onclick="selectTheme('${key}')" style="cursor: pointer;">
+                                <div class="theme-preview" style="border: 2px solid ${data.settings.theme === key ? theme.accent : '#ddd'}; border-radius: 6px;">
                                     <div class="theme-preview-left" style="background: ${theme.accent}"></div>
                                     <div class="theme-preview-right" style="background: ${theme.highlight}"></div>
                                 </div>
-                                <div class="theme-name">${theme.name}</div>
+                                <div class="theme-name" style="font-weight: ${data.settings.theme === key ? 'bold' : 'normal'};">${theme.name}</div>
                             </div>
                         `).join('')}
                     </div>
@@ -1993,6 +2039,12 @@
                     </div>
                 </div>
             `);
+        }
+        
+        function selectTheme(themeName) {
+            applyTheme(themeName);
+            showSettings(); // Refresh the modal to show the updated selection
+            showToast(`Theme changed to ${themes[themeName].name}`);
         }
         
         function toggleNightMode(enabled) {
