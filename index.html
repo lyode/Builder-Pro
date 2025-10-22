@@ -24,6 +24,7 @@
             --safe-area-inset-left: env(safe-area-inset-left, 0px);
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
             
+            /* Default Theme - Pink/Rose */
             --bg-color: #F4EDEB;
             --accent-color: #d2bcbf;
             --highlight-color: #a67980;
@@ -46,41 +47,41 @@
             --brightness: 1;
             --font-scale: 1;
         }
-        
-        /* Theme presets - Using body class for specificity */
-        body.theme-rose {
-            --accent-color: #d2bcbf !important;
-            --highlight-color: #a67980 !important;
+
+        /* Theme Color Schemes */
+        .theme-rose {
+            --accent-color: #d2bcbf;
+            --highlight-color: #a67980;
         }
-        
-        body.theme-sage {
-            --accent-color: #c0ccb8 !important;
-            --highlight-color: #60665c !important;
+
+        .theme-sage {
+            --accent-color: #c0ccb8;
+            --highlight-color: #60665c;
         }
-        
-        body.theme-gold {
-            --accent-color: #e0b558 !important;
-            --highlight-color: #ecd299 !important;
+
+        .theme-gold {
+            --accent-color: #e0b558;
+            --highlight-color: #ecd299;
         }
-        
-        body.theme-ocean {
-            --accent-color: #99b3ec !important;
-            --highlight-color: #151b73 !important;
+
+        .theme-ocean {
+            --accent-color: #99b3ec;
+            --highlight-color: #151b73;
         }
-        
-        body.theme-slate {
-            --accent-color: #8386a4 !important;
-            --highlight-color: #191a22 !important;
+
+        .theme-lavender {
+            --accent-color: #8386a4;
+            --highlight-color: #191a22;
         }
-        
-        body.theme-teal {
-            --accent-color: #90b2b8 !important;
-            --highlight-color: #2c4144 !important;
+
+        .theme-teal {
+            --accent-color: #90b2b8;
+            --highlight-color: #2c4144;
         }
-        
-        body.theme-mint {
-            --accent-color: #9cbbbf !important;
-            --highlight-color: #436266 !important;
+
+        .theme-seafoam {
+            --accent-color: #9cbbbf;
+            --highlight-color: #436266;
         }
         
         body.low-contrast { --contrast: 0.85; --brightness: 1.1; }
@@ -232,87 +233,98 @@
             height: 8px; 
             background: #10b981; 
             border-radius: 50%; 
+            animation: pulse 2s infinite; 
             display: none; 
         }
         
         .sync-indicator.syncing { 
             display: block; 
-            animation: pulse 1.5s infinite; 
+            background: #f39c12; 
+            animation: spin 1s linear infinite; 
         }
         
         @keyframes pulse { 
-            0%, 100% { transform: scale(1); opacity: 1; } 
-            50% { transform: scale(1.3); opacity: 0.7; } 
+            0%, 100% { opacity: 1; } 
+            50% { opacity: 0.5; } 
+        }
+        
+        @keyframes spin { 
+            to { transform: rotate(360deg); } 
         }
         
         .stats-bar { 
-            padding: 8px 12px; 
-            background: var(--card-bg); 
+            background: white; 
+            padding: 10px 12px; 
             display: flex; 
             justify-content: space-around; 
-            font-size: calc(11px * var(--font-scale)); 
-            box-shadow: 0 2px 5px var(--shadow-color); 
-            position: relative; 
+            box-shadow: 0 1px 3px var(--shadow-color); 
         }
         
         .stat-item { 
-            display: flex; 
-            flex-direction: column; 
-            align-items: center; 
-            gap: 2px; 
-            padding: 0 5px; 
+            text-align: center; 
+            flex: 1; 
+            padding: 2px;
         }
         
         .stat-value { 
-            font-size: calc(18px * var(--font-scale)); 
+            font-size: calc(16px * var(--font-scale)); 
             font-weight: bold; 
-            color: var(--accent-color); 
+            color: var(--text-color); 
         }
         
         .stat-label { 
-            color: var(--text-secondary); 
             font-size: calc(10px * var(--font-scale)); 
-        }
-        
-        .quick-actions { 
-            padding: 12px; 
-            background: var(--card-bg); 
+            color: var(--text-secondary); 
             margin-top: 2px; 
-            box-shadow: 0 2px 5px var(--shadow-color); 
+        }
+        
+        .nav-tabs { 
+            background: var(--card-bg); 
             display: flex; 
-            gap: 8px; 
+            border-bottom: 1px solid var(--border-color); 
+            padding: 0 12px; 
+            gap: 20px; 
             overflow-x: auto; 
-            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
         
-        .quick-action-btn { 
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--highlight-color) 100%); 
-            color: white; 
-            border: none; 
-            padding: 8px 14px; 
-            border-radius: 20px; 
-            font-size: calc(13px * var(--font-scale)); 
-            white-space: nowrap; 
+        .nav-tabs::-webkit-scrollbar { display: none; }
+        
+        .nav-tab { 
+            padding: 12px 4px; 
             cursor: pointer; 
-            transition: all 0.3s; 
-            flex-shrink: 0; 
+            white-space: nowrap; 
+            border-bottom: 2px solid transparent; 
+            color: var(--text-secondary); 
+            transition: all 0.2s; 
+            font-size: calc(13px * var(--font-scale)); 
         }
         
-        .quick-action-btn.active { 
-            background: linear-gradient(135deg, var(--highlight-color) 0%, var(--accent-color) 100%); 
-            box-shadow: 0 2px 8px var(--shadow-color); 
-            transform: scale(1.05); 
+        .nav-tab.active { 
+            color: var(--highlight-color); 
+            border-bottom-color: var(--highlight-color); 
+            font-weight: 500; 
         }
         
         .main-content-wrapper {
             margin-top: 260px;
-            flex: 1;
-            background: var(--bg-color);
         }
         
         .main-content { 
+            flex: 1; 
             padding: 12px; 
-            animation: fadeIn 0.3s;
+            max-width: 100%; 
+            overflow-x: hidden; 
+            min-height: calc(100vh - 260px);
+        }
+        
+        .section { 
+            display: none; 
+            animation: fadeIn 0.3s; 
+        }
+        
+        .section.active { 
+            display: block; 
         }
         
         @keyframes fadeIn { 
@@ -320,156 +332,164 @@
             to { opacity: 1; } 
         }
         
-        .project-card, .task-item, .transaction-item { 
+        .add-btn { 
+            position: fixed; 
+            bottom: calc(20px + env(safe-area-inset-bottom)); 
+            right: calc(20px + env(safe-area-inset-right)); 
+            background: linear-gradient(135deg, var(--accent-color), var(--highlight-color)); 
+            color: white; 
+            width: 56px; 
+            height: 56px; 
+            border-radius: 50%; 
+            border: none; 
+            font-size: 24px; 
+            cursor: pointer; 
+            box-shadow: 0 4px 12px var(--shadow-color); 
+            z-index: 50; 
+            transition: transform 0.2s; 
+        }
+        
+        .add-btn:active { 
+            transform: scale(0.95); 
+        }
+        
+        .card { 
             background: var(--card-bg); 
             border-radius: 12px; 
             padding: 14px; 
             margin-bottom: 12px; 
             box-shadow: 0 2px 8px var(--shadow-color); 
             position: relative; 
-            transition: all 0.3s; 
-            cursor: pointer;
+            overflow: hidden; 
+            transition: transform 0.2s, box-shadow 0.2s;
         }
         
-        .project-card:active, .task-item:active, .transaction-item:active { 
-            transform: scale(0.98); 
-            box-shadow: 0 1px 4px var(--shadow-color); 
+        .card:active {
+            transform: scale(0.99);
         }
         
-        .project-header { 
+        .card-header { 
             display: flex; 
             justify-content: space-between; 
             align-items: flex-start; 
-            margin-bottom: 10px; 
+            margin-bottom: 8px; 
+            gap: 10px;
         }
         
-        .project-title { 
-            font-size: calc(16px * var(--font-scale)); 
+        .card-title { 
             font-weight: 600; 
-            color: var(--text-color); 
-        }
-        
-        .project-value { 
             font-size: calc(14px * var(--font-scale)); 
-            font-weight: 600; 
-            color: var(--success); 
+            color: var(--text-color); 
+            word-break: break-word;
+            flex: 1; 
         }
         
-        .project-dates { 
+        .card-meta { 
             font-size: calc(11px * var(--font-scale)); 
             color: var(--text-secondary); 
-            margin-bottom: 8px; 
+            margin-top: 4px; 
         }
         
-        .project-progress { 
+        .card-actions { 
+            display: flex; 
+            gap: 6px;
+            flex-shrink: 0;
+        }
+        
+        .card-btn { 
+            background: transparent; 
+            border: none; 
+            color: var(--text-secondary); 
+            cursor: pointer; 
+            padding: 6px; 
+            border-radius: 50%; 
+            font-size: calc(16px * var(--font-scale)); 
+            transition: background 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+        }
+        
+        .card-btn:active { 
             background: var(--border-color); 
-            height: 4px; 
-            border-radius: 2px; 
-            overflow: hidden; 
-            margin: 8px 0; 
         }
         
         .progress-bar { 
+            height: 6px; 
+            background: var(--border-color); 
+            border-radius: 3px; 
+            overflow: hidden; 
+            margin-top: 10px; 
+        }
+        
+        .progress-fill { 
             height: 100%; 
             background: linear-gradient(90deg, var(--accent-color), var(--highlight-color)); 
-            border-radius: 2px; 
-            transition: width 0.3s ease; 
-        }
-        
-        .project-stats { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-top: 10px; 
-            padding-top: 10px; 
-            border-top: 1px solid var(--border-color); 
-            font-size: calc(11px * var(--font-scale)); 
-        }
-        
-        .stat-group { 
-            display: flex; 
-            gap: 15px; 
+            border-radius: 3px; 
+            transition: width 0.3s; 
         }
         
         .task-item { 
             display: flex; 
-            justify-content: space-between; 
             align-items: center; 
-            padding: 10px 14px; 
-        }
-        
-        .task-left { 
-            flex: 1; 
-        }
-        
-        .task-title { 
-            font-size: calc(14px * var(--font-scale)); 
-            color: var(--text-color); 
-            margin-bottom: 2px; 
-        }
-        
-        .task-project { 
-            font-size: calc(11px * var(--font-scale)); 
-            color: var(--text-secondary); 
+            padding: 8px; 
+            background: var(--bg-color); 
+            border-radius: 8px; 
+            margin-bottom: 6px; 
+            gap: 10px;
         }
         
         .task-checkbox { 
-            width: 22px; 
-            height: 22px; 
-            border: 2px solid var(--accent-color); 
-            border-radius: 50%; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            cursor: pointer; 
-            transition: all 0.2s; 
+            width: 20px; 
+            height: 20px; 
+            accent-color: var(--highlight-color); 
+            flex-shrink: 0; 
         }
         
-        .task-checkbox.checked { 
-            background: var(--accent-color); 
+        .task-text { 
+            flex: 1; 
+            font-size: calc(13px * var(--font-scale)); 
+            word-break: break-word; 
         }
         
-        .task-checkbox.checked::after { 
-            content: '✓'; 
-            color: white; 
-            font-size: calc(12px * var(--font-scale)); 
-            font-weight: bold; 
+        .task-text.completed { 
+            text-decoration: line-through; 
+            opacity: 0.6; 
         }
         
-        .transaction-item { 
-            padding: 10px 14px; 
+        .delete-task-btn {
+            background: transparent;
+            border: none;
+            color: var(--danger);
+            cursor: pointer;
+            padding: 4px;
+            font-size: calc(14px * var(--font-scale));
+            opacity: 0.7;
         }
         
-        .transaction-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            margin-bottom: 4px; 
+        .delete-task-btn:active {
+            opacity: 1;
         }
         
-        .transaction-title { 
-            font-size: calc(14px * var(--font-scale)); 
-            font-weight: 500; 
+        .transaction-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            margin-bottom: 6px;
         }
         
-        .transaction-amount { 
-            font-size: calc(16px * var(--font-scale)); 
-            font-weight: 600; 
+        .transaction-amount {
+            font-weight: bold;
+            font-size: calc(14px * var(--font-scale));
         }
         
-        .transaction-amount.income { 
-            color: var(--income-color); 
-        }
-        
-        .transaction-amount.expense { 
-            color: var(--expense-color); 
-        }
-        
-        .transaction-details { 
-            display: flex; 
-            justify-content: space-between; 
-            font-size: calc(11px * var(--font-scale)); 
-            color: var(--text-secondary); 
-        }
+        .income { color: var(--income-color); }
+        .expense { color: var(--expense-color); }
         
         .modal { 
             display: none; 
@@ -479,23 +499,24 @@
             right: 0; 
             bottom: 0; 
             background: rgba(0,0,0,0.5); 
-            z-index: 1000; 
-            animation: fadeIn 0.3s;
+            z-index: 200; 
+            animation: fadeIn 0.2s; 
+            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
         }
         
         .modal.active { 
             display: flex; 
-            align-items: center; 
             justify-content: center; 
-            padding: 20px;
+            align-items: center; 
         }
         
         .modal-content { 
             background: var(--card-bg); 
             border-radius: 16px; 
-            max-width: 500px; 
-            width: 100%; 
-            max-height: 90vh; 
+            padding: 20px; 
+            width: 90%; 
+            max-width: 400px; 
+            max-height: 80vh; 
             overflow-y: auto; 
             animation: slideUp 0.3s; 
         }
@@ -506,48 +527,24 @@
         }
         
         .modal-header { 
-            padding: 16px; 
-            border-bottom: 1px solid var(--border-color); 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-        }
-        
-        .modal-title { 
             font-size: calc(18px * var(--font-scale)); 
-            font-weight: 600; 
-        }
-        
-        .close-btn { 
-            background: none; 
-            border: none; 
-            font-size: calc(24px * var(--font-scale)); 
-            color: var(--text-secondary); 
-            cursor: pointer; 
-            padding: 0; 
-            width: 32px; 
-            height: 32px; 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-        }
-        
-        .modal-body { 
-            padding: 16px; 
+            font-weight: bold; 
+            margin-bottom: 16px; 
+            color: var(--text-color);
         }
         
         .form-group { 
-            margin-bottom: 15px; 
+            margin-bottom: 16px; 
         }
         
-        label { 
+        .form-label { 
             display: block; 
-            margin-bottom: 5px; 
-            font-size: calc(13px * var(--font-scale)); 
+            font-size: calc(12px * var(--font-scale)); 
             color: var(--text-secondary); 
+            margin-bottom: 6px; 
         }
         
-        input, select, textarea { 
+        .form-input, .form-select, .form-textarea { 
             width: 100%; 
             padding: 10px; 
             border: 1px solid var(--border-color); 
@@ -555,41 +552,17 @@
             font-size: calc(14px * var(--font-scale)); 
             background: var(--card-bg); 
             color: var(--text-color); 
-            transition: border-color 0.2s; 
+            transition: border-color 0.2s;
         }
         
-        input:focus, select:focus, textarea:focus { 
-            outline: none; 
-            border-color: var(--accent-color); 
-        }
-        
-        textarea { 
+        .form-textarea { 
             resize: vertical; 
             min-height: 80px; 
         }
         
-        .btn { 
-            padding: 10px 20px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: calc(14px * var(--font-scale)); 
-            cursor: pointer; 
-            transition: all 0.3s; 
-        }
-        
-        .btn-primary { 
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--highlight-color) 100%); 
-            color: white; 
-        }
-        
-        .btn-danger { 
-            background: var(--danger); 
-            color: white; 
-        }
-        
-        .btn-secondary { 
-            background: var(--border-color); 
-            color: var(--text-color); 
+        .form-input:focus, .form-select:focus, .form-textarea:focus { 
+            outline: none; 
+            border-color: var(--highlight-color); 
         }
         
         .form-actions { 
@@ -598,161 +571,168 @@
             margin-top: 20px; 
         }
         
+        .btn { 
+            flex: 1; 
+            padding: 12px; 
+            border: none; 
+            border-radius: 8px; 
+            font-size: calc(14px * var(--font-scale)); 
+            font-weight: 500; 
+            cursor: pointer; 
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        
+        .btn:active {
+            transform: scale(0.98);
+        }
+        
+        .btn-primary { 
+            background: linear-gradient(135deg, var(--accent-color), var(--highlight-color)); 
+            color: white; 
+        }
+        
+        .btn-secondary { 
+            background: var(--border-color); 
+            color: var(--text-color); 
+        }
+        
         .empty-state { 
             text-align: center; 
-            padding: 40px 20px; 
+            padding: 60px 20px; 
             color: var(--text-secondary); 
         }
         
         .empty-icon { 
-            font-size: calc(48px * var(--font-scale)); 
-            margin-bottom: 10px; 
+            font-size: 48px; 
+            margin-bottom: 16px; 
             opacity: 0.3; 
         }
         
-        .empty-message { 
+        .empty-text { 
             font-size: calc(14px * var(--font-scale)); 
+            line-height: 1.5; 
         }
         
         .toast { 
             position: fixed; 
-            bottom: calc(20px + env(safe-area-inset-bottom)); 
+            bottom: calc(100px + env(safe-area-inset-bottom)); 
             left: 50%; 
             transform: translateX(-50%); 
-            background: rgba(0,0,0,0.8); 
+            background: var(--button-primary); 
             color: white; 
             padding: 12px 20px; 
-            border-radius: 8px; 
+            border-radius: 20px; 
             font-size: calc(13px * var(--font-scale)); 
-            z-index: 2000; 
-            animation: toastSlideUp 0.3s;
+            z-index: 300; 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            pointer-events: none; 
+            max-width: 80%; 
+            text-align: center; 
         }
         
-        @keyframes toastSlideUp { 
-            from { transform: translate(-50%, 100px); } 
-            to { transform: translate(-50%, 0); } 
+        .toast.show { 
+            opacity: 0.95; 
         }
         
-        .color-options { 
-            display: flex; 
-            gap: 8px; 
-            margin-top: 10px; 
-        }
-        
-        .color-dot { 
-            width: 32px; 
-            height: 32px; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            border: 3px solid transparent; 
-            transition: all 0.2s; 
-        }
-        
-        .color-dot.selected { 
-            border-color: var(--text-color); 
-            transform: scale(1.2); 
-        }
-        
-        .accessibility-group {
+        .settings-group {
             background: var(--card-bg);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 15px;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
         }
         
-        .group-title {
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-row:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-label {
             font-size: calc(14px * var(--font-scale));
-            font-weight: 600;
-            margin-bottom: 10px;
             color: var(--text-color);
+            flex: 1;
         }
         
-        .setting-options {
+        .settings-value {
+            font-size: calc(13px * var(--font-scale));
+            color: var(--text-secondary);
+        }
+        
+        .switch {
+            position: relative;
+            width: 48px;
+            height: 26px;
+            background: var(--border-color);
+            border-radius: 13px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        
+        .switch.active {
+            background: var(--highlight-color);
+        }
+        
+        .switch-handle {
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.3s;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        .switch.active .switch-handle {
+            transform: translateX(22px);
+        }
+        
+        .btn-group {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
         }
         
-        .option-btn {
+        .btn-option {
             padding: 8px 12px;
             border: 1px solid var(--border-color);
-            border-radius: 6px;
             background: var(--card-bg);
             color: var(--text-color);
+            border-radius: 6px;
+            cursor: pointer;
             font-size: calc(12px * var(--font-scale));
-            cursor: pointer;
             transition: all 0.2s;
         }
         
-        .option-btn.active {
-            background: var(--accent-color);
+        .btn-option.active {
+            background: var(--highlight-color);
             color: white;
-            border-color: var(--accent-color);
+            border-color: var(--highlight-color);
         }
         
-        /* Theme selector */
-        .theme-selector {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            gap: 12px;
-            margin-top: 10px;
-        }
-        
-        .theme-option {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            padding: 8px;
-            border: 2px solid transparent;
+        #syncStatus {
+            padding: 8px 12px;
+            background: var(--bg-color);
             border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: var(--card-bg);
+            font-size: calc(11px * var(--font-scale));
+            margin-top: 8px;
         }
         
-        .theme-option:hover {
-            transform: scale(1.05);
-            box-shadow: 0 2px 8px var(--shadow-color);
+        .currency-note {
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+            font-style: italic;
+            margin-top: 4px;
         }
-        
-        .theme-option.active {
-            border-color: var(--accent-color);
-            background: linear-gradient(to bottom, rgba(255,255,255,0.1), rgba(255,255,255,0));
-            box-shadow: 0 2px 10px var(--shadow-color);
-        }
-        
-        .theme-preview {
-            width: 50px;
-            height: 35px;
-            border-radius: 6px;
-            display: flex;
-            overflow: hidden;
-            box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-            border: 1px solid rgba(0,0,0,0.1);
-        }
-        
-        .theme-preview-left {
-            flex: 1;
-            border-right: 1px solid rgba(255,255,255,0.3);
-        }
-        
-        .theme-preview-right {
-            flex: 1;
-        }
-        
-        .theme-name {
-            font-size: calc(10px * var(--font-scale));
-            color: var(--text-color);
-            text-align: center;
-            font-weight: 500;
-        }
-        
-        .theme-option.active .theme-name {
-            font-weight: 700;
-            color: var(--accent-color);
-        }
-        
+
         /* Sticky Note Styles */
         .sticky-note {
             position: fixed;
@@ -760,100 +740,201 @@
             left: 50%;
             transform: translate(-50%, -50%) rotate(-2deg);
             background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
-            padding: 20px;
             width: 280px;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-            border-radius: 2px;
-            z-index: 3000;
-            animation: stickyPop 0.5s ease-out;
+            padding: 20px;
+            border-radius: 4px;
+            box-shadow: 
+                0 10px 40px rgba(0,0,0,0.3),
+                inset 0 -40px 40px rgba(0,0,0,0.05);
+            z-index: 1000;
             font-family: 'Comic Sans MS', cursive, sans-serif;
+            animation: popIn 0.4s ease-out, wobble 0.5s ease-in-out 0.4s;
+            display: none;
         }
-        
-        @keyframes stickyPop {
-            0% { 
-                transform: translate(-50%, -50%) rotate(-2deg) scale(0);
-                opacity: 0;
-            }
-            50% {
-                transform: translate(-50%, -50%) rotate(-2deg) scale(1.1);
-            }
-            100% { 
-                transform: translate(-50%, -50%) rotate(-2deg) scale(1);
-                opacity: 1;
-            }
-        }
-        
+
         .sticky-note::before {
-            content: '📌';
+            content: '';
             position: absolute;
-            top: -10px;
+            top: -15px;
             left: 50%;
             transform: translateX(-50%);
-            font-size: 24px;
+            width: 60px;
+            height: 30px;
+            background: rgba(255,255,255,0.6);
+            border: 1px solid #ddd;
+            border-radius: 2px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-        
-        .sticky-title {
+
+        .sticky-note.show {
+            display: block;
+        }
+
+        .sticky-note-header {
             font-size: 16px;
             font-weight: bold;
             color: #333;
             margin-bottom: 10px;
             text-align: center;
+            text-decoration: underline;
+            text-decoration-style: wavy;
+            text-decoration-color: #ff9800;
         }
-        
-        .sticky-content {
+
+        .sticky-note-content {
             font-size: 14px;
             color: #333;
-            line-height: 1.4;
+            line-height: 1.6;
         }
-        
-        .sticky-content ul {
-            margin: 5px 0;
+
+        .sticky-note-content .check-item {
+            margin: 8px 0;
             padding-left: 20px;
+            position: relative;
         }
-        
-        .sticky-content li {
-            margin: 3px 0;
-        }
-        
-        .sticky-time {
+
+        .sticky-note-content .check-item::before {
+            content: '✓';
             position: absolute;
-            bottom: 5px;
-            right: 10px;
-            font-size: 10px;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+        }
+
+        .sticky-note-footer {
+            margin-top: 15px;
+            font-size: 11px;
             color: #666;
+            text-align: center;
             font-style: italic;
         }
-        
-        @keyframes stickyFadeOut {
-            0% { opacity: 1; }
-            100% { opacity: 0; transform: translate(-50%, -50%) rotate(-2deg) scale(0.8); }
+
+        @keyframes popIn {
+            0% {
+                transform: translate(-50%, -50%) scale(0) rotate(-2deg);
+                opacity: 0;
+            }
+            70% {
+                transform: translate(-50%, -50%) scale(1.1) rotate(-2deg);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1) rotate(-2deg);
+                opacity: 1;
+            }
         }
-        
-        .sticky-note.fade-out {
-            animation: stickyFadeOut 0.5s ease-out forwards;
+
+        @keyframes wobble {
+            0%, 100% { transform: translate(-50%, -50%) rotate(-2deg); }
+            25% { transform: translate(-50%, -50%) rotate(2deg); }
+            75% { transform: translate(-50%, -50%) rotate(-1deg); }
         }
+
+        /* Theme Color Picker */
+        .theme-picker {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .theme-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.3s;
+            overflow: hidden;
+        }
+
+        .theme-option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            transition: all 0.3s;
+        }
+
+        .theme-option::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            transition: all 0.3s;
+        }
+
+        .theme-option.active {
+            border-color: var(--text-color);
+            transform: scale(1.1);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .theme-option.active::before {
+            content: '✓';
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            height: 100%;
+            background: rgba(0,0,0,0.3) !important;
+        }
+
+        .theme-option.active::after {
+            display: none;
+        }
+
+        /* Individual theme colors for picker */
+        .theme-option[data-theme="rose"]::before { background: #d2bcbf; }
+        .theme-option[data-theme="rose"]::after { background: #a67980; }
+
+        .theme-option[data-theme="sage"]::before { background: #c0ccb8; }
+        .theme-option[data-theme="sage"]::after { background: #60665c; }
+
+        .theme-option[data-theme="gold"]::before { background: #e0b558; }
+        .theme-option[data-theme="gold"]::after { background: #ecd299; }
+
+        .theme-option[data-theme="ocean"]::before { background: #99b3ec; }
+        .theme-option[data-theme="ocean"]::after { background: #151b73; }
+
+        .theme-option[data-theme="lavender"]::before { background: #8386a4; }
+        .theme-option[data-theme="lavender"]::after { background: #191a22; }
+
+        .theme-option[data-theme="teal"]::before { background: #90b2b8; }
+        .theme-option[data-theme="teal"]::after { background: #2c4144; }
+
+        .theme-option[data-theme="seafoam"]::before { background: #9cbbbf; }
+        .theme-option[data-theme="seafoam"]::after { background: #436266; }
     </style>
 </head>
 <body>
     <div class="app-container">
         <div class="fixed-header-section">
-            <div class="header">
+            <header class="header">
                 <div class="header-content">
-                    <div class="header-left" onclick="currentView = 'dashboard'; renderView()">
+                    <div class="header-left" onclick="goHome()">
                         <div>
-                            <h1>Builder Pro</h1>
+                            <h1>🏗️ Builder Pro</h1>
                             <div class="header-subtitle">Complete Project Manager</div>
                         </div>
                     </div>
                     <div class="header-controls">
-                        <button class="header-btn" onclick="syncData()">
-                            🔄
-                            <div class="sync-indicator" id="syncIndicator"></div>
+                        <button class="header-btn" onclick="performSync()" title="Sync">
+                            ☁️
+                            <span class="sync-indicator" id="syncIndicator"></span>
                         </button>
-                        <button class="header-btn" onclick="showSettings()">⚙️</button>
+                        <button class="header-btn" onclick="showTrash()" title="Trash">
+                            🗑️
+                        </button>
                     </div>
                 </div>
-            </div>
+            </header>
             
             <div class="stats-bar">
                 <div class="stat-item">
@@ -869,41 +950,124 @@
                     <div class="stat-label">Complete</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-value" id="totalValue">$0</div>
-                    <div class="stat-label">Value</div>
+                    <div class="stat-value" id="totalBalance">$0</div>
+                    <div class="stat-label">Balance</div>
                 </div>
             </div>
             
-            <div class="quick-actions">
-                <button class="quick-action-btn active" onclick="currentView = 'dashboard'; renderView()">📊 Dashboard</button>
-                <button class="quick-action-btn" onclick="currentView = 'projects'; renderView()">🏗️ Projects</button>
-                <button class="quick-action-btn" onclick="currentView = 'tasks'; renderView()">✅ Tasks</button>
-                <button class="quick-action-btn" onclick="currentView = 'finance'; renderView()">💰 Finance</button>
-                <button class="quick-action-btn" onclick="showAddProject()">➕ Project</button>
-                <button class="quick-action-btn" onclick="showAddTask()">📝 Task</button>
-                <button class="quick-action-btn" onclick="showAddTransaction()">💵 Transaction</button>
-                <button class="quick-action-btn" onclick="currentView = 'trash'; renderView()">🗑️ Trash</button>
-            </div>
+            <nav class="nav-tabs">
+                <div class="nav-tab active" onclick="switchView('projects')">Projects</div>
+                <div class="nav-tab" onclick="switchView('tasks')">Tasks</div>
+                <div class="nav-tab" onclick="switchView('financial')">Financial</div>
+                <div class="nav-tab" onclick="switchView('settings')">Settings</div>
+            </nav>
         </div>
         
         <div class="main-content-wrapper">
-            <div class="main-content" id="mainContent">
-                <!-- Dynamic content -->
+            <main class="main-content">
+                <div id="projectsSection" class="section active"></div>
+                <div id="tasksSection" class="section"></div>
+                <div id="financialSection" class="section"></div>
+                <div id="settingsSection" class="section"></div>
+            </main>
+        </div>
+        
+        <button class="add-btn" id="addBtn" onclick="openAddModal()">+</button>
+    </div>
+    
+    <!-- Modals -->
+    <div id="addProjectModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">New Project</div>
+            <div class="form-group">
+                <label class="form-label">Project Name</label>
+                <input type="text" class="form-input" id="projectName" placeholder="Enter project name">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <textarea class="form-textarea" id="projectDescription" placeholder="Project description (optional)"></textarea>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Budget (optional)</label>
+                <input type="number" class="form-input" id="projectBudget" placeholder="0.00">
+                <div class="currency-note">Currency: <span id="currencyDisplay">USD</span></div>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeModal('addProjectModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveProject()">Create</button>
             </div>
         </div>
     </div>
     
-    <!-- Modals -->
-    <div class="modal" id="modal">
+    <div id="addTaskModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <span class="modal-title" id="modalTitle">Modal</span>
-                <button class="close-btn" onclick="closeModal()">×</button>
+            <div class="modal-header">New Task</div>
+            <div class="form-group">
+                <label class="form-label">Task Description</label>
+                <input type="text" class="form-input" id="taskDescription" placeholder="What needs to be done?">
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Dynamic modal content -->
+            <div class="form-group">
+                <label class="form-label">Project</label>
+                <select class="form-select" id="taskProject"></select>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeModal('addTaskModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTask()">Add Task</button>
             </div>
         </div>
+    </div>
+    
+    <div id="addTransactionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">New Transaction</div>
+            <div class="form-group">
+                <label class="form-label">Type</label>
+                <select class="form-select" id="transactionType">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Amount</label>
+                <input type="number" class="form-input" id="transactionAmount" placeholder="0.00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Description</label>
+                <input type="text" class="form-input" id="transactionDescription" placeholder="What is this for?">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Project</label>
+                <select class="form-select" id="transactionProject">
+                    <option value="">No Project</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeModal('addTransactionModal')">Cancel</button>
+                <button class="btn btn-primary" onclick="saveTransaction()">Add</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="trashModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">🗑️ Trash</div>
+            <div id="trashContent"></div>
+            <div class="form-actions">
+                <button class="btn btn-secondary" onclick="closeModal('trashModal')">Close</button>
+                <button class="btn btn-primary" onclick="emptyTrash()">Empty Trash</button>
+            </div>
+        </div>
+    </div>
+    
+    <div id="toast" class="toast"></div>
+
+    <!-- Sticky Note Reminder -->
+    <div id="stickyNote" class="sticky-note">
+        <div class="sticky-note-header">📌 Quick Check!</div>
+        <div class="sticky-note-content" id="stickyNoteContent">
+            <!-- Content will be dynamically generated -->
+        </div>
+        <div class="sticky-note-footer">Auto-closing in 5 seconds...</div>
     </div>
     
     <script>
@@ -916,6 +1080,7 @@
             permanentlyDeleted: [],
             settings: {
                 nightMode: false,
+                currency: 'USD',
                 contrast: 'normal',
                 fontSize: 'm',
                 saturation: 'normal',
@@ -923,1254 +1088,970 @@
             }
         };
         
-        let currentView = 'dashboard';
-        let editingItem = null;
+        // App state
+        let currentView = 'projects';
         let syncApiKey = '';
         let reminderInterval = null;
-        let lastReminderTime = Date.now();
+        let apiTempDisabled = false;
         
+        // App configuration
         const APP_CONFIG = {
-            binId: '6781c1cbad19ca34f8ea0b59',
-            baseUrl: 'https://api.jsonbin.io/v3'
+            baseUrl: 'https://api.jsonbin.io/v3',
+            binId: '678e017dacd3cb34a8c57f18'
         };
         
-        // Theme configurations
-        const themes = {
-            rose: { name: 'Rose', accent: '#d2bcbf', highlight: '#a67980' },
-            sage: { name: 'Sage', accent: '#c0ccb8', highlight: '#60665c' },
-            gold: { name: 'Gold', accent: '#e0b558', highlight: '#ecd299' },
-            ocean: { name: 'Ocean', accent: '#99b3ec', highlight: '#151b73' },
-            slate: { name: 'Slate', accent: '#8386a4', highlight: '#191a22' },
-            teal: { name: 'Teal', accent: '#90b2b8', highlight: '#2c4144' },
-            mint: { name: 'Mint', accent: '#9cbbbf', highlight: '#436266' }
-        };
-        
-        // Initialize
-        window.addEventListener('load', () => {
+        // Initialize app
+        function init() {
             loadData();
             applySettings();
             renderView();
             updateStats();
+            checkSyncStatus();
+            setupReminderSystem();
             
-            // Start reminder system
-            startReminderSystem();
-            
-            // Load API key
-            syncApiKey = localStorage.getItem('builderProSyncApiKey') || '';
-            
-            // Auto-sync every 5 minutes
-            setInterval(() => {
-                if (syncApiKey && navigator.onLine) {
-                    syncData();
-                }
-            }, 300000);
-        });
-        
-        // Reminder System
-        function startReminderSystem() {
-            // Clear any existing interval
-            if (reminderInterval) {
-                clearInterval(reminderInterval);
+            // Load API key from localStorage
+            const savedApiKey = localStorage.getItem('builderProSyncApiKey');
+            if (savedApiKey) {
+                syncApiKey = savedApiKey;
+                document.getElementById('syncMode').textContent = 'Ready';
             }
             
-            // Set random interval between 35-45 minutes
-            const minMinutes = 35;
-            const maxMinutes = 45;
-            const randomMinutes = Math.random() * (maxMinutes - minMinutes) + minMinutes;
-            const intervalMs = randomMinutes * 60 * 1000;
+            // Check if launched as PWA
+            if (window.matchMedia('(display-mode: standalone)').matches) {
+                console.log('Running as PWA');
+            }
             
-            reminderInterval = setInterval(() => {
-                showStickyNote();
-            }, intervalMs);
+            // Auto-sync on load if API key exists
+            if (syncApiKey && navigator.onLine) {
+                setTimeout(() => performSync(), 2000);
+            }
         }
         
-        function showStickyNote() {
-            const reminders = generateReminders();
-            
-            if (reminders.length === 0) return;
-            
-            const stickyNote = document.createElement('div');
-            stickyNote.className = 'sticky-note';
-            
-            const title = document.createElement('div');
-            title.className = 'sticky-title';
-            title.textContent = '🔔 Quick Check Reminder';
-            
-            const content = document.createElement('div');
-            content.className = 'sticky-content';
-            content.innerHTML = `
-                <ul>
-                    ${reminders.map(r => `<li>${r}</li>`).join('')}
-                </ul>
-            `;
-            
-            const time = document.createElement('div');
-            time.className = 'sticky-time';
-            time.textContent = new Date().toLocaleTimeString();
-            
-            stickyNote.appendChild(title);
-            stickyNote.appendChild(content);
-            stickyNote.appendChild(time);
-            
-            document.body.appendChild(stickyNote);
-            
-            // Auto-close after 5 seconds
-            setTimeout(() => {
-                stickyNote.classList.add('fade-out');
-                setTimeout(() => {
-                    stickyNote.remove();
-                }, 500);
-            }, 5000);
-            
-            // Restart the reminder system with a new random interval
-            startReminderSystem();
-        }
-        
-        function generateReminders() {
-            const reminders = [];
-            const now = new Date();
-            const today = now.toDateString();
-            
-            // Check overdue tasks
-            const overdueTasks = data.tasks.filter(t => 
-                !t.completed && t.dueDate && new Date(t.dueDate) < now
-            );
-            if (overdueTasks.length > 0) {
-                reminders.push(`📅 ${overdueTasks.length} overdue task${overdueTasks.length > 1 ? 's' : ''}`);
-            }
-            
-            // Check tasks due today
-            const todayTasks = data.tasks.filter(t => 
-                !t.completed && t.dueDate && new Date(t.dueDate).toDateString() === today
-            );
-            if (todayTasks.length > 0) {
-                reminders.push(`✅ ${todayTasks.length} task${todayTasks.length > 1 ? 's' : ''} due today`);
-            }
-            
-            // Check projects nearing deadline
-            const nearDeadlineProjects = data.projects.filter(p => {
-                if (!p.endDate || p.status === 'completed') return false;
-                const daysUntilDeadline = Math.ceil((new Date(p.endDate) - now) / (1000 * 60 * 60 * 24));
-                return daysUntilDeadline <= 3 && daysUntilDeadline >= 0;
-            });
-            if (nearDeadlineProjects.length > 0) {
-                reminders.push(`⚠️ ${nearDeadlineProjects.length} project${nearDeadlineProjects.length > 1 ? 's' : ''} ending soon`);
-            }
-            
-            // Check incomplete tasks count
-            const incompleteTasks = data.tasks.filter(t => !t.completed).length;
-            if (incompleteTasks > 10) {
-                reminders.push(`📝 ${incompleteTasks} pending tasks to review`);
-            }
-            
-            // Check financial summary
-            const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-            const monthTransactions = data.transactions.filter(t => 
-                new Date(t.date) >= monthStart
-            );
-            if (monthTransactions.length > 0) {
-                const monthTotal = monthTransactions.reduce((sum, t) => 
-                    sum + (t.type === 'income' ? t.amount : -t.amount), 0
-                );
-                reminders.push(`💰 Month balance: $${monthTotal.toFixed(2)}`);
-            }
-            
-            // Random motivational message if no other reminders
-            if (reminders.length === 0) {
-                const motivations = [
-                    '🌟 Keep up the great work!',
-                    '💪 You\'re doing amazing!',
-                    '🎯 Stay focused on your goals!',
-                    '🚀 Progress over perfection!',
-                    '✨ Every step counts!'
-                ];
-                reminders.push(motivations[Math.floor(Math.random() * motivations.length)]);
-            }
-            
-            return reminders;
-        }
-        
-        // Apply theme
-        function applyTheme(themeName) {
-            // Remove all theme classes
-            const themeClasses = ['theme-rose', 'theme-sage', 'theme-gold', 'theme-ocean', 'theme-slate', 'theme-teal', 'theme-mint'];
-            themeClasses.forEach(cls => document.body.classList.remove(cls));
-            
-            // Add new theme class
-            document.body.classList.add(`theme-${themeName}`);
-            
-            // Update theme color meta tag
-            const theme = themes[themeName];
-            if (theme) {
-                document.querySelector('meta[name="theme-color"]').content = theme.accent;
-                document.querySelector('meta[name="msapplication-navbutton-color"]').content = theme.accent;
-            }
-            
-            // Save to settings
-            data.settings.theme = themeName;
-            saveData();
-            
-            // Force a repaint to ensure CSS variables update
-            document.body.style.display = 'none';
-            document.body.offsetHeight; // Trigger reflow
-            document.body.style.display = '';
-        }
-        
-        // Data management
+        // Load data from localStorage
         function loadData() {
             const saved = localStorage.getItem('builderProData');
             if (saved) {
                 try {
                     data = JSON.parse(saved);
-                    // Ensure settings exists with theme
-                    if (!data.settings) {
-                        data.settings = {
-                            nightMode: false,
-                            contrast: 'normal',
-                            fontSize: 'm',
-                            saturation: 'normal',
-                            theme: 'rose'
-                        };
-                    }
+                    // Ensure all properties exist
+                    data.projects = data.projects || [];
+                    data.tasks = data.tasks || [];
+                    data.transactions = data.transactions || [];
+                    data.trash = data.trash || [];
+                    data.permanentlyDeleted = data.permanentlyDeleted || [];
+                    data.settings = data.settings || {
+                        nightMode: false,
+                        currency: 'USD',
+                        contrast: 'normal',
+                        fontSize: 'm',
+                        saturation: 'normal',
+                        theme: 'rose'
+                    };
+                    // Ensure theme setting exists
                     if (!data.settings.theme) {
                         data.settings.theme = 'rose';
                     }
                 } catch (e) {
-                    console.error('Failed to load data:', e);
+                    console.error('Error loading data:', e);
                 }
             }
         }
         
+        // Save data to localStorage
         function saveData() {
             localStorage.setItem('builderProData', JSON.stringify(data));
         }
         
+        // Apply settings
         function applySettings() {
-            // Remove all possible classes first
-            document.body.classList.remove('night-mode');
+            document.body.classList.toggle('night-mode', data.settings.nightMode);
+            
+            // Remove all theme classes
+            document.body.classList.remove('theme-rose', 'theme-sage', 'theme-gold', 
+                                          'theme-ocean', 'theme-lavender', 'theme-teal', 'theme-seafoam');
+            // Add current theme
+            document.body.classList.add('theme-' + data.settings.theme);
+            
+            // Update theme color meta tag
+            const themeColors = {
+                rose: '#d2bcbf',
+                sage: '#c0ccb8',
+                gold: '#e0b558',
+                ocean: '#99b3ec',
+                lavender: '#8386a4',
+                teal: '#90b2b8',
+                seafoam: '#9cbbbf'
+            };
+            document.querySelector('meta[name="theme-color"]').content = themeColors[data.settings.theme];
+            
+            // Contrast settings
             document.body.classList.remove('low-contrast', 'normal-contrast', 'high-contrast', 'extra-contrast');
+            document.body.classList.add(data.settings.contrast + '-contrast');
+            
+            // Font size settings
             document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl');
+            document.body.classList.add('font-' + data.settings.fontSize);
+            
+            // Saturation settings
             document.body.classList.remove('sat-low', 'sat-normal', 'sat-high', 'sat-vibrant');
-            document.body.classList.remove('theme-rose', 'theme-sage', 'theme-gold', 'theme-ocean', 'theme-slate', 'theme-teal', 'theme-mint');
-            
-            // Apply night mode if enabled
-            if (data.settings.nightMode) {
-                document.body.classList.add('night-mode');
-            }
-            
-            // Apply contrast setting
-            document.body.classList.add(`${data.settings.contrast}-contrast`);
-            
-            // Apply font size
-            document.body.classList.add(`font-${data.settings.fontSize}`);
-            
-            // Apply saturation
-            document.body.classList.add(`sat-${data.settings.saturation}`);
-            
-            // Apply theme - ensure a default if not set
-            const themeName = data.settings.theme || 'rose';
-            document.body.classList.add(`theme-${themeName}`);
-            
-            // Update theme meta tags
-            const theme = themes[themeName];
-            if (theme) {
-                const themeMetaTag = document.querySelector('meta[name="theme-color"]');
-                const msMetaTag = document.querySelector('meta[name="msapplication-navbutton-color"]');
-                if (themeMetaTag) themeMetaTag.content = theme.accent;
-                if (msMetaTag) msMetaTag.content = theme.accent;
-            }
+            document.body.classList.add('sat-' + data.settings.saturation);
         }
         
-        // Render functions
-        function renderView() {
-            const content = document.getElementById('mainContent');
+        // Switch view
+        function switchView(view) {
+            currentView = view;
             
-            // Update active button
-            document.querySelectorAll('.quick-action-btn').forEach(btn => {
-                btn.classList.remove('active');
+            // Update nav tabs
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
             });
+            event.target.classList.add('active');
             
-            const viewMap = {
-                'dashboard': 0,
-                'projects': 1,
-                'tasks': 2,
-                'finance': 3
-            };
+            // Update sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(view + 'Section').classList.add('active');
             
-            if (viewMap[currentView] !== undefined) {
-                document.querySelectorAll('.quick-action-btn')[viewMap[currentView]].classList.add('active');
-            }
+            // Update add button visibility
+            document.getElementById('addBtn').style.display = 
+                view === 'settings' ? 'none' : 'block';
             
+            renderView();
+        }
+        
+        // Go home
+        function goHome() {
+            currentView = 'projects';
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector('.nav-tab').classList.add('active');
+            
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById('projectsSection').classList.add('active');
+            
+            renderView();
+        }
+        
+        // Render current view
+        function renderView() {
             switch(currentView) {
-                case 'dashboard':
-                    renderDashboard(content);
-                    break;
                 case 'projects':
-                    renderProjects(content);
+                    renderProjects();
                     break;
                 case 'tasks':
-                    renderTasks(content);
+                    renderTasks();
                     break;
-                case 'finance':
-                    renderFinance(content);
+                case 'financial':
+                    renderFinancial();
                     break;
-                case 'trash':
-                    renderTrash(content);
+                case 'settings':
+                    renderSettings();
                     break;
             }
         }
         
-        function renderDashboard(content) {
-            const recentProjects = data.projects.slice(-3).reverse();
-            const recentTasks = data.tasks.filter(t => !t.completed).slice(-3).reverse();
+        // Render projects
+        function renderProjects() {
+            const container = document.getElementById('projectsSection');
+            const projects = data.projects.filter(p => !p.deleted);
             
-            content.innerHTML = `
-                <h2 style="margin-bottom: 15px; font-size: calc(18px * var(--font-scale));">Dashboard</h2>
-                
-                <div style="margin-bottom: 20px;">
-                    <h3 style="font-size: calc(14px * var(--font-scale)); color: var(--text-secondary); margin-bottom: 10px;">Recent Projects</h3>
-                    ${recentProjects.map(p => renderProjectCard(p)).join('') || '<div class="empty-state"><div class="empty-icon">🏗️</div><div class="empty-message">No projects yet</div></div>'}
-                </div>
-                
-                <div>
-                    <h3 style="font-size: calc(14px * var(--font-scale)); color: var(--text-secondary); margin-bottom: 10px;">Pending Tasks</h3>
-                    ${recentTasks.map(t => renderTaskItem(t)).join('') || '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-message">No pending tasks</div></div>'}
-                </div>
-            `;
-        }
-        
-        function renderProjects(content) {
-            const projects = data.projects.filter(p => p.status !== 'deleted');
-            content.innerHTML = `
-                <h2 style="margin-bottom: 15px; font-size: calc(18px * var(--font-scale));">Projects</h2>
-                ${projects.map(p => renderProjectCard(p)).join('') || '<div class="empty-state"><div class="empty-icon">🏗️</div><div class="empty-message">No projects yet. Click "+ Project" to add one.</div></div>'}
-            `;
-        }
-        
-        function renderTasks(content) {
-            const tasks = data.tasks.filter(t => t.status !== 'deleted');
-            const pending = tasks.filter(t => !t.completed);
-            const completed = tasks.filter(t => t.completed);
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📁</div>
+                        <div class="empty-text">No projects yet<br>Tap + to create your first project</div>
+                    </div>
+                `;
+                return;
+            }
             
-            content.innerHTML = `
-                <h2 style="margin-bottom: 15px; font-size: calc(18px * var(--font-scale));">Tasks</h2>
+            container.innerHTML = projects.map(project => {
+                const tasks = data.tasks.filter(t => t.projectId === project.id && !t.deleted);
+                const completed = tasks.filter(t => t.completed).length;
+                const progress = tasks.length > 0 ? (completed / tasks.length * 100) : 0;
                 
-                <div style="margin-bottom: 20px;">
-                    <h3 style="font-size: calc(14px * var(--font-scale)); color: var(--text-secondary); margin-bottom: 10px;">Pending (${pending.length})</h3>
-                    ${pending.map(t => renderTaskItem(t)).join('') || '<div class="empty-state"><div class="empty-icon">📝</div><div class="empty-message">No pending tasks</div></div>'}
+                const transactions = data.transactions.filter(t => t.projectId === project.id && !t.deleted);
+                const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+                const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+                const balance = income - expenses;
+                
+                return `
+                    <div class="card" onclick="viewProject('${project.id}')">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">${project.name}</div>
+                                <div class="card-meta">
+                                    ${tasks.length} tasks • ${getCurrencySymbol()}${balance.toFixed(2)}
+                                    ${project.budget ? ` • Budget: ${getCurrencySymbol()}${project.budget}` : ''}
+                                </div>
+                            </div>
+                            <div class="card-actions">
+                                <button class="card-btn" onclick="event.stopPropagation(); deleteProject('${project.id}')">🗑️</button>
+                            </div>
+                        </div>
+                        ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
+                        ${tasks.length > 0 ? `
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${progress}%"></div>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // View project details
+        function viewProject(projectId) {
+            const project = data.projects.find(p => p.id === projectId);
+            if (!project) return;
+            
+            const tasks = data.tasks.filter(t => t.projectId === projectId && !t.deleted);
+            const transactions = data.transactions.filter(t => t.projectId === projectId && !t.deleted);
+            
+            const container = document.getElementById('projectsSection');
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-header">
+                        <div>
+                            <div class="card-title">${project.name}</div>
+                            <div class="card-meta">Created: ${new Date(project.created).toLocaleDateString()}</div>
+                        </div>
+                        <button class="card-btn" onclick="renderProjects()">←</button>
+                    </div>
+                    ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
                 </div>
                 
-                <div>
-                    <h3 style="font-size: calc(14px * var(--font-scale)); color: var(--text-secondary); margin-bottom: 10px;">Completed (${completed.length})</h3>
-                    ${completed.map(t => renderTaskItem(t)).join('') || '<div class="empty-state"><div class="empty-icon">✅</div><div class="empty-message">No completed tasks</div></div>'}
+                <div class="card">
+                    <div class="card-title">Tasks (${tasks.length})</div>
+                    ${tasks.length > 0 ? tasks.map(task => `
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox" 
+                                   ${task.completed ? 'checked' : ''} 
+                                   onchange="toggleTask('${task.id}')">
+                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.description}</span>
+                            <button class="delete-task-btn" onclick="deleteTask('${task.id}')">×</button>
+                        </div>
+                    `).join('') : '<div class="card-meta">No tasks yet</div>'}
+                    <button class="btn btn-primary" style="margin-top: 10px" 
+                            onclick="openAddTaskForProject('${projectId}')">Add Task</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Transactions</div>
+                    ${transactions.length > 0 ? transactions.map(t => `
+                        <div class="transaction-item">
+                            <div>
+                                <div class="${t.type}">${getCurrencySymbol()}${t.amount.toFixed(2)}</div>
+                                <div class="card-meta">${t.description}</div>
+                            </div>
+                            <div class="card-meta">${new Date(t.date).toLocaleDateString()}</div>
+                        </div>
+                    `).join('') : '<div class="card-meta">No transactions yet</div>'}
                 </div>
             `;
         }
         
-        function renderFinance(content) {
-            const transactions = data.transactions.filter(t => t.status !== 'deleted');
-            const income = transactions.filter(t => t.type === 'income');
-            const expenses = transactions.filter(t => t.type === 'expense');
-            const totalIncome = income.reduce((sum, t) => sum + t.amount, 0);
-            const totalExpenses = expenses.reduce((sum, t) => sum + t.amount, 0);
+        // Render tasks
+        function renderTasks() {
+            const container = document.getElementById('tasksSection');
+            const tasks = data.tasks.filter(t => !t.deleted);
+            
+            if (tasks.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">✅</div>
+                        <div class="empty-text">No tasks yet<br>Create a project first, then add tasks</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Group tasks by project
+            const grouped = {};
+            tasks.forEach(task => {
+                const project = data.projects.find(p => p.id === task.projectId);
+                if (project) {
+                    if (!grouped[project.name]) {
+                        grouped[project.name] = [];
+                    }
+                    grouped[project.name].push(task);
+                }
+            });
+            
+            container.innerHTML = Object.entries(grouped).map(([projectName, tasks]) => `
+                <div class="card">
+                    <div class="card-title">${projectName}</div>
+                    ${tasks.map(task => `
+                        <div class="task-item">
+                            <input type="checkbox" class="task-checkbox" 
+                                   ${task.completed ? 'checked' : ''} 
+                                   onchange="toggleTask('${task.id}')">
+                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.description}</span>
+                            <button class="delete-task-btn" onclick="deleteTask('${task.id}')">×</button>
+                        </div>
+                    `).join('')}
+                </div>
+            `).join('');
+        }
+        
+        // Render financial
+        function renderFinancial() {
+            const container = document.getElementById('financialSection');
+            const transactions = data.transactions.filter(t => !t.deleted);
+            
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
             const balance = totalIncome - totalExpenses;
             
-            content.innerHTML = `
-                <h2 style="margin-bottom: 15px; font-size: calc(18px * var(--font-scale));">Finance</h2>
-                
-                <div style="background: var(--card-bg); padding: 15px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 2px 8px var(--shadow-color);">
-                    <div style="display: flex; justify-content: space-around; text-align: center;">
-                        <div>
-                            <div style="color: var(--income-color); font-size: calc(20px * var(--font-scale)); font-weight: bold;">$${totalIncome.toFixed(2)}</div>
-                            <div style="font-size: calc(11px * var(--font-scale)); color: var(--text-secondary);">Income</div>
-                        </div>
-                        <div>
-                            <div style="color: var(--expense-color); font-size: calc(20px * var(--font-scale)); font-weight: bold;">$${totalExpenses.toFixed(2)}</div>
-                            <div style="font-size: calc(11px * var(--font-scale)); color: var(--text-secondary);">Expenses</div>
-                        </div>
-                        <div>
-                            <div style="color: ${balance >= 0 ? 'var(--income-color)' : 'var(--expense-color)'}; font-size: calc(20px * var(--font-scale)); font-weight: bold;">$${balance.toFixed(2)}</div>
-                            <div style="font-size: calc(11px * var(--font-scale)); color: var(--text-secondary);">Balance</div>
-                        </div>
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-title">Summary</div>
+                    <div class="transaction-item">
+                        <span>Total Income</span>
+                        <span class="income">${getCurrencySymbol()}${totalIncome.toFixed(2)}</span>
+                    </div>
+                    <div class="transaction-item">
+                        <span>Total Expenses</span>
+                        <span class="expense">${getCurrencySymbol()}${totalExpenses.toFixed(2)}</span>
+                    </div>
+                    <div class="transaction-item">
+                        <span><strong>Balance</strong></span>
+                        <span class="${balance >= 0 ? 'income' : 'expense'}">
+                            <strong>${getCurrencySymbol()}${balance.toFixed(2)}</strong>
+                        </span>
                     </div>
                 </div>
                 
-                <h3 style="font-size: calc(14px * var(--font-scale)); color: var(--text-secondary); margin-bottom: 10px;">Transactions</h3>
-                ${transactions.map(t => renderTransactionItem(t)).join('') || '<div class="empty-state"><div class="empty-icon">💰</div><div class="empty-message">No transactions yet</div></div>'}
-            `;
-        }
-        
-        function renderTrash(content) {
-            const trashedItems = data.trash || [];
-            
-            content.innerHTML = `
-                <h2 style="margin-bottom: 15px; font-size: calc(18px * var(--font-scale));">Trash</h2>
-                
-                <div style="margin-bottom: 15px;">
-                    <button class="btn btn-danger" onclick="emptyTrash()" style="margin-right: 10px;">Empty Trash</button>
-                    <button class="btn btn-secondary" onclick="restoreAll()">Restore All</button>
-                </div>
-                
-                ${trashedItems.map(item => `
-                    <div class="project-card">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-weight: 600;">${item.type}: ${item.data.title || item.data.description || 'Unnamed'}</div>
-                                <div style="font-size: calc(11px * var(--font-scale)); color: var(--text-secondary);">Deleted: ${new Date(item.deletedAt).toLocaleDateString()}</div>
+                <div class="card">
+                    <div class="card-title">Recent Transactions</div>
+                    ${transactions.length > 0 ? transactions.slice(-10).reverse().map(t => {
+                        const project = data.projects.find(p => p.id === t.projectId);
+                        return `
+                            <div class="transaction-item">
+                                <div>
+                                    <div class="${t.type}">${getCurrencySymbol()}${t.amount.toFixed(2)}</div>
+                                    <div class="card-meta">${t.description}</div>
+                                    ${project ? `<div class="card-meta">${project.name}</div>` : ''}
+                                </div>
+                                <div>
+                                    <div class="card-meta">${new Date(t.date).toLocaleDateString()}</div>
+                                    <button class="card-btn" onclick="deleteTransaction('${t.id}')">🗑️</button>
+                                </div>
                             </div>
-                            <div style="display: flex; gap: 8px;">
-                                <button class="btn btn-secondary" onclick="restoreItem('${item.id}')">Restore</button>
-                                <button class="btn btn-danger" onclick="permanentDelete('${item.id}')">Delete</button>
-                            </div>
-                        </div>
-                    </div>
-                `).join('') || '<div class="empty-state"><div class="empty-icon">🗑️</div><div class="empty-message">Trash is empty</div></div>'}
+                        `;
+                    }).join('') : '<div class="card-meta">No transactions yet</div>'}
+                </div>
             `;
         }
         
-        function renderProjectCard(project) {
-            const tasks = data.tasks.filter(t => t.projectId === project.id && t.status !== 'deleted');
-            const completedTasks = tasks.filter(t => t.completed).length;
-            const totalTasks = tasks.length;
-            const progress = totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
-            
-            const transactions = data.transactions.filter(t => t.projectId === project.id && t.status !== 'deleted');
-            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const netValue = income - expenses;
-            
-            return `
-                <div class="project-card" onclick="editProject('${project.id}')">
-                    <div class="project-header">
-                        <div class="project-title">${project.title}</div>
-                        <div class="project-value" style="color: ${netValue >= 0 ? 'var(--income-color)' : 'var(--expense-color)'}">$${netValue.toFixed(2)}</div>
-                    </div>
-                    <div class="project-dates">
-                        ${project.startDate || 'No start'} - ${project.endDate || 'No end'}
-                    </div>
-                    <div class="project-progress">
-                        <div class="progress-bar" style="width: ${progress}%"></div>
-                    </div>
-                    <div class="project-stats">
-                        <div class="stat-group">
-                            <span>📝 ${totalTasks} tasks</span>
-                            <span>✅ ${completedTasks} done</span>
+        // Render settings
+        function renderSettings() {
+            const container = document.getElementById('settingsSection');
+            container.innerHTML = `
+                <div class="settings-group">
+                    <div class="settings-row">
+                        <span class="settings-label">Night Mode</span>
+                        <div class="switch ${data.settings.nightMode ? 'active' : ''}" 
+                             onclick="toggleSetting('nightMode')">
+                            <div class="switch-handle"></div>
                         </div>
-                        <div>
-                            <span style="color: var(--text-secondary); font-size: calc(10px * var(--font-scale));">${project.status || 'active'}</span>
-                        </div>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <span class="settings-label">Theme Color</span>
+                    </div>
+                    <div class="theme-picker">
+                        <div class="theme-option ${data.settings.theme === 'rose' ? 'active' : ''}" 
+                             data-theme="rose" onclick="setTheme('rose')"></div>
+                        <div class="theme-option ${data.settings.theme === 'sage' ? 'active' : ''}" 
+                             data-theme="sage" onclick="setTheme('sage')"></div>
+                        <div class="theme-option ${data.settings.theme === 'gold' ? 'active' : ''}" 
+                             data-theme="gold" onclick="setTheme('gold')"></div>
+                        <div class="theme-option ${data.settings.theme === 'ocean' ? 'active' : ''}" 
+                             data-theme="ocean" onclick="setTheme('ocean')"></div>
+                        <div class="theme-option ${data.settings.theme === 'lavender' ? 'active' : ''}" 
+                             data-theme="lavender" onclick="setTheme('lavender')"></div>
+                        <div class="theme-option ${data.settings.theme === 'teal' ? 'active' : ''}" 
+                             data-theme="teal" onclick="setTheme('teal')"></div>
+                        <div class="theme-option ${data.settings.theme === 'seafoam' ? 'active' : ''}" 
+                             data-theme="seafoam" onclick="setTheme('seafoam')"></div>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <span class="settings-label">Contrast</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-option ${data.settings.contrast === 'low' ? 'active' : ''}" 
+                                onclick="setSetting('contrast', 'low')">Low</button>
+                        <button class="btn-option ${data.settings.contrast === 'normal' ? 'active' : ''}" 
+                                onclick="setSetting('contrast', 'normal')">Normal</button>
+                        <button class="btn-option ${data.settings.contrast === 'high' ? 'active' : ''}" 
+                                onclick="setSetting('contrast', 'high')">High</button>
+                        <button class="btn-option ${data.settings.contrast === 'extra' ? 'active' : ''}" 
+                                onclick="setSetting('contrast', 'extra')">Extra</button>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <span class="settings-label">Font Size</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-option ${data.settings.fontSize === 's' ? 'active' : ''}" 
+                                onclick="setSetting('fontSize', 's')">S</button>
+                        <button class="btn-option ${data.settings.fontSize === 'm' ? 'active' : ''}" 
+                                onclick="setSetting('fontSize', 'm')">M</button>
+                        <button class="btn-option ${data.settings.fontSize === 'l' ? 'active' : ''}" 
+                                onclick="setSetting('fontSize', 'l')">L</button>
+                        <button class="btn-option ${data.settings.fontSize === 'xl' ? 'active' : ''}" 
+                                onclick="setSetting('fontSize', 'xl')">XL</button>
+                        <button class="btn-option ${data.settings.fontSize === 'xxl' ? 'active' : ''}" 
+                                onclick="setSetting('fontSize', 'xxl')">XXL</button>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <span class="settings-label">Color Saturation</span>
+                    </div>
+                    <div class="btn-group">
+                        <button class="btn-option ${data.settings.saturation === 'low' ? 'active' : ''}" 
+                                onclick="setSetting('saturation', 'low')">Low</button>
+                        <button class="btn-option ${data.settings.saturation === 'normal' ? 'active' : ''}" 
+                                onclick="setSetting('saturation', 'normal')">Normal</button>
+                        <button class="btn-option ${data.settings.saturation === 'high' ? 'active' : ''}" 
+                                onclick="setSetting('saturation', 'high')">High</button>
+                        <button class="btn-option ${data.settings.saturation === 'vibrant' ? 'active' : ''}" 
+                                onclick="setSetting('saturation', 'vibrant')">Vibrant</button>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <span class="settings-label">Currency</span>
+                        <select class="form-select" style="width: auto" onchange="setCurrency(this.value)">
+                            <option value="USD" ${data.settings.currency === 'USD' ? 'selected' : ''}>USD ($)</option>
+                            <option value="EUR" ${data.settings.currency === 'EUR' ? 'selected' : ''}>EUR (€)</option>
+                            <option value="GBP" ${data.settings.currency === 'GBP' ? 'selected' : ''}>GBP (£)</option>
+                            <option value="JPY" ${data.settings.currency === 'JPY' ? 'selected' : ''}>JPY (¥)</option>
+                            <option value="CNY" ${data.settings.currency === 'CNY' ? 'selected' : ''}>CNY (¥)</option>
+                            <option value="INR" ${data.settings.currency === 'INR' ? 'selected' : ''}>INR (₹)</option>
+                            <option value="MYR" ${data.settings.currency === 'MYR' ? 'selected' : ''}>MYR (RM)</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="settings-group">
+                    <div class="card-title">Cloud Sync (JSONBin.io)</div>
+                    <div id="syncStatus">
+                        <div>Status: <span id="syncMode">Not configured</span></div>
+                        <div id="lastSyncTime"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">API Key (from jsonbin.io)</label>
+                        <input type="password" class="form-input" id="apiKeyInput" 
+                               placeholder="Enter your JSONBin API key">
+                    </div>
+                    <button class="btn btn-primary" onclick="saveApiKey()">Save API Key</button>
+                    <button class="btn btn-secondary" onclick="testSync()" style="margin-top: 8px">Test Connection</button>
+                </div>
+                
+                <div class="settings-group">
+                    <div class="card-title">Data Management</div>
+                    <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
+                    <input type="file" id="importFile" accept=".json" style="display: none" onchange="importData(event)">
+                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" 
+                            style="margin-top: 8px">Import Data</button>
+                    <button class="btn btn-secondary" onclick="showTrash()" style="margin-top: 8px">
+                        View Trash (${data.trash.length} items)
+                    </button>
+                </div>
+                
+                <div class="settings-group">
+                    <div class="card-title">About</div>
+                    <div class="card-meta">
+                        Builder Pro v2.0<br>
+                        Complete Project Manager<br>
+                        © 2025 - All rights reserved
                     </div>
                 </div>
             `;
         }
         
-        function renderTaskItem(task) {
-            const project = data.projects.find(p => p.id === task.projectId);
-            return `
-                <div class="task-item" onclick="editTask('${task.id}')">
-                    <div class="task-left">
-                        <div class="task-title">${task.title}</div>
-                        <div class="task-project">${project ? project.title : 'No project'} ${task.dueDate ? `• Due: ${new Date(task.dueDate).toLocaleDateString()}` : ''}</div>
-                    </div>
-                    <div class="task-checkbox ${task.completed ? 'checked' : ''}" onclick="event.stopPropagation(); toggleTask('${task.id}')"></div>
-                </div>
-            `;
+        // Toggle setting
+        function toggleSetting(setting) {
+            data.settings[setting] = !data.settings[setting];
+            saveData();
+            applySettings();
+            renderSettings();
         }
         
-        function renderTransactionItem(transaction) {
-            const project = data.projects.find(p => p.id === transaction.projectId);
-            return `
-                <div class="transaction-item" onclick="editTransaction('${transaction.id}')">
-                    <div class="transaction-header">
-                        <div class="transaction-title">${transaction.description}</div>
-                        <div class="transaction-amount ${transaction.type}">
-                            ${transaction.type === 'income' ? '+' : '-'}$${transaction.amount.toFixed(2)}
-                        </div>
-                    </div>
-                    <div class="transaction-details">
-                        <span>${project ? project.title : 'No project'}</span>
-                        <span>${new Date(transaction.date).toLocaleDateString()}</span>
-                    </div>
-                </div>
-            `;
+        // Set setting
+        function setSetting(setting, value) {
+            data.settings[setting] = value;
+            saveData();
+            applySettings();
+            renderSettings();
+        }
+        
+        // Set theme
+        function setTheme(theme) {
+            data.settings.theme = theme;
+            saveData();
+            applySettings();
+            renderSettings();
+        }
+        
+        // Set currency
+        function setCurrency(currency) {
+            data.settings.currency = currency;
+            saveData();
+            renderView();
+            updateStats();
+        }
+        
+        // Get currency symbol
+        function getCurrencySymbol() {
+            const symbols = {
+                USD: '$',
+                EUR: '€',
+                GBP: '£',
+                JPY: '¥',
+                CNY: '¥',
+                INR: '₹',
+                MYR: 'RM'
+            };
+            return symbols[data.settings.currency] || '$';
         }
         
         // Update stats
         function updateStats() {
-            const projects = data.projects.filter(p => p.status !== 'deleted');
-            const tasks = data.tasks.filter(t => t.status !== 'deleted');
-            const completedTasks = tasks.filter(t => t.completed).length;
-            const completionRate = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;
+            const projects = data.projects.filter(p => !p.deleted);
+            const tasks = data.tasks.filter(t => !t.deleted);
+            const completedTasks = tasks.filter(t => t.completed);
+            const transactions = data.transactions.filter(t => !t.deleted);
             
-            const transactions = data.transactions.filter(t => t.status !== 'deleted');
-            const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const totalValue = income - expenses;
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const balance = totalIncome - totalExpenses;
             
             document.getElementById('projectCount').textContent = projects.length;
             document.getElementById('taskCount').textContent = tasks.length;
-            document.getElementById('completionRate').textContent = completionRate + '%';
-            document.getElementById('totalValue').textContent = '$' + totalValue.toFixed(0);
+            document.getElementById('completionRate').textContent = 
+                tasks.length > 0 ? Math.round(completedTasks.length / tasks.length * 100) + '%' : '0%';
+            document.getElementById('totalBalance').textContent = 
+                getCurrencySymbol() + balance.toFixed(0);
         }
         
-        // Modal functions
-        function showModal(title, content) {
-            document.getElementById('modalTitle').textContent = title;
-            document.getElementById('modalBody').innerHTML = content;
-            document.getElementById('modal').classList.add('active');
+        // Open add modal
+        function openAddModal() {
+            switch(currentView) {
+                case 'projects':
+                    openModal('addProjectModal');
+                    document.getElementById('currencyDisplay').textContent = data.settings.currency;
+                    break;
+                case 'tasks':
+                    if (data.projects.filter(p => !p.deleted).length === 0) {
+                        showToast('Create a project first');
+                        return;
+                    }
+                    openAddTaskModal();
+                    break;
+                case 'financial':
+                    openAddTransactionModal();
+                    break;
+            }
         }
         
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
-            editingItem = null;
+        // Open add task modal
+        function openAddTaskModal() {
+            const select = document.getElementById('taskProject');
+            select.innerHTML = data.projects.filter(p => !p.deleted).map(p => 
+                `<option value="${p.id}">${p.name}</option>`
+            ).join('');
+            openModal('addTaskModal');
         }
         
-        // CRUD Operations
-        function showAddProject() {
-            editingItem = null;
-            showModal('Add Project', `
-                <form onsubmit="event.preventDefault(); saveProject()">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="projectTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="projectDescription"></textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Start Date</label>
-                        <input type="date" id="projectStartDate">
-                    </div>
-                    <div class="form-group">
-                        <label>End Date</label>
-                        <input type="date" id="projectEndDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Budget</label>
-                        <input type="number" id="projectBudget" step="0.01">
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                </form>
-            `);
+        // Open add task for specific project
+        function openAddTaskForProject(projectId) {
+            const select = document.getElementById('taskProject');
+            select.innerHTML = data.projects.filter(p => !p.deleted).map(p => 
+                `<option value="${p.id}" ${p.id === projectId ? 'selected' : ''}>${p.name}</option>`
+            ).join('');
+            openModal('addTaskModal');
         }
         
-        function editProject(id) {
-            const project = data.projects.find(p => p.id === id);
-            if (!project) return;
-            
-            editingItem = project;
-            showModal('Edit Project', `
-                <form onsubmit="event.preventDefault(); saveProject()">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="projectTitle" value="${project.title}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <textarea id="projectDescription">${project.description || ''}</textarea>
-                    </div>
-                    <div class="form-group">
-                        <label>Start Date</label>
-                        <input type="date" id="projectStartDate" value="${project.startDate || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>End Date</label>
-                        <input type="date" id="projectEndDate" value="${project.endDate || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>Budget</label>
-                        <input type="number" id="projectBudget" step="0.01" value="${project.budget || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>Status</label>
-                        <select id="projectStatus">
-                            <option value="active" ${project.status === 'active' ? 'selected' : ''}>Active</option>
-                            <option value="completed" ${project.status === 'completed' ? 'selected' : ''}>Completed</option>
-                            <option value="on-hold" ${project.status === 'on-hold' ? 'selected' : ''}>On Hold</option>
-                        </select>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteProject('${project.id}')">Delete</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                </form>
-            `);
+        // Open add transaction modal
+        function openAddTransactionModal() {
+            const select = document.getElementById('transactionProject');
+            select.innerHTML = '<option value="">No Project</option>' + 
+                data.projects.filter(p => !p.deleted).map(p => 
+                    `<option value="${p.id}">${p.name}</option>`
+                ).join('');
+            openModal('addTransactionModal');
         }
         
+        // Open modal
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+        
+        // Close modal
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+            // Clear inputs
+            document.querySelectorAll(`#${modalId} input, #${modalId} textarea`).forEach(input => {
+                input.value = '';
+            });
+        }
+        
+        // Save project
         function saveProject() {
+            const name = document.getElementById('projectName').value.trim();
+            const description = document.getElementById('projectDescription').value.trim();
+            const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
+            
+            if (!name) {
+                showToast('Please enter a project name');
+                return;
+            }
+            
             const project = {
-                id: editingItem ? editingItem.id : Date.now().toString(),
-                title: document.getElementById('projectTitle').value,
-                description: document.getElementById('projectDescription').value,
-                startDate: document.getElementById('projectStartDate').value,
-                endDate: document.getElementById('projectEndDate').value,
-                budget: parseFloat(document.getElementById('projectBudget').value) || 0,
-                status: document.getElementById('projectStatus') ? document.getElementById('projectStatus').value : 'active',
-                createdAt: editingItem ? editingItem.createdAt : new Date().toISOString(),
-                updatedAt: new Date().toISOString()
+                id: Date.now().toString(),
+                name,
+                description,
+                budget,
+                created: Date.now(),
+                updated: Date.now()
             };
             
-            if (editingItem) {
-                const index = data.projects.findIndex(p => p.id === editingItem.id);
-                data.projects[index] = project;
-            } else {
-                data.projects.push(project);
-            }
-            
+            data.projects.push(project);
             saveData();
-            closeModal();
-            renderView();
+            closeModal('addProjectModal');
+            renderProjects();
             updateStats();
-            showToast(editingItem ? 'Project updated' : 'Project added');
+            showToast('Project created');
         }
         
-        function deleteProject(id) {
-            if (confirm('Delete this project? It will be moved to trash.')) {
-                const project = data.projects.find(p => p.id === id);
-                if (project) {
-                    // Move to trash
-                    if (!data.trash) data.trash = [];
-                    data.trash.push({
-                        id: Date.now().toString(),
-                        type: 'project',
-                        data: project,
-                        deletedAt: new Date().toISOString()
-                    });
-                    
-                    // Mark as deleted
-                    project.status = 'deleted';
-                    
-                    saveData();
-                    closeModal();
-                    renderView();
-                    updateStats();
-                    showToast('Project moved to trash');
-                }
-            }
-        }
-        
-        function showAddTask() {
-            editingItem = null;
-            const projectOptions = data.projects.filter(p => p.status !== 'deleted')
-                .map(p => `<option value="${p.id}">${p.title}</option>`)
-                .join('');
-            
-            showModal('Add Task', `
-                <form onsubmit="event.preventDefault(); saveTask()">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="taskTitle" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Project</label>
-                        <select id="taskProject">
-                            <option value="">No project</option>
-                            ${projectOptions}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="date" id="taskDueDate">
-                    </div>
-                    <div class="form-group">
-                        <label>Priority</label>
-                        <select id="taskPriority">
-                            <option value="low">Low</option>
-                            <option value="medium">Medium</option>
-                            <option value="high">High</option>
-                        </select>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                </form>
-            `);
-        }
-        
-        function editTask(id) {
-            const task = data.tasks.find(t => t.id === id);
-            if (!task) return;
-            
-            editingItem = task;
-            const projectOptions = data.projects.filter(p => p.status !== 'deleted')
-                .map(p => `<option value="${p.id}" ${task.projectId === p.id ? 'selected' : ''}>${p.title}</option>`)
-                .join('');
-            
-            showModal('Edit Task', `
-                <form onsubmit="event.preventDefault(); saveTask()">
-                    <div class="form-group">
-                        <label>Title</label>
-                        <input type="text" id="taskTitle" value="${task.title}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Project</label>
-                        <select id="taskProject">
-                            <option value="">No project</option>
-                            ${projectOptions}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Due Date</label>
-                        <input type="date" id="taskDueDate" value="${task.dueDate || ''}">
-                    </div>
-                    <div class="form-group">
-                        <label>Priority</label>
-                        <select id="taskPriority">
-                            <option value="low" ${task.priority === 'low' ? 'selected' : ''}>Low</option>
-                            <option value="medium" ${task.priority === 'medium' ? 'selected' : ''}>Medium</option>
-                            <option value="high" ${task.priority === 'high' ? 'selected' : ''}>High</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>
-                            <input type="checkbox" id="taskCompleted" ${task.completed ? 'checked' : ''}>
-                            Completed
-                        </label>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteTask('${task.id}')">Delete</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                </form>
-            `);
-        }
-        
+        // Save task
         function saveTask() {
-            const task = {
-                id: editingItem ? editingItem.id : Date.now().toString(),
-                title: document.getElementById('taskTitle').value,
-                projectId: document.getElementById('taskProject').value,
-                dueDate: document.getElementById('taskDueDate').value,
-                priority: document.getElementById('taskPriority').value,
-                completed: document.getElementById('taskCompleted') ? document.getElementById('taskCompleted').checked : false,
-                createdAt: editingItem ? editingItem.createdAt : new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
+            const description = document.getElementById('taskDescription').value.trim();
+            const projectId = document.getElementById('taskProject').value;
             
-            if (editingItem) {
-                const index = data.tasks.findIndex(t => t.id === editingItem.id);
-                data.tasks[index] = task;
-            } else {
-                data.tasks.push(task);
+            if (!description) {
+                showToast('Please enter task description');
+                return;
             }
             
+            const task = {
+                id: Date.now().toString(),
+                description,
+                projectId,
+                completed: false,
+                created: Date.now(),
+                updated: Date.now()
+            };
+            
+            data.tasks.push(task);
             saveData();
-            closeModal();
+            closeModal('addTaskModal');
             renderView();
             updateStats();
-            showToast(editingItem ? 'Task updated' : 'Task added');
+            showToast('Task added');
         }
         
-        function toggleTask(id) {
-            const task = data.tasks.find(t => t.id === id);
+        // Save transaction
+        function saveTransaction() {
+            const type = document.getElementById('transactionType').value;
+            const amount = parseFloat(document.getElementById('transactionAmount').value);
+            const description = document.getElementById('transactionDescription').value.trim();
+            const projectId = document.getElementById('transactionProject').value;
+            
+            if (!amount || amount <= 0) {
+                showToast('Please enter a valid amount');
+                return;
+            }
+            
+            if (!description) {
+                showToast('Please enter a description');
+                return;
+            }
+            
+            const transaction = {
+                id: Date.now().toString(),
+                type,
+                amount,
+                description,
+                projectId,
+                date: Date.now()
+            };
+            
+            data.transactions.push(transaction);
+            saveData();
+            closeModal('addTransactionModal');
+            renderFinancial();
+            updateStats();
+            showToast('Transaction added');
+        }
+        
+        // Toggle task
+        function toggleTask(taskId) {
+            const task = data.tasks.find(t => t.id === taskId);
             if (task) {
                 task.completed = !task.completed;
-                task.updatedAt = new Date().toISOString();
+                task.updated = Date.now();
                 saveData();
                 renderView();
                 updateStats();
             }
         }
         
-        function deleteTask(id) {
-            if (confirm('Delete this task? It will be moved to trash.')) {
-                const task = data.tasks.find(t => t.id === id);
-                if (task) {
-                    // Move to trash
-                    if (!data.trash) data.trash = [];
-                    data.trash.push({
-                        id: Date.now().toString(),
-                        type: 'task',
-                        data: task,
-                        deletedAt: new Date().toISOString()
-                    });
-                    
-                    // Mark as deleted
-                    task.status = 'deleted';
-                    
-                    saveData();
-                    closeModal();
-                    renderView();
-                    updateStats();
-                    showToast('Task moved to trash');
-                }
-            }
-        }
-        
-        function showAddTransaction() {
-            editingItem = null;
-            const projectOptions = data.projects.filter(p => p.status !== 'deleted')
-                .map(p => `<option value="${p.id}">${p.title}</option>`)
-                .join('');
+        // Delete project
+        function deleteProject(projectId) {
+            if (!confirm('Delete this project and all its tasks/transactions?')) return;
             
-            showModal('Add Transaction', `
-                <form onsubmit="event.preventDefault(); saveTransaction()">
-                    <div class="form-group">
-                        <label>Type</label>
-                        <select id="transactionType">
-                            <option value="income">Income</option>
-                            <option value="expense">Expense</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Amount</label>
-                        <input type="number" id="transactionAmount" step="0.01" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <input type="text" id="transactionDescription" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Project</label>
-                        <select id="transactionProject">
-                            <option value="">No project</option>
-                            ${projectOptions}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" id="transactionDate" value="${new Date().toISOString().split('T')[0]}" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                </form>
-            `);
-        }
-        
-        function editTransaction(id) {
-            const transaction = data.transactions.find(t => t.id === id);
-            if (!transaction) return;
-            
-            editingItem = transaction;
-            const projectOptions = data.projects.filter(p => p.status !== 'deleted')
-                .map(p => `<option value="${p.id}" ${transaction.projectId === p.id ? 'selected' : ''}>${p.title}</option>`)
-                .join('');
-            
-            showModal('Edit Transaction', `
-                <form onsubmit="event.preventDefault(); saveTransaction()">
-                    <div class="form-group">
-                        <label>Type</label>
-                        <select id="transactionType">
-                            <option value="income" ${transaction.type === 'income' ? 'selected' : ''}>Income</option>
-                            <option value="expense" ${transaction.type === 'expense' ? 'selected' : ''}>Expense</option>
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Amount</label>
-                        <input type="number" id="transactionAmount" step="0.01" value="${transaction.amount}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Description</label>
-                        <input type="text" id="transactionDescription" value="${transaction.description}" required>
-                    </div>
-                    <div class="form-group">
-                        <label>Project</label>
-                        <select id="transactionProject">
-                            <option value="">No project</option>
-                            ${projectOptions}
-                        </select>
-                    </div>
-                    <div class="form-group">
-                        <label>Date</label>
-                        <input type="date" id="transactionDate" value="${transaction.date}" required>
-                    </div>
-                    <div class="form-actions">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button type="button" class="btn btn-danger" onclick="deleteTransaction('${transaction.id}')">Delete</button>
-                        <button type="button" class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                    </div>
-                </form>
-            `);
-        }
-        
-        function saveTransaction() {
-            const transaction = {
-                id: editingItem ? editingItem.id : Date.now().toString(),
-                type: document.getElementById('transactionType').value,
-                amount: parseFloat(document.getElementById('transactionAmount').value),
-                description: document.getElementById('transactionDescription').value,
-                projectId: document.getElementById('transactionProject').value,
-                date: document.getElementById('transactionDate').value,
-                createdAt: editingItem ? editingItem.createdAt : new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            };
-            
-            if (editingItem) {
-                const index = data.transactions.findIndex(t => t.id === editingItem.id);
-                data.transactions[index] = transaction;
-            } else {
-                data.transactions.push(transaction);
-            }
-            
-            saveData();
-            closeModal();
-            renderView();
-            updateStats();
-            showToast(editingItem ? 'Transaction updated' : 'Transaction added');
-        }
-        
-        function deleteTransaction(id) {
-            if (confirm('Delete this transaction? It will be moved to trash.')) {
-                const transaction = data.transactions.find(t => t.id === id);
-                if (transaction) {
-                    // Move to trash
-                    if (!data.trash) data.trash = [];
-                    data.trash.push({
-                        id: Date.now().toString(),
-                        type: 'transaction',
-                        data: transaction,
-                        deletedAt: new Date().toISOString()
-                    });
-                    
-                    // Mark as deleted
-                    transaction.status = 'deleted';
-                    
-                    saveData();
-                    closeModal();
-                    renderView();
-                    updateStats();
-                    showToast('Transaction moved to trash');
-                }
-            }
-        }
-        
-        // Trash functions
-        function restoreItem(id) {
-            const itemIndex = data.trash.findIndex(item => item.id === id);
-            if (itemIndex !== -1) {
-                const item = data.trash[itemIndex];
+            const project = data.projects.find(p => p.id === projectId);
+            if (project) {
+                project.deleted = true;
+                project.deletedAt = Date.now();
+                data.trash.push({ type: 'project', item: project });
                 
-                // Restore the item
-                item.data.status = 'active';
-                delete item.data.deletedAt;
+                // Also delete related tasks and transactions
+                data.tasks.filter(t => t.projectId === projectId).forEach(task => {
+                    task.deleted = true;
+                    task.deletedAt = Date.now();
+                    data.trash.push({ type: 'task', item: task });
+                });
                 
-                // Remove from trash
-                data.trash.splice(itemIndex, 1);
+                data.transactions.filter(t => t.projectId === projectId).forEach(transaction => {
+                    transaction.deleted = true;
+                    transaction.deletedAt = Date.now();
+                    data.trash.push({ type: 'transaction', item: transaction });
+                });
                 
                 saveData();
+                renderProjects();
+                updateStats();
+                showToast('Project moved to trash');
+            }
+        }
+        
+        // Delete task
+        function deleteTask(taskId) {
+            const task = data.tasks.find(t => t.id === taskId);
+            if (task) {
+                task.deleted = true;
+                task.deletedAt = Date.now();
+                data.trash.push({ type: 'task', item: task });
+                saveData();
+                renderView();
+                updateStats();
+                showToast('Task deleted');
+            }
+        }
+        
+        // Delete transaction
+        function deleteTransaction(transactionId) {
+            const transaction = data.transactions.find(t => t.id === transactionId);
+            if (transaction) {
+                transaction.deleted = true;
+                transaction.deletedAt = Date.now();
+                data.trash.push({ type: 'transaction', item: transaction });
+                saveData();
+                renderFinancial();
+                updateStats();
+                showToast('Transaction deleted');
+            }
+        }
+        
+        // Show trash
+        function showTrash() {
+            const modal = document.getElementById('trashModal');
+            const content = document.getElementById('trashContent');
+            
+            if (data.trash.length === 0) {
+                content.innerHTML = '<div class="empty-state"><div class="empty-text">Trash is empty</div></div>';
+            } else {
+                content.innerHTML = data.trash.map(item => {
+                    const deletedDate = new Date(item.item.deletedAt).toLocaleDateString();
+                    return `
+                        <div class="task-item">
+                            <div style="flex: 1">
+                                <div>${item.type}: ${item.item.name || item.item.description}</div>
+                                <div class="card-meta">Deleted: ${deletedDate}</div>
+                            </div>
+                            <button class="btn btn-primary" onclick="restoreItem('${item.item.id}', '${item.type}')">
+                                Restore
+                            </button>
+                        </div>
+                    `;
+                }).join('');
+            }
+            
+            openModal('trashModal');
+        }
+        
+        // Restore item
+        function restoreItem(itemId, type) {
+            let item;
+            switch(type) {
+                case 'project':
+                    item = data.projects.find(p => p.id === itemId);
+                    break;
+                case 'task':
+                    item = data.tasks.find(t => t.id === itemId);
+                    break;
+                case 'transaction':
+                    item = data.transactions.find(t => t.id === itemId);
+                    break;
+            }
+            
+            if (item) {
+                delete item.deleted;
+                delete item.deletedAt;
+                data.trash = data.trash.filter(t => t.item.id !== itemId);
+                saveData();
+                showTrash();
                 renderView();
                 updateStats();
                 showToast('Item restored');
             }
         }
         
-        function restoreAll() {
-            if (data.trash && data.trash.length > 0) {
-                if (confirm(`Restore all ${data.trash.length} items from trash?`)) {
-                    data.trash.forEach(item => {
-                        item.data.status = 'active';
-                        delete item.data.deletedAt;
-                    });
-                    
-                    data.trash = [];
-                    saveData();
-                    renderView();
-                    updateStats();
-                    showToast('All items restored');
-                }
-            }
-        }
-        
-        function permanentDelete(id) {
-            if (confirm('Permanently delete this item? This cannot be undone!')) {
-                const itemIndex = data.trash.findIndex(item => item.id === id);
-                if (itemIndex !== -1) {
-                    const item = data.trash[itemIndex];
-                    
-                    // Track permanently deleted items
-                    if (!data.permanentlyDeleted) data.permanentlyDeleted = [];
-                    data.permanentlyDeleted.push({
-                        ...item,
-                        permanentlyDeletedAt: new Date().toISOString()
-                    });
-                    
-                    // Remove from the appropriate array
-                    if (item.type === 'project') {
-                        const index = data.projects.findIndex(p => p.id === item.data.id);
-                        if (index !== -1) data.projects.splice(index, 1);
-                    } else if (item.type === 'task') {
-                        const index = data.tasks.findIndex(t => t.id === item.data.id);
-                        if (index !== -1) data.tasks.splice(index, 1);
-                    } else if (item.type === 'transaction') {
-                        const index = data.transactions.findIndex(t => t.id === item.data.id);
-                        if (index !== -1) data.transactions.splice(index, 1);
-                    }
-                    
-                    // Remove from trash
-                    data.trash.splice(itemIndex, 1);
-                    
-                    saveData();
-                    renderView();
-                    updateStats();
-                    showToast('Item permanently deleted');
-                }
-            }
-        }
-        
+        // Empty trash
         function emptyTrash() {
-            if (data.trash && data.trash.length > 0) {
-                if (confirm(`Permanently delete all ${data.trash.length} items? This cannot be undone!`)) {
-                    // Track permanently deleted items
-                    if (!data.permanentlyDeleted) data.permanentlyDeleted = [];
-                    
-                    data.trash.forEach(item => {
-                        data.permanentlyDeleted.push({
-                            ...item,
-                            permanentlyDeletedAt: new Date().toISOString()
-                        });
-                        
-                        // Remove from the appropriate array
-                        if (item.type === 'project') {
-                            const index = data.projects.findIndex(p => p.id === item.data.id);
-                            if (index !== -1) data.projects.splice(index, 1);
-                        } else if (item.type === 'task') {
-                            const index = data.tasks.findIndex(t => t.id === item.data.id);
-                            if (index !== -1) data.tasks.splice(index, 1);
-                        } else if (item.type === 'transaction') {
-                            const index = data.transactions.findIndex(t => t.id === item.data.id);
-                            if (index !== -1) data.transactions.splice(index, 1);
-                        }
-                    });
-                    
-                    data.trash = [];
-                    saveData();
-                    renderView();
-                    updateStats();
-                    showToast('Trash emptied');
-                }
+            if (!confirm('Permanently delete all items in trash?')) return;
+            
+            // Move items to permanently deleted for record keeping
+            data.trash.forEach(item => {
+                data.permanentlyDeleted.push({
+                    ...item,
+                    permanentlyDeletedAt: Date.now()
+                });
+            });
+            
+            // Remove from main arrays
+            const trashIds = data.trash.map(t => t.item.id);
+            data.projects = data.projects.filter(p => !trashIds.includes(p.id));
+            data.tasks = data.tasks.filter(t => !trashIds.includes(t.id));
+            data.transactions = data.transactions.filter(t => !trashIds.includes(t.id));
+            
+            data.trash = [];
+            saveData();
+            closeModal('trashModal');
+            renderView();
+            updateStats();
+            showToast('Trash emptied');
+        }
+        
+        // Show toast
+        function showToast(message, duration = 3000) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, duration);
+        }
+        
+        // Check sync status
+        function checkSyncStatus() {
+            const lastSync = localStorage.getItem('lastSyncTime');
+            if (lastSync) {
+                const date = new Date(parseInt(lastSync));
+                document.getElementById('lastSyncTime').textContent = 
+                    `Last: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
             }
         }
         
-        // Settings
-        function showSettings() {
-            const lastSync = localStorage.getItem('lastSyncTime');
-            const lastSyncDisplay = lastSync ? new Date(parseInt(lastSync)).toLocaleString() : 'Never';
+        // Perform sync (temporarily disabled for Builder Pro 2.0 development)
+        async function performSync() {
+            if (apiTempDisabled) {
+                showToast('🔧 Sync temporarily disabled for Builder Pro 2.0 development', 4000);
+                return;
+            }
             
-            showModal('Settings', `
-                <div class="accessibility-group">
-                    <div class="group-title">🎨 Theme Color</div>
-                    <div class="theme-selector">
-                        ${Object.entries(themes).map(([key, theme]) => `
-                            <div class="theme-option ${data.settings.theme === key ? 'active' : ''}" onclick="selectTheme('${key}')" style="cursor: pointer;">
-                                <div class="theme-preview" style="border: 2px solid ${data.settings.theme === key ? theme.accent : '#ddd'}; border-radius: 6px;">
-                                    <div class="theme-preview-left" style="background: ${theme.accent}"></div>
-                                    <div class="theme-preview-right" style="background: ${theme.highlight}"></div>
-                                </div>
-                                <div class="theme-name" style="font-weight: ${data.settings.theme === key ? 'bold' : 'normal'};">${theme.name}</div>
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-                
-                <div class="accessibility-group">
-                    <div class="group-title">Display Mode</div>
-                    <div class="setting-options">
-                        <button class="option-btn ${!data.settings.nightMode ? 'active' : ''}" onclick="toggleNightMode(false)">☀️ Light</button>
-                        <button class="option-btn ${data.settings.nightMode ? 'active' : ''}" onclick="toggleNightMode(true)">🌙 Dark</button>
-                    </div>
-                </div>
-                
-                <div class="accessibility-group">
-                    <div class="group-title">Text Size</div>
-                    <div class="setting-options">
-                        <button class="option-btn ${data.settings.fontSize === 's' ? 'active' : ''}" onclick="setFontSize('s')">Small</button>
-                        <button class="option-btn ${data.settings.fontSize === 'm' ? 'active' : ''}" onclick="setFontSize('m')">Medium</button>
-                        <button class="option-btn ${data.settings.fontSize === 'l' ? 'active' : ''}" onclick="setFontSize('l')">Large</button>
-                        <button class="option-btn ${data.settings.fontSize === 'xl' ? 'active' : ''}" onclick="setFontSize('xl')">X-Large</button>
-                        <button class="option-btn ${data.settings.fontSize === 'xxl' ? 'active' : ''}" onclick="setFontSize('xxl')">XX-Large</button>
-                    </div>
-                </div>
-                
-                <div class="accessibility-group">
-                    <div class="group-title">Contrast</div>
-                    <div class="setting-options">
-                        <button class="option-btn ${data.settings.contrast === 'low' ? 'active' : ''}" onclick="setContrast('low')">Low</button>
-                        <button class="option-btn ${data.settings.contrast === 'normal' ? 'active' : ''}" onclick="setContrast('normal')">Normal</button>
-                        <button class="option-btn ${data.settings.contrast === 'high' ? 'active' : ''}" onclick="setContrast('high')">High</button>
-                        <button class="option-btn ${data.settings.contrast === 'extra' ? 'active' : ''}" onclick="setContrast('extra')">Extra</button>
-                    </div>
-                </div>
-                
-                <div class="accessibility-group">
-                    <div class="group-title">Color Saturation</div>
-                    <div class="setting-options">
-                        <button class="option-btn ${data.settings.saturation === 'low' ? 'active' : ''}" onclick="setSaturation('low')">Low</button>
-                        <button class="option-btn ${data.settings.saturation === 'normal' ? 'active' : ''}" onclick="setSaturation('normal')">Normal</button>
-                        <button class="option-btn ${data.settings.saturation === 'high' ? 'active' : ''}" onclick="setSaturation('high')">High</button>
-                        <button class="option-btn ${data.settings.saturation === 'vibrant' ? 'active' : ''}" onclick="setSaturation('vibrant')">Vibrant</button>
-                    </div>
-                </div>
-                
-                <div class="accessibility-group">
-                    <div class="group-title">Cloud Sync (JSONBin.io)</div>
-                    <div style="margin-bottom: 10px;">
-                        <label style="display: block; margin-bottom: 5px;">API Key</label>
-                        <input type="password" id="apiKeyInput" placeholder="Enter your JSONBin API key" style="width: 100%;">
-                    </div>
-                    <div style="display: flex; gap: 8px; margin-bottom: 10px;">
-                        <button class="btn btn-primary" onclick="saveApiKey()">Save Key</button>
-                        <button class="btn btn-secondary" onclick="testSync()">Test Connection</button>
-                    </div>
-                    <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 5px;">
-                        Status: <span id="syncMode" style="font-weight: bold;">${syncApiKey ? 'Ready' : 'No API Key'}</span>
-                    </div>
-                    <div style="font-size: 11px; color: var(--text-secondary);" id="lastSyncTime">
-                        Last: ${lastSyncDisplay}
-                    </div>
-                </div>
-                
-                <div class="accessibility-group">
-                    <div class="group-title">Data Management</div>
-                    <div style="display: flex; gap: 8px;">
-                        <button class="btn btn-secondary" onclick="exportData()">📥 Export</button>
-                        <label class="btn btn-secondary" style="margin: 0;">
-                            📤 Import
-                            <input type="file" accept=".json" onchange="importData(event)" style="display: none;">
-                        </label>
-                    </div>
-                </div>
-            `);
-        }
-        
-        function selectTheme(themeName) {
-            applyTheme(themeName);
-            showSettings(); // Refresh the modal to show the updated selection
-            showToast(`Theme changed to ${themes[themeName].name}`);
-        }
-        
-        function toggleNightMode(enabled) {
-            data.settings.nightMode = enabled;
-            applySettings();
-            saveData();
-            showSettings(); // Refresh modal
-        }
-        
-        function setFontSize(size) {
-            data.settings.fontSize = size;
-            applySettings();
-            saveData();
-            showSettings(); // Refresh modal
-        }
-        
-        function setContrast(level) {
-            data.settings.contrast = level;
-            applySettings();
-            saveData();
-            showSettings(); // Refresh modal
-        }
-        
-        function setSaturation(level) {
-            data.settings.saturation = level;
-            applySettings();
-            saveData();
-            showSettings(); // Refresh modal
-        }
-        
-        // Toast notification
-        function showToast(message, duration = 3000) {
-            const existing = document.querySelector('.toast');
-            if (existing) existing.remove();
-            
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = message;
-            document.body.appendChild(toast);
-            
-            setTimeout(() => toast.remove(), duration);
-        }
-        
-        // Sync functions
-        async function syncData() {
             if (!syncApiKey) {
-                showToast('⚠️ No API key set! Go to Settings to add one.');
+                showToast('⚠️ No API key set! Go to Settings.');
                 return;
             }
             
             const indicator = document.getElementById('syncIndicator');
             const syncMode = document.getElementById('syncMode');
+            indicator.classList.add('syncing');
+            syncMode.textContent = 'Syncing...';
             
             const startTime = Date.now();
-            indicator.classList.add('syncing');
             
             try {
-                console.log('🔄 Starting 3-way sync...');
+                console.log('🔄 Starting sync process...');
                 
-                // STEP 1: FETCH from cloud
-                console.log('🔄 Step 1: Fetching from cloud...');
+                // STEP 1: FETCH cloud data
+                console.log('🔄 Step 1: Fetching cloud data...');
                 syncMode.textContent = 'Fetching...';
-                const response = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
+                const getResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
                     headers: {
                         'X-Master-Key': syncApiKey
                     }
                 });
                 
-                if (!response.ok) {
-                    throw new Error(`Fetch failed: ${response.status} - ${response.statusText}`);
+                if (!getResponse.ok) {
+                    throw new Error(`Fetch failed: ${getResponse.status} - ${getResponse.statusText}`);
                 }
                 
-                const result = await response.json();
-                const cloudData = result.record;
-                console.log('☁️ Cloud data:', {
-                    projects: cloudData.projects?.length || 0,
-                    tasks: cloudData.tasks?.length || 0,
-                    transactions: cloudData.transactions?.length || 0
-                });
+                const cloudResult = await getResponse.json();
+                const cloudData = cloudResult.record || {};
                 
-                // STEP 2: MERGE local and cloud data
+                // STEP 2: MERGE data intelligently
                 console.log('🔄 Step 2: Merging data...');
                 syncMode.textContent = 'Merging...';
                 
-                const beforeCounts = {
-                    projects: data.projects.length,
-                    tasks: data.tasks.length,
-                    transactions: data.transactions.length
-                };
-                
-                // Merge arrays (union by ID, prefer newer updatedAt)
-                if (cloudData) {
+                if (cloudData.projects || cloudData.tasks || cloudData.transactions) {
+                    const beforeCounts = {
+                        projects: data.projects.length,
+                        tasks: data.tasks.length,
+                        transactions: data.transactions.length
+                    };
+                    
                     // Merge projects
                     if (cloudData.projects) {
-                        const projectMap = new Map();
-                        [...data.projects, ...cloudData.projects].forEach(p => {
-                            const existing = projectMap.get(p.id);
-                            if (!existing || new Date(p.updatedAt) > new Date(existing.updatedAt)) {
-                                projectMap.set(p.id, p);
+                        const localIds = new Set(data.projects.map(p => p.id));
+                        const newProjects = cloudData.projects.filter(p => !localIds.has(p.id));
+                        data.projects = [...data.projects, ...newProjects];
+                        
+                        // Update existing projects if cloud version is newer
+                        cloudData.projects.forEach(cloudProject => {
+                            const localIndex = data.projects.findIndex(p => p.id === cloudProject.id);
+                            if (localIndex !== -1) {
+                                const localProject = data.projects[localIndex];
+                                if (cloudProject.updated > localProject.updated) {
+                                    data.projects[localIndex] = cloudProject;
+                                }
                             }
                         });
-                        data.projects = Array.from(projectMap.values());
                     }
                     
                     // Merge tasks
                     if (cloudData.tasks) {
-                        const taskMap = new Map();
-                        [...data.tasks, ...cloudData.tasks].forEach(t => {
-                            const existing = taskMap.get(t.id);
-                            if (!existing || new Date(t.updatedAt) > new Date(existing.updatedAt)) {
-                                taskMap.set(t.id, t);
+                        const localIds = new Set(data.tasks.map(t => t.id));
+                        const newTasks = cloudData.tasks.filter(t => !localIds.has(t.id));
+                        data.tasks = [...data.tasks, ...newTasks];
+                        
+                        cloudData.tasks.forEach(cloudTask => {
+                            const localIndex = data.tasks.findIndex(t => t.id === cloudTask.id);
+                            if (localIndex !== -1) {
+                                const localTask = data.tasks[localIndex];
+                                if (cloudTask.updated > localTask.updated) {
+                                    data.tasks[localIndex] = cloudTask;
+                                }
                             }
                         });
-                        data.tasks = Array.from(taskMap.values());
                     }
                     
                     // Merge transactions
                     if (cloudData.transactions) {
-                        const transMap = new Map();
-                        [...data.transactions, ...cloudData.transactions].forEach(t => {
-                            const existing = transMap.get(t.id);
-                            if (!existing || new Date(t.updatedAt) > new Date(existing.updatedAt)) {
-                                transMap.set(t.id, t);
-                            }
-                        });
-                        data.transactions = Array.from(transMap.values());
+                        const localIds = new Set(data.transactions.map(t => t.id));
+                        const newTransactions = cloudData.transactions.filter(t => !localIds.has(t.id));
+                        data.transactions = [...data.transactions, ...newTransactions];
                     }
                     
                     // Merge trash
@@ -2180,7 +2061,7 @@
                             ...cloudData.trash
                         ];
                         data.trash = Array.from(
-                            new Map(data.trash.map(item => [item.id, item])).values()
+                            new Map(data.trash.map(item => [item.item.id, item])).values()
                         );
                     }
                     
@@ -2376,6 +2257,88 @@
                 reader.readAsText(file);
             }
         }
+
+        // Sticky Note Reminder System
+        function setupReminderSystem() {
+            // Temporarily disable API for Builder Pro 2.0 development
+            apiTempDisabled = true;
+            showToast('🔧 API temporarily disabled for Builder Pro 2.0 development', 5000);
+            
+            // Set random interval between 35-45 minutes
+            const randomMinutes = 35 + Math.random() * 10; // 35-45 minutes
+            const intervalMs = randomMinutes * 60 * 1000;
+            
+            reminderInterval = setInterval(() => {
+                showStickyNote();
+            }, intervalMs);
+            
+            // Show initial reminder after 2 minutes for testing
+            setTimeout(() => {
+                showStickyNote();
+            }, 2 * 60 * 1000);
+        }
+
+        function showStickyNote() {
+            const stickyNote = document.getElementById('stickyNote');
+            const content = document.getElementById('stickyNoteContent');
+            
+            // Generate dynamic check items based on current app state
+            const checkItems = [];
+            
+            // Check incomplete tasks
+            const incompleteTasks = data.tasks.filter(t => !t.deleted && !t.completed).length;
+            if (incompleteTasks > 0) {
+                checkItems.push(`${incompleteTasks} pending task${incompleteTasks > 1 ? 's' : ''} to complete`);
+            }
+            
+            // Check project progress
+            const projectsWithNoTasks = data.projects.filter(p => {
+                return !p.deleted && !data.tasks.some(t => t.projectId === p.id && !t.deleted);
+            }).length;
+            if (projectsWithNoTasks > 0) {
+                checkItems.push(`${projectsWithNoTasks} project${projectsWithNoTasks > 1 ? 's' : ''} need tasks`);
+            }
+            
+            // Check financial balance
+            const transactions = data.transactions.filter(t => !t.deleted);
+            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
+            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+            const balance = totalIncome - totalExpenses;
+            if (balance < 0) {
+                checkItems.push(`Budget deficit: ${getCurrencySymbol()}${Math.abs(balance).toFixed(0)}`);
+            }
+            
+            // Check trash
+            if (data.trash.length > 10) {
+                checkItems.push(`Trash has ${data.trash.length} items`);
+            }
+            
+            // Default items if nothing specific
+            if (checkItems.length === 0) {
+                checkItems.push('Review your projects');
+                checkItems.push('Update task progress');
+                checkItems.push('Check financial summary');
+            }
+            
+            // Add development reminder
+            checkItems.push('Builder Pro 2.0 in development! 🚀');
+            
+            // Generate HTML for check items
+            content.innerHTML = checkItems.map(item => 
+                `<div class="check-item">${item}</div>`
+            ).join('');
+            
+            // Show sticky note
+            stickyNote.classList.add('show');
+            
+            // Auto-hide after 5 seconds
+            setTimeout(() => {
+                stickyNote.classList.remove('show');
+            }, 5000);
+        }
+
+        // Initialize on load
+        window.addEventListener('load', init);
     </script>
 </body>
 </html>
