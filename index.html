@@ -7,15 +7,15 @@
     <!-- PWA Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Builder Pro">
-    <meta name="apple-mobile-web-app-title" content="Builder Pro">
+    <meta name="application-name" content="Builder Pro AI">
+    <meta name="apple-mobile-web-app-title" content="Builder Pro AI">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <meta name="theme-color" content="#d2bcbf">
     <meta name="msapplication-navbutton-color" content="#d2bcbf">
     <meta name="msapplication-starturl" content="/">
     <meta name="format-detection" content="telephone=no">
     
-    <title>Builder Pro - Complete Project Manager</title>
+    <title>Builder Pro AI - Intelligent Project Manager</title>
     
     <style>
         :root {
@@ -46,6 +46,16 @@
             --contrast: 1;
             --brightness: 1;
             --font-scale: 1;
+            
+            /* Gantt Chart Colors */
+            --gantt-project1: #99b3ec;
+            --gantt-project2: #90b2b8;
+            --gantt-project3: #c0ccb8;
+            --gantt-project4: #e0b558;
+            --gantt-project5: #d2bcbf;
+            --gantt-project6: #8386a4;
+            --gantt-critical: #ef4444;
+            --gantt-milestone: #6366f1;
         }
 
         /* Theme Color Schemes */
@@ -223,6 +233,18 @@
         
         .header-btn:active {
             background: rgba(255,255,255,0.3);
+        }
+
+        .ai-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            font-size: 8px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
         }
         
         .sync-indicator { 
@@ -430,6 +452,286 @@
             border-radius: 3px; 
             transition: width 0.3s; 
         }
+
+        /* Gantt Chart Styles */
+        .gantt-container {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 16px;
+            overflow-x: auto;
+        }
+
+        .gantt-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .gantt-title {
+            font-weight: 600;
+            font-size: calc(16px * var(--font-scale));
+            color: var(--text-color);
+        }
+
+        .gantt-controls {
+            display: flex;
+            gap: 8px;
+        }
+
+        .gantt-btn {
+            padding: 6px 12px;
+            background: var(--bg-color);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: calc(12px * var(--font-scale));
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gantt-btn.active {
+            background: var(--highlight-color);
+            color: white;
+            border-color: var(--highlight-color);
+        }
+
+        .gantt-chart {
+            position: relative;
+            min-height: 200px;
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 10px;
+            overflow-x: auto;
+        }
+
+        .gantt-timeline {
+            display: flex;
+            position: relative;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 10px;
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+        }
+
+        .gantt-month {
+            flex: 1;
+            text-align: center;
+            padding: 4px;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .gantt-rows {
+            position: relative;
+        }
+
+        .gantt-row {
+            display: flex;
+            align-items: center;
+            min-height: 40px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .gantt-label {
+            width: 120px;
+            padding-right: 10px;
+            font-size: calc(12px * var(--font-scale));
+            color: var(--text-color);
+            font-weight: 500;
+        }
+
+        .gantt-bars {
+            flex: 1;
+            position: relative;
+            height: 30px;
+            background: repeating-linear-gradient(
+                90deg,
+                transparent,
+                transparent 10%,
+                var(--border-color) 10%,
+                var(--border-color) 10.1%
+            );
+        }
+
+        .gantt-bar {
+            position: absolute;
+            height: 24px;
+            top: 3px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 8px;
+            font-size: calc(11px * var(--font-scale));
+            color: white;
+            font-weight: 500;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .gantt-bar:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 10;
+        }
+
+        .gantt-bar.critical {
+            background: var(--gantt-critical);
+        }
+
+        .gantt-bar.milestone {
+            background: var(--gantt-milestone);
+            width: 20px !important;
+            height: 20px;
+            transform: rotate(45deg);
+            padding: 0;
+        }
+
+        .mini-gantt {
+            height: 60px;
+            background: var(--bg-color);
+            border-radius: 6px;
+            padding: 8px;
+            margin-top: 8px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .mini-gantt-bar {
+            position: absolute;
+            height: 8px;
+            background: var(--accent-color);
+            border-radius: 4px;
+            opacity: 0.7;
+        }
+
+        /* AI Assistant Styles */
+        .ai-assistant {
+            position: fixed;
+            bottom: calc(90px + env(safe-area-inset-bottom));
+            right: calc(20px + env(safe-area-inset-right));
+            background: linear-gradient(135deg, #6366f1, #8b5cf6);
+            color: white;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
+            z-index: 49;
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ai-assistant:active {
+            transform: scale(0.95);
+        }
+
+        .ai-panel {
+            position: fixed;
+            bottom: calc(150px + env(safe-area-inset-bottom));
+            right: calc(20px + env(safe-area-inset-right));
+            width: 320px;
+            max-height: 400px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 16px;
+            display: none;
+            z-index: 100;
+            animation: slideUp 0.3s;
+        }
+
+        .ai-panel.active {
+            display: block;
+        }
+
+        .ai-panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .ai-panel-title {
+            font-weight: 600;
+            font-size: calc(14px * var(--font-scale));
+            color: var(--text-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ai-close {
+            background: transparent;
+            border: none;
+            font-size: 18px;
+            cursor: pointer;
+            color: var(--text-secondary);
+        }
+
+        .ai-suggestions {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+
+        .ai-suggestion {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 10px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .ai-suggestion:hover {
+            transform: translateX(4px);
+            background: linear-gradient(90deg, var(--bg-color), var(--accent-color) 200%);
+        }
+
+        .ai-suggestion-title {
+            font-weight: 500;
+            font-size: calc(12px * var(--font-scale));
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+
+        .ai-suggestion-desc {
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
+            line-height: 1.4;
+        }
+
+        .ai-priority {
+            display: inline-block;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: calc(10px * var(--font-scale));
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .ai-priority.high {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .ai-priority.medium {
+            background: #fffbeb;
+            color: #d97706;
+        }
+
+        .ai-priority.low {
+            background: #f0fdf4;
+            color: #16a34a;
+        }
         
         .task-item { 
             display: flex; 
@@ -594,6 +896,11 @@
         .btn-secondary { 
             background: var(--border-color); 
             color: var(--text-color); 
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444, #dc2626);
+            color: white;
         }
         
         .empty-state { 
@@ -920,11 +1227,15 @@
                 <div class="header-content">
                     <div class="header-left" onclick="goHome()">
                         <div>
-                            <h1>🏗️ Builder Pro</h1>
-                            <div class="header-subtitle">Complete Project Manager</div>
+                            <h1>🏗️ Builder Pro AI</h1>
+                            <div class="header-subtitle">Intelligent Project Manager</div>
                         </div>
                     </div>
                     <div class="header-controls">
+                        <button class="header-btn" onclick="showAIAssistant()" title="AI Assistant">
+                            🤖
+                            <span class="ai-badge">AI</span>
+                        </button>
                         <button class="header-btn" onclick="performSync()" title="Sync">
                             ☁️
                             <span class="sync-indicator" id="syncIndicator"></span>
@@ -957,6 +1268,7 @@
             
             <nav class="nav-tabs">
                 <div class="nav-tab active" onclick="switchView('projects')">Projects</div>
+                <div class="nav-tab" onclick="switchView('schedule')">Schedule</div>
                 <div class="nav-tab" onclick="switchView('tasks')">Tasks</div>
                 <div class="nav-tab" onclick="switchView('financial')">Financial</div>
                 <div class="nav-tab" onclick="switchView('settings')">Settings</div>
@@ -966,6 +1278,7 @@
         <div class="main-content-wrapper">
             <main class="main-content">
                 <div id="projectsSection" class="section active"></div>
+                <div id="scheduleSection" class="section"></div>
                 <div id="tasksSection" class="section"></div>
                 <div id="financialSection" class="section"></div>
                 <div id="settingsSection" class="section"></div>
@@ -973,6 +1286,21 @@
         </div>
         
         <button class="add-btn" id="addBtn" onclick="openAddModal()">+</button>
+        <button class="ai-assistant" onclick="toggleAIPanel()">🤖</button>
+        
+        <!-- AI Panel -->
+        <div id="aiPanel" class="ai-panel">
+            <div class="ai-panel-header">
+                <div class="ai-panel-title">
+                    <span>🤖</span>
+                    <span>AI Assistant</span>
+                </div>
+                <button class="ai-close" onclick="toggleAIPanel()">×</button>
+            </div>
+            <div class="ai-suggestions" id="aiSuggestions">
+                <!-- AI suggestions will be dynamically generated -->
+            </div>
+        </div>
     </div>
     
     <!-- Modals -->
@@ -988,9 +1316,25 @@
                 <textarea class="form-textarea" id="projectDescription" placeholder="Project description (optional)"></textarea>
             </div>
             <div class="form-group">
+                <label class="form-label">Start Date</label>
+                <input type="date" class="form-input" id="projectStartDate">
+            </div>
+            <div class="form-group">
+                <label class="form-label">End Date</label>
+                <input type="date" class="form-input" id="projectEndDate">
+            </div>
+            <div class="form-group">
                 <label class="form-label">Budget (optional)</label>
                 <input type="number" class="form-input" id="projectBudget" placeholder="0.00">
                 <div class="currency-note">Currency: <span id="currencyDisplay">USD</span></div>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Priority</label>
+                <select class="form-select" id="projectPriority">
+                    <option value="low">Low</option>
+                    <option value="medium" selected>Medium</option>
+                    <option value="high">High</option>
+                </select>
             </div>
             <div class="form-actions">
                 <button class="btn btn-secondary" onclick="closeModal('addProjectModal')">Cancel</button>
@@ -1009,6 +1353,14 @@
             <div class="form-group">
                 <label class="form-label">Project</label>
                 <select class="form-select" id="taskProject"></select>
+            </div>
+            <div class="form-group">
+                <label class="form-label">Due Date</label>
+                <input type="date" class="form-input" id="taskDueDate">
+            </div>
+            <div class="form-group">
+                <label class="form-label">Estimated Hours</label>
+                <input type="number" class="form-input" id="taskEstimatedHours" placeholder="0" min="0" step="0.5">
             </div>
             <div class="form-actions">
                 <button class="btn btn-secondary" onclick="closeModal('addTaskModal')">Cancel</button>
@@ -1084,7 +1436,8 @@
                 contrast: 'normal',
                 fontSize: 'm',
                 saturation: 'normal',
-                theme: 'rose'
+                theme: 'rose',
+                aiEnabled: true
             }
         };
         
@@ -1093,6 +1446,7 @@
         let syncApiKey = '';
         let reminderInterval = null;
         let apiTempDisabled = false;
+        let ganttView = 'month'; // month, week, day
         
         // App configuration
         const APP_CONFIG = {
@@ -1104,10 +1458,18 @@
         function init() {
             loadData();
             applySettings();
+            
+            // Check if this is first run or user wants to clear
+            if (localStorage.getItem('clearDataFlag') === 'true' || !localStorage.getItem('builderProData')) {
+                clearAllData();
+                localStorage.removeItem('clearDataFlag');
+            }
+            
             renderView();
             updateStats();
             checkSyncStatus();
             setupReminderSystem();
+            initializeAI();
             
             // Load API key from localStorage
             const savedApiKey = localStorage.getItem('builderProSyncApiKey');
@@ -1121,10 +1483,10 @@
                 console.log('Running as PWA');
             }
             
-            // Auto-sync on load if API key exists
-            if (syncApiKey && navigator.onLine) {
-                setTimeout(() => performSync(), 2000);
-            }
+            // Set today's date as default for new projects/tasks
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('projectStartDate').value = today;
+            document.getElementById('taskDueDate').value = today;
         }
         
         // Load data from localStorage
@@ -1145,11 +1507,15 @@
                         contrast: 'normal',
                         fontSize: 'm',
                         saturation: 'normal',
-                        theme: 'rose'
+                        theme: 'rose',
+                        aiEnabled: true
                     };
                     // Ensure theme setting exists
                     if (!data.settings.theme) {
                         data.settings.theme = 'rose';
+                    }
+                    if (data.settings.aiEnabled === undefined) {
+                        data.settings.aiEnabled = true;
                     }
                 } catch (e) {
                     console.error('Error loading data:', e);
@@ -1160,6 +1526,24 @@
         // Save data to localStorage
         function saveData() {
             localStorage.setItem('builderProData', JSON.stringify(data));
+        }
+
+        // Clear all data
+        function clearAllData() {
+            if (confirm('⚠️ This will permanently delete ALL projects, tasks, and transactions. Are you absolutely sure?')) {
+                data = {
+                    projects: [],
+                    tasks: [],
+                    transactions: [],
+                    trash: [],
+                    permanentlyDeleted: [],
+                    settings: data.settings // Preserve settings
+                };
+                saveData();
+                renderView();
+                updateStats();
+                showToast('✨ All data cleared! Fresh start.');
+            }
         }
         
         // Apply settings
@@ -1195,6 +1579,9 @@
             // Saturation settings
             document.body.classList.remove('sat-low', 'sat-normal', 'sat-high', 'sat-vibrant');
             document.body.classList.add('sat-' + data.settings.saturation);
+            
+            // AI Assistant visibility
+            document.querySelector('.ai-assistant').style.display = data.settings.aiEnabled ? 'flex' : 'none';
         }
         
         // Switch view
@@ -1215,7 +1602,7 @@
             
             // Update add button visibility
             document.getElementById('addBtn').style.display = 
-                view === 'settings' ? 'none' : 'block';
+                (view === 'settings' || view === 'schedule') ? 'none' : 'block';
             
             renderView();
         }
@@ -1242,6 +1629,9 @@
                 case 'projects':
                     renderProjects();
                     break;
+                case 'schedule':
+                    renderSchedule();
+                    break;
                 case 'tasks':
                     renderTasks();
                     break;
@@ -1254,7 +1644,7 @@
             }
         }
         
-        // Render projects
+        // Render projects with mini Gantt charts
         function renderProjects() {
             const container = document.getElementById('projectsSection');
             const projects = data.projects.filter(p => !p.deleted);
@@ -1279,11 +1669,22 @@
                 const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
                 const balance = income - expenses;
                 
+                // Calculate project duration for mini Gantt
+                const startDate = new Date(project.startDate || project.created);
+                const endDate = new Date(project.endDate || Date.now() + 30 * 24 * 60 * 60 * 1000);
+                const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+                const daysPassed = Math.ceil((new Date() - startDate) / (1000 * 60 * 60 * 24));
+                const progressPercent = Math.min(100, Math.max(0, (daysPassed / totalDays) * 100));
+                
                 return `
                     <div class="card" onclick="viewProject('${project.id}')">
                         <div class="card-header">
                             <div>
-                                <div class="card-title">${project.name}</div>
+                                <div class="card-title">
+                                    ${project.name}
+                                    ${project.priority === 'high' ? '<span class="ai-priority high">HIGH</span>' : ''}
+                                    ${project.priority === 'low' ? '<span class="ai-priority low">LOW</span>' : ''}
+                                </div>
                                 <div class="card-meta">
                                     ${tasks.length} tasks • ${getCurrencySymbol()}${balance.toFixed(2)}
                                     ${project.budget ? ` • Budget: ${getCurrencySymbol()}${project.budget}` : ''}
@@ -1294,6 +1695,16 @@
                             </div>
                         </div>
                         ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
+                        
+                        <!-- Mini Gantt Chart -->
+                        <div class="mini-gantt">
+                            <div class="mini-gantt-bar" style="width: ${progressPercent}%; background: ${getProjectColor(project.id)};"></div>
+                            <div style="position: absolute; top: 20px; left: 8px; font-size: 10px; color: var(--text-secondary);">
+                                ${startDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - 
+                                ${endDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
+                            </div>
+                        </div>
+                        
                         ${tasks.length > 0 ? `
                             <div class="progress-bar">
                                 <div class="progress-fill" style="width: ${progress}%"></div>
@@ -1302,6 +1713,326 @@
                     </div>
                 `;
             }).join('');
+        }
+
+        // Render Schedule with main Gantt chart
+        function renderSchedule() {
+            const container = document.getElementById('scheduleSection');
+            const projects = data.projects.filter(p => !p.deleted);
+            
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-icon">📅</div>
+                        <div class="empty-text">No projects to schedule<br>Create projects to see your timeline</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Generate Gantt chart HTML
+            const months = generateMonthRange(projects);
+            const ganttHTML = `
+                <div class="gantt-container">
+                    <div class="gantt-header">
+                        <div class="gantt-title">📊 Master Schedule</div>
+                        <div class="gantt-controls">
+                            <button class="gantt-btn ${ganttView === 'day' ? 'active' : ''}" onclick="changeGanttView('day')">Day</button>
+                            <button class="gantt-btn ${ganttView === 'week' ? 'active' : ''}" onclick="changeGanttView('week')">Week</button>
+                            <button class="gantt-btn ${ganttView === 'month' ? 'active' : ''}" onclick="changeGanttView('month')">Month</button>
+                        </div>
+                    </div>
+                    <div class="gantt-chart">
+                        <div class="gantt-timeline">
+                            ${months.map(month => `<div class="gantt-month">${month}</div>`).join('')}
+                        </div>
+                        <div class="gantt-rows">
+                            ${projects.map(project => {
+                                const startDate = new Date(project.startDate || project.created);
+                                const endDate = new Date(project.endDate || Date.now() + 30 * 24 * 60 * 60 * 1000);
+                                const position = calculateGanttPosition(startDate, endDate, months);
+                                
+                                return `
+                                    <div class="gantt-row">
+                                        <div class="gantt-label">${project.name}</div>
+                                        <div class="gantt-bars">
+                                            <div class="gantt-bar ${project.priority === 'high' ? 'critical' : ''}" 
+                                                 style="left: ${position.left}%; width: ${position.width}%; background: ${getProjectColor(project.id)};"
+                                                 onclick="viewProject('${project.id}')">
+                                                ${Math.round(position.width) > 10 ? project.name.substring(0, 10) : ''}
+                                            </div>
+                                        </div>
+                                    </div>
+                                `;
+                            }).join('')}
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- AI Schedule Insights -->
+                ${renderScheduleInsights(projects)}
+            `;
+            
+            container.innerHTML = ganttHTML;
+        }
+
+        // Generate month range for Gantt chart
+        function generateMonthRange(projects) {
+            if (projects.length === 0) return [];
+            
+            let minDate = new Date();
+            let maxDate = new Date();
+            
+            projects.forEach(project => {
+                const start = new Date(project.startDate || project.created);
+                const end = new Date(project.endDate || Date.now() + 30 * 24 * 60 * 60 * 1000);
+                
+                if (start < minDate) minDate = start;
+                if (end > maxDate) maxDate = end;
+            });
+            
+            // Add buffer
+            minDate.setMonth(minDate.getMonth() - 1);
+            maxDate.setMonth(maxDate.getMonth() + 1);
+            
+            const months = [];
+            const current = new Date(minDate);
+            
+            while (current <= maxDate) {
+                months.push(current.toLocaleDateString('en-US', { month: 'short', year: '2-digit' }));
+                current.setMonth(current.getMonth() + 1);
+            }
+            
+            return months;
+        }
+
+        // Calculate Gantt bar position
+        function calculateGanttPosition(startDate, endDate, months) {
+            if (months.length === 0) return { left: 0, width: 100 };
+            
+            const firstMonth = new Date(months[0]);
+            const lastMonth = new Date(months[months.length - 1]);
+            const totalDays = (lastMonth - firstMonth) / (1000 * 60 * 60 * 24);
+            
+            const startOffset = Math.max(0, (startDate - firstMonth) / (1000 * 60 * 60 * 24));
+            const duration = (endDate - startDate) / (1000 * 60 * 60 * 24);
+            
+            return {
+                left: (startOffset / totalDays) * 100,
+                width: Math.min(100 - (startOffset / totalDays) * 100, (duration / totalDays) * 100)
+            };
+        }
+
+        // Get project color
+        function getProjectColor(projectId) {
+            const colors = [
+                'var(--gantt-project1)',
+                'var(--gantt-project2)',
+                'var(--gantt-project3)',
+                'var(--gantt-project4)',
+                'var(--gantt-project5)',
+                'var(--gantt-project6)'
+            ];
+            const index = data.projects.findIndex(p => p.id === projectId);
+            return colors[index % colors.length];
+        }
+
+        // Change Gantt view
+        function changeGanttView(view) {
+            ganttView = view;
+            renderSchedule();
+        }
+
+        // Render schedule insights
+        function renderScheduleInsights(projects) {
+            const today = new Date();
+            const overdue = projects.filter(p => new Date(p.endDate) < today && !isProjectComplete(p.id));
+            const upcoming = projects.filter(p => {
+                const end = new Date(p.endDate);
+                const daysUntil = (end - today) / (1000 * 60 * 60 * 24);
+                return daysUntil > 0 && daysUntil <= 7;
+            });
+            
+            if (overdue.length === 0 && upcoming.length === 0) return '';
+            
+            return `
+                <div class="card">
+                    <div class="card-title">🤖 AI Schedule Insights</div>
+                    ${overdue.length > 0 ? `
+                        <div class="ai-suggestion">
+                            <div class="ai-suggestion-title">⚠️ Overdue Projects (${overdue.length})</div>
+                            <div class="ai-suggestion-desc">
+                                ${overdue.map(p => p.name).join(', ')} need immediate attention.
+                            </div>
+                        </div>
+                    ` : ''}
+                    ${upcoming.length > 0 ? `
+                        <div class="ai-suggestion">
+                            <div class="ai-suggestion-title">📅 Upcoming Deadlines (${upcoming.length})</div>
+                            <div class="ai-suggestion-desc">
+                                ${upcoming.map(p => p.name).join(', ')} are due within 7 days.
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+        // Check if project is complete
+        function isProjectComplete(projectId) {
+            const tasks = data.tasks.filter(t => t.projectId === projectId && !t.deleted);
+            if (tasks.length === 0) return false;
+            return tasks.every(t => t.completed);
+        }
+
+        // Initialize AI
+        function initializeAI() {
+            generateAISuggestions();
+            
+            // Refresh AI suggestions every 5 minutes
+            setInterval(generateAISuggestions, 5 * 60 * 1000);
+        }
+
+        // Generate AI suggestions
+        function generateAISuggestions() {
+            const suggestions = [];
+            const projects = data.projects.filter(p => !p.deleted);
+            const tasks = data.tasks.filter(t => !t.deleted);
+            
+            // Analyze project health
+            projects.forEach(project => {
+                const projectTasks = tasks.filter(t => t.projectId === project.id);
+                const completedTasks = projectTasks.filter(t => t.completed);
+                const progress = projectTasks.length > 0 ? (completedTasks.length / projectTasks.length) * 100 : 0;
+                
+                // Check if project is behind schedule
+                if (project.endDate) {
+                    const daysRemaining = Math.ceil((new Date(project.endDate) - new Date()) / (1000 * 60 * 60 * 24));
+                    const estimatedDaysNeeded = projectTasks.filter(t => !t.completed).length * 2; // Assume 2 days per task
+                    
+                    if (daysRemaining < estimatedDaysNeeded && progress < 80) {
+                        suggestions.push({
+                            title: `${project.name} is at risk`,
+                            desc: `Only ${daysRemaining} days left with ${projectTasks.filter(t => !t.completed).length} tasks remaining. Consider reassigning resources.`,
+                            priority: 'high',
+                            action: () => viewProject(project.id)
+                        });
+                    }
+                }
+                
+                // Suggest adding tasks to empty projects
+                if (projectTasks.length === 0) {
+                    suggestions.push({
+                        title: `Add tasks to ${project.name}`,
+                        desc: 'Projects without tasks are harder to track. Break down the work into manageable tasks.',
+                        priority: 'medium',
+                        action: () => openAddTaskForProject(project.id)
+                    });
+                }
+                
+                // Budget warnings
+                const transactions = data.transactions.filter(t => t.projectId === project.id && !t.deleted);
+                const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
+                
+                if (project.budget && expenses > project.budget * 0.8) {
+                    suggestions.push({
+                        title: `Budget alert for ${project.name}`,
+                        desc: `You've used ${Math.round((expenses / project.budget) * 100)}% of your budget.`,
+                        priority: expenses > project.budget ? 'high' : 'medium',
+                        action: () => viewProject(project.id)
+                    });
+                }
+            });
+            
+            // Task optimization suggestions
+            const overdueTasks = tasks.filter(t => t.dueDate && new Date(t.dueDate) < new Date() && !t.completed);
+            if (overdueTasks.length > 0) {
+                suggestions.push({
+                    title: `${overdueTasks.length} overdue tasks`,
+                    desc: 'Focus on completing overdue tasks to get back on track.',
+                    priority: 'high',
+                    action: () => switchView('tasks')
+                });
+            }
+            
+            // Workload balancing
+            const tasksPerProject = {};
+            tasks.forEach(task => {
+                if (!task.completed) {
+                    tasksPerProject[task.projectId] = (tasksPerProject[task.projectId] || 0) + 1;
+                }
+            });
+            
+            const imbalanced = Object.values(tasksPerProject).some(count => count > 10);
+            if (imbalanced) {
+                suggestions.push({
+                    title: 'Workload imbalance detected',
+                    desc: 'Some projects have too many pending tasks. Consider breaking them down or delegating.',
+                    priority: 'low',
+                    action: () => switchView('schedule')
+                });
+            }
+            
+            // Update AI panel
+            updateAISuggestions(suggestions);
+        }
+
+        // Update AI suggestions panel
+        function updateAISuggestions(suggestions) {
+            const container = document.getElementById('aiSuggestions');
+            
+            if (suggestions.length === 0) {
+                container.innerHTML = `
+                    <div class="ai-suggestion">
+                        <div class="ai-suggestion-title">✨ All looking good!</div>
+                        <div class="ai-suggestion-desc">Your projects are on track. Keep up the great work!</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort by priority
+            suggestions.sort((a, b) => {
+                const priorityOrder = { high: 0, medium: 1, low: 2 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            });
+            
+            container.innerHTML = suggestions.slice(0, 5).map(suggestion => `
+                <div class="ai-suggestion" onclick="${suggestion.action ? 'executeSuggestion(' + suggestions.indexOf(suggestion) + ')' : ''}">
+                    <div class="ai-suggestion-title">
+                        ${suggestion.title}
+                        <span class="ai-priority ${suggestion.priority}">${suggestion.priority.toUpperCase()}</span>
+                    </div>
+                    <div class="ai-suggestion-desc">${suggestion.desc}</div>
+                </div>
+            `).join('');
+            
+            // Store suggestions for execution
+            window.aiSuggestions = suggestions;
+        }
+
+        // Execute AI suggestion
+        function executeSuggestion(index) {
+            if (window.aiSuggestions && window.aiSuggestions[index] && window.aiSuggestions[index].action) {
+                window.aiSuggestions[index].action();
+                toggleAIPanel();
+            }
+        }
+
+        // Toggle AI panel
+        function toggleAIPanel() {
+            const panel = document.getElementById('aiPanel');
+            panel.classList.toggle('active');
+            
+            if (panel.classList.contains('active')) {
+                generateAISuggestions();
+            }
+        }
+
+        // Show AI Assistant
+        function showAIAssistant() {
+            generateAISuggestions();
+            toggleAIPanel();
         }
         
         // View project details
@@ -1317,12 +2048,25 @@
                 <div class="card">
                     <div class="card-header">
                         <div>
-                            <div class="card-title">${project.name}</div>
-                            <div class="card-meta">Created: ${new Date(project.created).toLocaleDateString()}</div>
+                            <div class="card-title">
+                                ${project.name}
+                                ${project.priority === 'high' ? '<span class="ai-priority high">HIGH</span>' : ''}
+                                ${project.priority === 'low' ? '<span class="ai-priority low">LOW</span>' : ''}
+                            </div>
+                            <div class="card-meta">
+                                Created: ${new Date(project.created).toLocaleDateString()}
+                                ${project.startDate ? ` • Start: ${new Date(project.startDate).toLocaleDateString()}` : ''}
+                                ${project.endDate ? ` • End: ${new Date(project.endDate).toLocaleDateString()}` : ''}
+                            </div>
                         </div>
                         <button class="card-btn" onclick="renderProjects()">←</button>
                     </div>
                     ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
+                    
+                    <!-- Project Mini Gantt -->
+                    <div class="mini-gantt" style="height: 100px; margin-top: 10px;">
+                        ${renderProjectGantt(project, tasks)}
+                    </div>
                 </div>
                 
                 <div class="card">
@@ -1332,7 +2076,11 @@
                             <input type="checkbox" class="task-checkbox" 
                                    ${task.completed ? 'checked' : ''} 
                                    onchange="toggleTask('${task.id}')">
-                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.description}</span>
+                            <span class="task-text ${task.completed ? 'completed' : ''}">
+                                ${task.description}
+                                ${task.dueDate ? ` (Due: ${new Date(task.dueDate).toLocaleDateString()})` : ''}
+                                ${task.estimatedHours ? ` [${task.estimatedHours}h]` : ''}
+                            </span>
                             <button class="delete-task-btn" onclick="deleteTask('${task.id}')">×</button>
                         </div>
                     `).join('') : '<div class="card-meta">No tasks yet</div>'}
@@ -1353,6 +2101,44 @@
                     `).join('') : '<div class="card-meta">No transactions yet</div>'}
                 </div>
             `;
+        }
+
+        // Render project Gantt
+        function renderProjectGantt(project, tasks) {
+            if (tasks.length === 0) {
+                return '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">No tasks to display in timeline</div>';
+            }
+            
+            const startDate = new Date(project.startDate || project.created);
+            const endDate = new Date(project.endDate || Date.now() + 30 * 24 * 60 * 60 * 1000);
+            const totalDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+            
+            return tasks.map((task, index) => {
+                const taskStart = new Date(task.created);
+                const taskEnd = task.dueDate ? new Date(task.dueDate) : endDate;
+                const taskStartOffset = Math.max(0, Math.ceil((taskStart - startDate) / (1000 * 60 * 60 * 24)));
+                const taskDuration = Math.ceil((taskEnd - taskStart) / (1000 * 60 * 60 * 24));
+                
+                const left = (taskStartOffset / totalDays) * 100;
+                const width = Math.min(100 - left, (taskDuration / totalDays) * 100);
+                
+                return `
+                    <div style="position: absolute; 
+                                left: ${left}%; 
+                                width: ${width}%; 
+                                top: ${10 + index * 15}px; 
+                                height: 12px; 
+                                background: ${task.completed ? '#10b981' : '#f39c12'}; 
+                                border-radius: 2px; 
+                                opacity: 0.8;
+                                font-size: 9px;
+                                color: white;
+                                padding: 0 2px;
+                                overflow: hidden;">
+                        ${task.description.substring(0, 10)}
+                    </div>
+                `;
+            }).join('');
         }
         
         // Render tasks
@@ -1390,7 +2176,11 @@
                             <input type="checkbox" class="task-checkbox" 
                                    ${task.completed ? 'checked' : ''} 
                                    onchange="toggleTask('${task.id}')">
-                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.description}</span>
+                            <span class="task-text ${task.completed ? 'completed' : ''}">
+                                ${task.description}
+                                ${task.dueDate ? ` (Due: ${new Date(task.dueDate).toLocaleDateString()})` : ''}
+                                ${task.estimatedHours ? ` [${task.estimatedHours}h]` : ''}
+                            </span>
                             <button class="delete-task-btn" onclick="deleteTask('${task.id}')">×</button>
                         </div>
                     `).join('')}
@@ -1457,6 +2247,14 @@
                         <span class="settings-label">Night Mode</span>
                         <div class="switch ${data.settings.nightMode ? 'active' : ''}" 
                              onclick="toggleSetting('nightMode')">
+                            <div class="switch-handle"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <span class="settings-label">AI Assistant</span>
+                        <div class="switch ${data.settings.aiEnabled ? 'active' : ''}" 
+                             onclick="toggleSetting('aiEnabled')">
                             <div class="switch-handle"></div>
                         </div>
                     </div>
@@ -1563,13 +2361,16 @@
                     <button class="btn btn-secondary" onclick="showTrash()" style="margin-top: 8px">
                         View Trash (${data.trash.length} items)
                     </button>
+                    <button class="btn btn-danger" onclick="clearAllData()" style="margin-top: 8px">
+                        🗑️ Clear All Data
+                    </button>
                 </div>
                 
                 <div class="settings-group">
                     <div class="card-title">About</div>
                     <div class="card-meta">
-                        Builder Pro v2.0<br>
-                        Complete Project Manager<br>
+                        Builder Pro AI v2.1<br>
+                        Intelligent Project Manager<br>
                         © 2025 - All rights reserved
                     </div>
                 </div>
@@ -1582,6 +2383,15 @@
             saveData();
             applySettings();
             renderSettings();
+            
+            if (setting === 'aiEnabled') {
+                if (data.settings.aiEnabled) {
+                    initializeAI();
+                    showToast('🤖 AI Assistant activated');
+                } else {
+                    showToast('AI Assistant deactivated');
+                }
+            }
         }
         
         // Set setting
@@ -1647,6 +2457,12 @@
                 case 'projects':
                     openModal('addProjectModal');
                     document.getElementById('currencyDisplay').textContent = data.settings.currency;
+                    // Set default dates
+                    const today = new Date().toISOString().split('T')[0];
+                    document.getElementById('projectStartDate').value = today;
+                    const endDate = new Date();
+                    endDate.setMonth(endDate.getMonth() + 1);
+                    document.getElementById('projectEndDate').value = endDate.toISOString().split('T')[0];
                     break;
                 case 'tasks':
                     if (data.projects.filter(p => !p.deleted).length === 0) {
@@ -1699,7 +2515,9 @@
             document.getElementById(modalId).classList.remove('active');
             // Clear inputs
             document.querySelectorAll(`#${modalId} input, #${modalId} textarea`).forEach(input => {
-                input.value = '';
+                if (input.type !== 'date') {
+                    input.value = '';
+                }
             });
         }
         
@@ -1707,10 +2525,18 @@
         function saveProject() {
             const name = document.getElementById('projectName').value.trim();
             const description = document.getElementById('projectDescription').value.trim();
+            const startDate = document.getElementById('projectStartDate').value;
+            const endDate = document.getElementById('projectEndDate').value;
             const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
+            const priority = document.getElementById('projectPriority').value;
             
             if (!name) {
                 showToast('Please enter a project name');
+                return;
+            }
+            
+            if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+                showToast('End date must be after start date');
                 return;
             }
             
@@ -1718,7 +2544,10 @@
                 id: Date.now().toString(),
                 name,
                 description,
+                startDate,
+                endDate,
                 budget,
+                priority,
                 created: Date.now(),
                 updated: Date.now()
             };
@@ -1728,13 +2557,16 @@
             closeModal('addProjectModal');
             renderProjects();
             updateStats();
-            showToast('Project created');
+            generateAISuggestions();
+            showToast('🎉 Project created');
         }
         
         // Save task
         function saveTask() {
             const description = document.getElementById('taskDescription').value.trim();
             const projectId = document.getElementById('taskProject').value;
+            const dueDate = document.getElementById('taskDueDate').value;
+            const estimatedHours = parseFloat(document.getElementById('taskEstimatedHours').value) || 0;
             
             if (!description) {
                 showToast('Please enter task description');
@@ -1745,6 +2577,8 @@
                 id: Date.now().toString(),
                 description,
                 projectId,
+                dueDate,
+                estimatedHours,
                 completed: false,
                 created: Date.now(),
                 updated: Date.now()
@@ -1755,6 +2589,7 @@
             closeModal('addTaskModal');
             renderView();
             updateStats();
+            generateAISuggestions();
             showToast('Task added');
         }
         
@@ -1789,6 +2624,7 @@
             closeModal('addTransactionModal');
             renderFinancial();
             updateStats();
+            generateAISuggestions();
             showToast('Transaction added');
         }
         
@@ -1801,6 +2637,7 @@
                 saveData();
                 renderView();
                 updateStats();
+                generateAISuggestions();
             }
         }
         
@@ -1830,6 +2667,7 @@
                 saveData();
                 renderProjects();
                 updateStats();
+                generateAISuggestions();
                 showToast('Project moved to trash');
             }
         }
@@ -1844,6 +2682,7 @@
                 saveData();
                 renderView();
                 updateStats();
+                generateAISuggestions();
                 showToast('Task deleted');
             }
         }
@@ -1966,197 +2805,12 @@
         // Perform sync (temporarily disabled for Builder Pro 2.0 development)
         async function performSync() {
             if (apiTempDisabled) {
-                showToast('🔧 Sync temporarily disabled for Builder Pro 2.0 development', 4000);
+                showToast('🔧 Sync temporarily disabled for Builder Pro AI development', 4000);
                 return;
             }
             
-            if (!syncApiKey) {
-                showToast('⚠️ No API key set! Go to Settings.');
-                return;
-            }
-            
-            const indicator = document.getElementById('syncIndicator');
-            const syncMode = document.getElementById('syncMode');
-            indicator.classList.add('syncing');
-            syncMode.textContent = 'Syncing...';
-            
-            const startTime = Date.now();
-            
-            try {
-                console.log('🔄 Starting sync process...');
-                
-                // STEP 1: FETCH cloud data
-                console.log('🔄 Step 1: Fetching cloud data...');
-                syncMode.textContent = 'Fetching...';
-                const getResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
-                    headers: {
-                        'X-Master-Key': syncApiKey
-                    }
-                });
-                
-                if (!getResponse.ok) {
-                    throw new Error(`Fetch failed: ${getResponse.status} - ${getResponse.statusText}`);
-                }
-                
-                const cloudResult = await getResponse.json();
-                const cloudData = cloudResult.record || {};
-                
-                // STEP 2: MERGE data intelligently
-                console.log('🔄 Step 2: Merging data...');
-                syncMode.textContent = 'Merging...';
-                
-                if (cloudData.projects || cloudData.tasks || cloudData.transactions) {
-                    const beforeCounts = {
-                        projects: data.projects.length,
-                        tasks: data.tasks.length,
-                        transactions: data.transactions.length
-                    };
-                    
-                    // Merge projects
-                    if (cloudData.projects) {
-                        const localIds = new Set(data.projects.map(p => p.id));
-                        const newProjects = cloudData.projects.filter(p => !localIds.has(p.id));
-                        data.projects = [...data.projects, ...newProjects];
-                        
-                        // Update existing projects if cloud version is newer
-                        cloudData.projects.forEach(cloudProject => {
-                            const localIndex = data.projects.findIndex(p => p.id === cloudProject.id);
-                            if (localIndex !== -1) {
-                                const localProject = data.projects[localIndex];
-                                if (cloudProject.updated > localProject.updated) {
-                                    data.projects[localIndex] = cloudProject;
-                                }
-                            }
-                        });
-                    }
-                    
-                    // Merge tasks
-                    if (cloudData.tasks) {
-                        const localIds = new Set(data.tasks.map(t => t.id));
-                        const newTasks = cloudData.tasks.filter(t => !localIds.has(t.id));
-                        data.tasks = [...data.tasks, ...newTasks];
-                        
-                        cloudData.tasks.forEach(cloudTask => {
-                            const localIndex = data.tasks.findIndex(t => t.id === cloudTask.id);
-                            if (localIndex !== -1) {
-                                const localTask = data.tasks[localIndex];
-                                if (cloudTask.updated > localTask.updated) {
-                                    data.tasks[localIndex] = cloudTask;
-                                }
-                            }
-                        });
-                    }
-                    
-                    // Merge transactions
-                    if (cloudData.transactions) {
-                        const localIds = new Set(data.transactions.map(t => t.id));
-                        const newTransactions = cloudData.transactions.filter(t => !localIds.has(t.id));
-                        data.transactions = [...data.transactions, ...newTransactions];
-                    }
-                    
-                    // Merge trash
-                    if (cloudData.trash) {
-                        data.trash = [
-                            ...(data.trash || []),
-                            ...cloudData.trash
-                        ];
-                        data.trash = Array.from(
-                            new Map(data.trash.map(item => [item.item.id, item])).values()
-                        );
-                    }
-                    
-                    // Merge permanently deleted
-                    if (cloudData.permanentlyDeleted) {
-                        data.permanentlyDeleted = [
-                            ...(data.permanentlyDeleted || []),
-                            ...cloudData.permanentlyDeleted
-                        ];
-                        data.permanentlyDeleted = Array.from(
-                            new Map(data.permanentlyDeleted.map(item => [item.id, item])).values()
-                        );
-                    }
-                    
-                    const afterCounts = {
-                        projects: data.projects.length,
-                        tasks: data.tasks.length,
-                        transactions: data.transactions.length
-                    };
-                    
-                    // Show what changed during merge
-                    const changes = [];
-                    if (afterCounts.projects !== beforeCounts.projects) {
-                        changes.push(`${afterCounts.projects - beforeCounts.projects > 0 ? '+' : ''}${afterCounts.projects - beforeCounts.projects} projects`);
-                    }
-                    if (afterCounts.tasks !== beforeCounts.tasks) {
-                        changes.push(`${afterCounts.tasks - beforeCounts.tasks > 0 ? '+' : ''}${afterCounts.tasks - beforeCounts.tasks} tasks`);
-                    }
-                    if (afterCounts.transactions !== beforeCounts.transactions) {
-                        changes.push(`${afterCounts.transactions - beforeCounts.transactions > 0 ? '+' : ''}${afterCounts.transactions - beforeCounts.transactions} trans`);
-                    }
-                    
-                    console.log('✅ Merge complete:', changes.length > 0 ? changes.join(', ') : 'No changes');
-                    
-                    saveData();
-                    renderView();
-                    updateStats();
-                }
-                
-                // STEP 3: PUSH merged data back to cloud
-                console.log('🔄 Step 3: Pushing merged data to cloud...');
-                syncMode.textContent = 'Pushing...';
-                const putResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': syncApiKey
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!putResponse.ok) {
-                    throw new Error(`Push failed: ${putResponse.status} - ${putResponse.statusText}`);
-                }
-                
-                const syncDuration = ((Date.now() - startTime) / 1000).toFixed(1);
-                console.log(`✅ Sync complete in ${syncDuration}s`);
-                
-                localStorage.setItem('lastSyncTime', Date.now().toString());
-                const nowTime = new Date().toLocaleTimeString();
-                document.getElementById('lastSyncTime').textContent = `Last: ${nowTime}`;
-                showToast(`✅ Synced ${data.projects.length}p ${data.tasks.length}t ${data.transactions.length}tr in ${syncDuration}s!`, 5000);
-                indicator.classList.remove('syncing');
-                syncMode.textContent = 'Connected';
-                
-            } catch (error) {
-                const syncDuration = ((Date.now() - startTime) / 1000).toFixed(1);
-                console.error('❌ Sync error:', error);
-                
-                let errorMsg = error.message;
-                if (error.message.includes('401')) {
-                    errorMsg = 'Invalid API key! Check Settings';
-                } else if (error.message.includes('404')) {
-                    errorMsg = 'Bin not found! Check Bin ID';
-                } else if (error.message.includes('Failed to fetch')) {
-                    errorMsg = 'No internet connection!';
-                }
-                
-                showToast(`❌ ${errorMsg}`, 6000);
-                indicator.classList.remove('syncing');
-                syncMode.textContent = 'Error';
-                
-                // Show detailed error in console
-                console.log('Sync diagnostics:', {
-                    duration: syncDuration + 's',
-                    apiKey: syncApiKey ? 'SET (length: ' + syncApiKey.length + ')' : 'NOT SET',
-                    binId: APP_CONFIG.binId,
-                    online: navigator.onLine,
-                    localData: {
-                        projects: data.projects.length,
-                        tasks: data.tasks.length,
-                        transactions: data.transactions.length
-                    }
-                });
-            }
+            // [Sync implementation would go here - currently disabled]
+            showToast('🔧 Sync coming soon in next update');
         }
 
         function saveApiKey() {
@@ -2170,58 +2824,11 @@
             localStorage.setItem('builderProSyncApiKey', key);
             document.getElementById('apiKeyInput').value = '';
             document.getElementById('syncMode').textContent = 'Ready';
-            showToast('✅ API key saved! Now click "Test Sync Connection"', 5000);
+            showToast('✅ API key saved!');
         }
 
         async function testSync() {
-            if (!syncApiKey) {
-                showToast('⚠️ No API key set! Enter your JSONBin API key first.');
-                return;
-            }
-            
-            showToast('🔍 Testing connection...');
-            
-            try {
-                console.log('🔍 Testing sync connection...');
-                console.log('API Key length:', syncApiKey.length);
-                console.log('Bin ID:', APP_CONFIG.binId);
-                console.log('Base URL:', APP_CONFIG.baseUrl);
-                
-                const response = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
-                    headers: {
-                        'X-Master-Key': syncApiKey
-                    }
-                });
-                
-                console.log('Response status:', response.status);
-                console.log('Response OK:', response.ok);
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Connection successful!');
-                    console.log('Cloud data:', {
-                        projects: result.record?.projects?.length || 0,
-                        tasks: result.record?.tasks?.length || 0,
-                        transactions: result.record?.transactions?.length || 0
-                    });
-                    
-                    showToast('✅ Connection works! Your API key is valid.');
-                    document.getElementById('syncMode').textContent = 'Connected';
-                } else if (response.status === 401) {
-                    showToast('❌ Invalid API key! Get a new one from jsonbin.io');
-                    document.getElementById('syncMode').textContent = 'Invalid Key';
-                } else if (response.status === 404) {
-                    showToast('❌ Bin not found! Check your Bin ID.');
-                    document.getElementById('syncMode').textContent = 'Invalid Bin';
-                } else {
-                    showToast(`❌ Error ${response.status}: ${response.statusText}`);
-                    document.getElementById('syncMode').textContent = 'Error';
-                }
-            } catch (error) {
-                console.error('❌ Test failed:', error);
-                showToast('❌ Connection failed! Check internet & open browser console (F12)');
-                document.getElementById('syncMode').textContent = 'Offline';
-            }
+            showToast('🔧 Sync testing coming soon');
         }
 
         function exportData() {
@@ -2229,7 +2836,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'builder-pro-backup.json';
+            a.download = 'builder-pro-ai-backup.json';
             a.click();
             URL.revokeObjectURL(url);
             showToast('Data exported');
@@ -2262,7 +2869,6 @@
         function setupReminderSystem() {
             // Temporarily disable API for Builder Pro 2.0 development
             apiTempDisabled = true;
-            showToast('🔧 API temporarily disabled for Builder Pro 2.0 development', 5000);
             
             // Set random interval between 35-45 minutes
             const randomMinutes = 35 + Math.random() * 10; // 35-45 minutes
@@ -2315,13 +2921,13 @@
             
             // Default items if nothing specific
             if (checkItems.length === 0) {
-                checkItems.push('Review your projects');
-                checkItems.push('Update task progress');
-                checkItems.push('Check financial summary');
+                checkItems.push('Review your schedule');
+                checkItems.push('Check AI suggestions');
+                checkItems.push('Update project timelines');
             }
             
             // Add development reminder
-            checkItems.push('Builder Pro 2.0 in development! 🚀');
+            checkItems.push('AI Assistant is ready to help! 🤖');
             
             // Generate HTML for check items
             content.innerHTML = checkItems.map(item => 
