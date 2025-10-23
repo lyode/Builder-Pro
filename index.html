@@ -2,1684 +2,791 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    
-    <!-- PWA Meta Tags -->
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Builder Pro">
-    <meta name="apple-mobile-web-app-title" content="Builder Pro">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="theme-color" content="#d2bcbf">
-    <meta name="msapplication-navbutton-color" content="#d2bcbf">
-    <meta name="msapplication-starturl" content="/">
-    <meta name="format-detection" content="telephone=no">
-    
-    <title>Builder Pro 2.2 - Ultra AI-Powered Project Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Builder Pro - Enhanced Social Sharing</title>
     
     <style>
-        :root {
-            --safe-area-inset-top: env(safe-area-inset-top, 0px);
-            --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
-            --safe-area-inset-left: env(safe-area-inset-left, 0px);
-            --safe-area-inset-right: env(safe-area-inset-right, 0px);
-            
-            /* Default Theme - Pink/Rose */
-            --bg-color: #F4EDEB;
-            --accent-color: #d2bcbf;
-            --highlight-color: #a67980;
-            --text-color: #1C1C1C;
-            
-            --card-bg: #ffffff;
-            --text-secondary: #5a5a5a;
-            --border-color: #e8e8e8;
-            --shadow-color: rgba(75, 43, 26, 0.08);
-            --success: #10b981;
-            --warning: #f39c12;
-            --danger: #ef4444;
-            --income-color: #10b981;
-            --expense-color: #ef4444;
-            
-            --button-primary: #4B2B1A;
-            --button-primary-hover: #6B4332;
-            
-            --contrast: 1;
-            --brightness: 1;
-            --font-scale: 1;
-            
-            /* Gantt Chart Colors */
-            --gantt-bg: #f8f9fa;
-            --gantt-grid: #e0e0e0;
-            --gantt-today: #ff6b6b;
-            --gantt-weekend: #f0f0f0;
-            --gantt-task-1: #4ecdc4;
-            --gantt-task-2: #45b7d1;
-            --gantt-task-3: #96ceb4;
-            --gantt-task-4: #ffeaa7;
-            --gantt-task-5: #dfe6e9;
-            --gantt-task-6: #a29bfe;
-            --gantt-task-7: #fd79a8;
-        }
-
-        /* Theme Color Schemes */
-        .theme-rose {
-            --accent-color: #d2bcbf;
-            --highlight-color: #a67980;
-        }
-
-        .theme-sage {
-            --accent-color: #c0ccb8;
-            --highlight-color: #60665c;
-        }
-
-        .theme-gold {
-            --accent-color: #e0b558;
-            --highlight-color: #ecd299;
-        }
-
-        .theme-ocean {
-            --accent-color: #99b3ec;
-            --highlight-color: #151b73;
-        }
-
-        .theme-lavender {
-            --accent-color: #8386a4;
-            --highlight-color: #191a22;
-        }
-
-        .theme-teal {
-            --accent-color: #90b2b8;
-            --highlight-color: #2c4144;
-        }
-
-        .theme-seafoam {
-            --accent-color: #9cbbbf;
-            --highlight-color: #436266;
-        }
-        
-        body.low-contrast { --contrast: 0.85; --brightness: 1.1; }
-        body.normal-contrast { --contrast: 1; --brightness: 1; }
-        body.high-contrast { --contrast: 1.25; --brightness: 0.95; }
-        body.extra-contrast { --contrast: 1.5; --brightness: 0.9; }
-        body { filter: contrast(var(--contrast)) brightness(var(--brightness)); }
-        
-        body.font-s { --font-scale: 0.85; }
-        body.font-m { --font-scale: 1; }
-        body.font-l { --font-scale: 1.15; }
-        body.font-xl { --font-scale: 1.3; }
-        body.font-xxl { --font-scale: 1.5; }
-
-        body.sat-low { filter: saturate(0.7) contrast(var(--contrast)) brightness(var(--brightness)); }
-        body.sat-normal { filter: saturate(1) contrast(var(--contrast)) brightness(var(--brightness)); }
-        body.sat-high { filter: saturate(1.3) contrast(var(--contrast)) brightness(var(--brightness)); }
-        body.sat-vibrant { filter: saturate(1.6) contrast(var(--contrast)) brightness(var(--brightness)); }
-
-        .night-mode { 
-            --bg-color: #1a1618 !important; 
-            --card-bg: #2d2729 !important; 
-            --text-color: #f0f0f0 !important; 
-            --text-secondary: #c0c0c8 !important; 
-            --border-color: #4a4246 !important; 
-            --shadow-color: rgba(0,0,0,0.3) !important;
-            --gantt-bg: #2d2729 !important;
-            --gantt-grid: #4a4246 !important;
-            --gantt-weekend: #3d3739 !important;
-        }
-        
-        * { 
-            margin: 0; 
-            padding: 0; 
-            box-sizing: border-box; 
-            -webkit-tap-highlight-color: transparent; 
-        }
-        
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; 
-            background: var(--bg-color); 
-            color: var(--text-color);
-            min-height: 100vh; 
-            overflow-x: hidden; 
-            transition: all 0.3s; 
-            font-size: calc(14px * var(--font-scale));
-        }
-        
-        .app-container { 
-            max-width: 100vw; 
-            min-height: 100vh; 
-            display: flex; 
-            flex-direction: column;
-            padding-left: env(safe-area-inset-left);
-            padding-right: env(safe-area-inset-right);
-        }
-        
-        .fixed-header-section {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 100;
-            background: var(--bg-color);
-            padding-top: var(--safe-area-inset-top);
-        }
-        
-        .header { 
-            background: linear-gradient(135deg, var(--accent-color) 0%, var(--highlight-color) 100%); 
-            color: white; 
-            padding: 10px 12px; 
-            box-shadow: 0 2px 10px var(--shadow-color); 
-        }
-        
-        .header-content { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            gap: 10px; 
-        }
-        
-        .header-left { 
-            display: flex; 
-            align-items: center; 
-            gap: 10px; 
-            flex: 1; 
-            cursor: pointer; 
-        }
-        
-        .header h1 { 
-            font-size: calc(16px * var(--font-scale)); 
-            font-weight: 600; 
-        }
-        
-        .header-subtitle { 
-            font-size: calc(11px * var(--font-scale)); 
-            opacity: 0.9; 
-            margin-top: 2px; 
-        }
-        
-        .header-controls { 
-            display: flex; 
-            gap: 8px; 
-            align-items: center; 
-        }
-        
-        .header-btn { 
-            background: rgba(255,255,255,0.2); 
-            border: none; 
-            color: white; 
-            width: 32px; 
-            height: 32px; 
-            border-radius: 50%; 
-            cursor: pointer; 
-            font-size: calc(14px * var(--font-scale)); 
-            display: flex; 
-            align-items: center; 
-            justify-content: center; 
-            position: relative; 
-            transition: background 0.2s;
-        }
-        
-        .header-btn:active {
-            background: rgba(255,255,255,0.3);
-        }
-        
-        .ai-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            font-size: 8px;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        
-        .voice-active {
-            animation: pulse 1s infinite;
-            background: rgba(255,0,0,0.3) !important;
-        }
-        
-        @keyframes pulse { 
-            0%, 100% { opacity: 1; } 
-            50% { opacity: 0.5; } 
-        }
-        
-        .stats-bar { 
-            background: white; 
-            padding: 10px 12px; 
-            display: flex; 
-            justify-content: space-around; 
-            box-shadow: 0 1px 3px var(--shadow-color); 
-        }
-        
-        .stat-item { 
-            text-align: center; 
-            flex: 1; 
-            padding: 2px;
-        }
-        
-        .stat-value { 
-            font-size: calc(16px * var(--font-scale)); 
-            font-weight: bold; 
-            color: var(--text-color); 
-        }
-        
-        .stat-label { 
-            font-size: calc(10px * var(--font-scale)); 
-            color: var(--text-secondary); 
-            margin-top: 2px; 
-        }
-        
-        .nav-tabs { 
-            background: var(--card-bg); 
-            display: flex; 
-            border-bottom: 1px solid var(--border-color); 
-            padding: 0 12px; 
-            gap: 20px; 
-            overflow-x: auto; 
-            scrollbar-width: none;
-        }
-        
-        .nav-tabs::-webkit-scrollbar { display: none; }
-        
-        .nav-tab { 
-            padding: 12px 4px; 
-            cursor: pointer; 
-            white-space: nowrap; 
-            border-bottom: 2px solid transparent; 
-            color: var(--text-secondary); 
-            transition: all 0.2s; 
-            font-size: calc(13px * var(--font-scale)); 
-            position: relative;
-        }
-        
-        .nav-tab.active { 
-            color: var(--highlight-color); 
-            border-bottom-color: var(--highlight-color); 
-            font-weight: 500; 
-        }
-        
-        .nav-tab .badge {
-            position: absolute;
-            top: 6px;
-            right: -10px;
-            background: var(--danger);
-            color: white;
-            font-size: 10px;
-            padding: 2px 4px;
-            border-radius: 8px;
-            font-weight: bold;
-        }
-        
-        .main-content-wrapper {
-            margin-top: 260px;
-        }
-        
-        .main-content { 
-            flex: 1; 
-            padding: 12px; 
-            max-width: 100%; 
-            overflow-x: hidden; 
-            min-height: calc(100vh - 260px);
-        }
-        
-        .section { 
-            display: none; 
-            animation: fadeIn 0.3s; 
-        }
-        
-        .section.active { 
-            display: block; 
-        }
-        
-        @keyframes fadeIn { 
-            from { opacity: 0; } 
-            to { opacity: 1; } 
-        }
-        
-        .add-btn { 
-            position: fixed; 
-            bottom: calc(20px + env(safe-area-inset-bottom)); 
-            right: calc(20px + env(safe-area-inset-right)); 
-            background: linear-gradient(135deg, var(--accent-color), var(--highlight-color)); 
-            color: white; 
-            width: 56px; 
-            height: 56px; 
-            border-radius: 50%; 
-            border: none; 
-            font-size: 24px; 
-            cursor: pointer; 
-            box-shadow: 0 4px 12px var(--shadow-color); 
-            z-index: 50; 
-            transition: transform 0.2s; 
-        }
-        
-        .add-btn:active { 
-            transform: scale(0.95); 
-        }
-        
-        .card { 
-            background: var(--card-bg); 
-            border-radius: 12px; 
-            padding: 14px; 
-            margin-bottom: 12px; 
-            box-shadow: 0 2px 8px var(--shadow-color); 
-            position: relative; 
-            overflow: hidden; 
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        
-        .card:active {
-            transform: scale(0.99);
-        }
-        
-        .card-header { 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: flex-start; 
-            margin-bottom: 8px; 
-            gap: 10px;
-        }
-        
-        .card-title { 
-            font-weight: 600; 
-            font-size: calc(14px * var(--font-scale)); 
-            color: var(--text-color); 
-            word-break: break-word;
-            flex: 1; 
-        }
-        
-        .card-meta { 
-            font-size: calc(11px * var(--font-scale)); 
-            color: var(--text-secondary); 
-            margin-top: 4px; 
-        }
-        
-        /* Kanban Board Styles */
-        .kanban-board {
-            display: flex;
-            gap: 16px;
-            overflow-x: auto;
-            padding-bottom: 20px;
-            min-height: 500px;
-        }
-        
-        .kanban-column {
-            min-width: 280px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 12px;
-            box-shadow: 0 2px 8px var(--shadow-color);
-        }
-        
-        .kanban-header {
-            font-weight: 600;
-            font-size: calc(14px * var(--font-scale));
-            padding: 10px;
-            background: var(--bg-color);
-            border-radius: 8px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .kanban-cards {
-            min-height: 400px;
-            padding: 4px;
-        }
-        
-        .kanban-card {
-            background: var(--bg-color);
-            border-radius: 8px;
-            padding: 12px;
-            margin-bottom: 8px;
-            cursor: move;
-            transition: all 0.2s;
-            border-left: 4px solid var(--accent-color);
-        }
-        
-        .kanban-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px var(--shadow-color);
-        }
-        
-        .kanban-card.dragging {
-            opacity: 0.5;
-            transform: rotate(5deg);
-        }
-        
-        .kanban-card-title {
-            font-weight: 500;
-            margin-bottom: 6px;
-        }
-        
-        .kanban-card-meta {
-            display: flex;
-            justify-content: space-between;
-            font-size: calc(11px * var(--font-scale));
-            color: var(--text-secondary);
-        }
-        
-        .kanban-priority {
-            padding: 2px 6px;
-            border-radius: 4px;
-            font-size: 10px;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        
-        .priority-high {
-            background: var(--danger);
-            color: white;
-        }
-        
-        .priority-medium {
-            background: var(--warning);
-            color: white;
-        }
-        
-        .priority-low {
-            background: var(--success);
-            color: white;
-        }
-        
-        /* Dependency Lines */
-        .dependency-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-        }
-        
-        .dependency-line {
-            stroke: var(--accent-color);
-            stroke-width: 2;
-            fill: none;
-            stroke-dasharray: 5,5;
-            animation: dash 20s linear infinite;
-        }
-        
-        @keyframes dash {
-            to {
-                stroke-dashoffset: -100;
-            }
-        }
-        
-        .dependency-arrow {
-            fill: var(--accent-color);
-        }
-        
-        /* Time Machine */
-        .time-machine {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px var(--shadow-color);
-        }
-        
-        .time-slider {
-            width: 100%;
-            margin: 20px 0;
-            -webkit-appearance: none;
-            height: 8px;
-            border-radius: 4px;
-            background: var(--border-color);
-            outline: none;
-        }
-        
-        .time-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--accent-color);
-            cursor: pointer;
-        }
-        
-        .time-display {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-top: 10px;
-        }
-        
-        .snapshot-info {
-            background: var(--bg-color);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-        }
-        
-        /* Voice Indicator */
-        .voice-indicator {
-            position: fixed;
-            bottom: calc(100px + env(safe-area-inset-bottom));
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(255,0,0,0.9);
-            color: white;
-            padding: 12px 24px;
-            border-radius: 20px;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            z-index: 1000;
-        }
-        
-        .voice-indicator.active {
-            display: flex;
-            animation: pulse 1s infinite;
-        }
-        
-        .voice-wave {
-            width: 4px;
-            height: 20px;
-            background: white;
-            border-radius: 2px;
-            animation: wave 0.5s infinite ease-in-out;
-        }
-        
-        .voice-wave:nth-child(2) { animation-delay: 0.1s; }
-        .voice-wave:nth-child(3) { animation-delay: 0.2s; }
-        .voice-wave:nth-child(4) { animation-delay: 0.3s; }
-        .voice-wave:nth-child(5) { animation-delay: 0.4s; }
-        
-        @keyframes wave {
-            0%, 100% { height: 20px; }
-            50% { height: 40px; }
-        }
-        
-        /* Client Portal */
-        .share-link {
-            background: var(--bg-color);
-            padding: 10px;
-            border-radius: 8px;
-            margin-top: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .share-input {
-            flex: 1;
-            padding: 8px;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            font-size: calc(12px * var(--font-scale));
-            font-family: monospace;
-        }
-        
-        .copy-btn {
-            padding: 8px 12px;
-            background: var(--accent-color);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: calc(12px * var(--font-scale));
-        }
-        
-        /* View Switcher */
-        .view-switcher {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 16px;
-        }
-        
-        .view-btn {
-            padding: 8px 16px;
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
-            font-size: calc(13px * var(--font-scale));
-        }
-        
-        .view-btn.active {
-            background: var(--highlight-color);
-            color: white;
-            border-color: var(--highlight-color);
-        }
-        
-        /* AI Insights Panel */
-        .ai-panel {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-        
-        .ai-panel-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        
-        .ai-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            padding: 20px;
         }
         
-        .ai-title {
-            font-size: calc(16px * var(--font-scale));
+        /* Share Modal Container */
+        .share-modal {
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            animation: slideUp 0.4s ease-out;
+        }
+        
+        @keyframes slideUp {
+            from {
+                transform: translateY(50px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        
+        .share-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        .share-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .share-subtitle {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        /* Project Info */
+        .project-preview {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 24px;
+            border: 2px solid #e9ecef;
+        }
+        
+        .project-name {
             font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
         }
         
-        /* Toast Notification */
-        .toast { 
-            position: fixed; 
-            bottom: calc(100px + env(safe-area-inset-bottom)); 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: var(--button-primary); 
+        .project-details {
+            font-size: 13px;
+            color: #666;
+        }
+        
+        /* Share URL Input */
+        .share-url-container {
+            position: relative;
+            margin-bottom: 32px;
+        }
+        
+        .share-url-input {
+            width: 100%;
+            padding: 14px 120px 14px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 14px;
+            font-family: monospace;
+            background: #f8f9fa;
+            color: #495057;
+        }
+        
+        .share-url-input:focus {
+            outline: none;
+            border-color: #667eea;
+            background: white;
+        }
+        
+        .copy-url-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .copy-url-btn:hover {
+            transform: translateY(-50%) scale(1.05);
+        }
+        
+        .copy-url-btn.copied {
+            background: #10b981;
+        }
+        
+        /* Social Share Grid */
+        .share-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+        
+        .share-btn {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 8px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .share-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
+        
+        .share-btn:active {
+            transform: translateY(-2px);
+        }
+        
+        .share-icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+        
+        .share-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            text-transform: capitalize;
+        }
+        
+        /* Social Platform Colors */
+        .facebook { background: linear-gradient(135deg, #1877f2, #165fd3); }
+        .twitter { background: linear-gradient(135deg, #1da1f2, #1a8cd8); }
+        .linkedin { background: linear-gradient(135deg, #0077b5, #005885); }
+        .whatsapp { background: linear-gradient(135deg, #25d366, #20b954); }
+        .telegram { background: linear-gradient(135deg, #0088cc, #006699); }
+        .email { background: linear-gradient(135deg, #ea4335, #d33b2b); }
+        .messenger { background: linear-gradient(135deg, #0084ff, #006bcc); }
+        .reddit { background: linear-gradient(135deg, #ff4500, #cc3700); }
+        .pinterest { background: linear-gradient(135deg, #bd081c, #8e0616); }
+        .tumblr { background: linear-gradient(135deg, #35465c, #2a3849); }
+        .skype { background: linear-gradient(135deg, #00aff0, #008bbf); }
+        .discord { background: linear-gradient(135deg, #5865f2, #4752c4); }
+        .slack { background: linear-gradient(135deg, #4a154b, #351030); }
+        .teams { background: linear-gradient(135deg, #6264a7, #4b4d86); }
+        .wechat { background: linear-gradient(135deg, #7bb32e, #5d8623); }
+        .viber { background: linear-gradient(135deg, #7360f2, #5a4ac4); }
+        .line { background: linear-gradient(135deg, #00c300, #009900); }
+        .snapchat { background: linear-gradient(135deg, #fffc00, #ccca00); }
+        .instagram { background: linear-gradient(135deg, #e1306c, #c13584, #833ab4, #5851db, #405de6); }
+        .tiktok { background: linear-gradient(135deg, #000000, #333333); }
+        
+        .snapchat .share-label,
+        .tiktok .share-label { 
             color: white; 
-            padding: 12px 20px; 
-            border-radius: 20px; 
-            font-size: calc(13px * var(--font-scale)); 
-            z-index: 300; 
-            opacity: 0; 
-            transition: opacity 0.3s; 
-            pointer-events: none; 
-            max-width: 80%; 
-            text-align: center; 
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
         }
         
-        .toast.show { 
-            opacity: 0.95; 
+        /* QR Code Section */
+        .qr-section {
+            text-align: center;
+            padding: 24px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin-bottom: 24px;
         }
         
-        /* Modal */
-        .modal { 
-            display: none; 
-            position: fixed; 
-            top: 0; 
-            left: 0; 
-            right: 0; 
-            bottom: 0; 
-            background: rgba(0,0,0,0.5); 
-            z-index: 200; 
-            animation: fadeIn 0.2s; 
-            padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+        .qr-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 16px;
         }
         
-        .modal.active { 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
+        .qr-code {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
         }
         
-        .modal-content { 
-            background: var(--card-bg); 
-            border-radius: 16px; 
-            padding: 20px; 
-            width: 90%; 
-            max-width: 400px; 
-            max-height: 80vh; 
-            overflow-y: auto; 
-            animation: slideUp 0.3s; 
+        /* More Options */
+        .more-options {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
         }
         
-        @keyframes slideUp { 
-            from { transform: translateY(50px); opacity: 0; } 
-            to { transform: translateY(0); opacity: 1; } 
+        .option-btn {
+            flex: 1;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 600;
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
         
-        .modal-header { 
-            font-size: calc(18px * var(--font-scale)); 
-            font-weight: bold; 
-            margin-bottom: 16px; 
-            color: var(--text-color);
+        .option-btn:hover {
+            border-color: #667eea;
+            color: #667eea;
+            background: #f8f9ff;
         }
         
-        .form-group { 
-            margin-bottom: 16px; 
+        /* Embed Code Section */
+        .embed-section {
+            margin-top: 24px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            display: none;
         }
         
-        .form-label { 
-            display: block; 
-            font-size: calc(12px * var(--font-scale)); 
-            color: var(--text-secondary); 
-            margin-bottom: 6px; 
+        .embed-section.active {
+            display: block;
         }
         
-        .form-input, .form-select, .form-textarea { 
-            width: 100%; 
-            padding: 10px; 
-            border: 1px solid var(--border-color); 
-            border-radius: 8px; 
-            font-size: calc(14px * var(--font-scale)); 
-            background: var(--card-bg); 
-            color: var(--text-color); 
-            transition: border-color 0.2s;
+        .embed-title {
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #333;
         }
         
-        .form-actions { 
-            display: flex; 
-            gap: 10px; 
-            margin-top: 20px; 
+        .embed-code {
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            font-family: monospace;
+            font-size: 12px;
+            background: white;
+            resize: vertical;
         }
         
-        .btn { 
-            flex: 1; 
-            padding: 12px; 
-            border: none; 
-            border-radius: 8px; 
-            font-size: calc(14px * var(--font-scale)); 
-            font-weight: 500; 
-            cursor: pointer; 
-            transition: transform 0.2s, opacity 0.2s;
+        /* Analytics Badge */
+        .analytics-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #ff6b6b;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 10px;
+            font-weight: bold;
         }
         
-        .btn:active {
-            transform: scale(0.98);
+        /* Share Categories */
+        .share-category {
+            margin-bottom: 24px;
         }
         
-        .btn-primary { 
-            background: linear-gradient(135deg, var(--accent-color), var(--highlight-color)); 
-            color: white; 
+        .category-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #e9ecef;
         }
         
-        .btn-secondary { 
-            background: var(--border-color); 
-            color: var(--text-color); 
+        /* Custom Message */
+        .custom-message {
+            margin-bottom: 24px;
+        }
+        
+        .message-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 14px;
+            resize: none;
+            min-height: 80px;
+        }
+        
+        .message-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .char-count {
+            text-align: right;
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+        
+        /* Success Animation */
+        @keyframes shareSuccess {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .share-success {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+            animation: shareSuccess 0.5s ease-out;
+            z-index: 1000;
+            display: none;
+        }
+        
+        .success-icon {
+            font-size: 60px;
+            color: #10b981;
+            margin-bottom: 16px;
+        }
+        
+        .success-text {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        /* Demo Button */
+        .demo-trigger {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 12px 24px;
+            background: white;
+            color: #667eea;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            transition: all 0.3s;
+        }
+        
+        .demo-trigger:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
-    <div class="app-container">
-        <div class="fixed-header-section">
-            <header class="header">
-                <div class="header-content">
-                    <div class="header-left" onclick="goHome()">
-                        <div>
-                            <h1>🏗️ Builder Pro 2.2</h1>
-                            <div class="header-subtitle">Ultra AI-Powered Manager</div>
-                        </div>
-                    </div>
-                    <div class="header-controls">
-                        <button class="header-btn" id="voiceBtn" onclick="toggleVoiceCommand()" title="Voice Commands">
-                            🎤
-                        </button>
-                        <button class="header-btn" onclick="showTimeMachine()" title="Time Machine">
-                            ⏰
-                        </button>
-                        <button class="header-btn" onclick="shareProject()" title="Share">
-                            🔗
-                        </button>
-                        <button class="header-btn" onclick="showAIAssistant()" title="AI Assistant">
-                            🤖
-                            <span class="ai-badge">AI</span>
-                        </button>
-                    </div>
-                </div>
-            </header>
-            
-            <div class="stats-bar">
-                <div class="stat-item">
-                    <div class="stat-value" id="projectCount">0</div>
-                    <div class="stat-label">Projects</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="taskCount">0</div>
-                    <div class="stat-label">Tasks</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="completionRate">0%</div>
-                    <div class="stat-label">Complete</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-value" id="totalBalance">$0</div>
-                    <div class="stat-label">Balance</div>
-                </div>
-            </div>
-            
-            <nav class="nav-tabs">
-                <div class="nav-tab active" onclick="switchView('projects')">Projects</div>
-                <div class="nav-tab" onclick="switchView('kanban')">
-                    Kanban
-                    <span class="badge" id="kanbanBadge" style="display: none;">0</span>
-                </div>
-                <div class="nav-tab" onclick="switchView('schedule')">Schedule</div>
-                <div class="nav-tab" onclick="switchView('dependencies')">Dependencies</div>
-                <div class="nav-tab" onclick="switchView('settings')">Settings</div>
-            </nav>
+    <button class="demo-trigger" onclick="location.reload()">Reset Demo</button>
+    
+    <div class="share-modal">
+        <div class="share-header">
+            <div class="share-title">Share Your Project</div>
+            <div class="share-subtitle">Choose how you want to share "Website Redesign"</div>
         </div>
         
-        <div class="main-content-wrapper">
-            <main class="main-content">
-                <div id="projectsSection" class="section active"></div>
-                <div id="kanbanSection" class="section"></div>
-                <div id="scheduleSection" class="section"></div>
-                <div id="dependenciesSection" class="section"></div>
-                <div id="settingsSection" class="section"></div>
-            </main>
+        <div class="project-preview">
+            <div class="project-name">🏗️ Website Redesign Project</div>
+            <div class="project-details">15 tasks • 3 team members • Due in 30 days</div>
         </div>
         
-        <button class="add-btn" id="addBtn" onclick="openAddModal()">+</button>
-    </div>
-    
-    <!-- Voice Indicator -->
-    <div id="voiceIndicator" class="voice-indicator">
-        <div class="voice-wave"></div>
-        <div class="voice-wave"></div>
-        <div class="voice-wave"></div>
-        <div class="voice-wave"></div>
-        <div class="voice-wave"></div>
-        <span>Listening...</span>
-    </div>
-    
-    <!-- Modals will go here -->
-    <div id="timeMachineModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">⏰ Time Machine</div>
-            <div class="time-machine">
-                <label class="form-label">Select Date & Time</label>
-                <input type="range" class="time-slider" id="timeSlider" min="0" max="100" value="100">
-                <div class="time-display">
-                    <span id="selectedTime">Current State</span>
-                    <button class="btn btn-primary" onclick="restoreSnapshot()">Restore</button>
-                </div>
-                <div class="snapshot-info" id="snapshotInfo">
-                    <!-- Snapshot details will appear here -->
-                </div>
+        <div class="share-url-container">
+            <input type="text" class="share-url-input" id="shareUrl" value="https://builderpro.app/p/abc123xyz" readonly>
+            <button class="copy-url-btn" id="copyBtn" onclick="copyUrl()">Copy Link</button>
+        </div>
+        
+        <div class="custom-message">
+            <textarea class="message-input" id="customMessage" placeholder="Add a message (optional)..." maxlength="280">Check out my project progress on Builder Pro!</textarea>
+            <div class="char-count"><span id="charCount">42</span>/280</div>
+        </div>
+        
+        <!-- Social Media Platforms -->
+        <div class="share-category">
+            <div class="category-title">Social Media</div>
+            <div class="share-grid">
+                <button class="share-btn facebook" onclick="shareOn('facebook')">
+                    <div class="share-icon">📘</div>
+                    <div class="share-label">Facebook</div>
+                </button>
+                <button class="share-btn twitter" onclick="shareOn('twitter')">
+                    <div class="share-icon">🐦</div>
+                    <div class="share-label">Twitter/X</div>
+                </button>
+                <button class="share-btn linkedin" onclick="shareOn('linkedin')">
+                    <div class="share-icon">💼</div>
+                    <div class="share-label">LinkedIn</div>
+                </button>
+                <button class="share-btn instagram" onclick="shareOn('instagram')">
+                    <div class="share-icon">📷</div>
+                    <div class="share-label">Instagram</div>
+                    <span class="analytics-badge">HOT</span>
+                </button>
+                <button class="share-btn reddit" onclick="shareOn('reddit')">
+                    <div class="share-icon">🤖</div>
+                    <div class="share-label">Reddit</div>
+                </button>
+                <button class="share-btn pinterest" onclick="shareOn('pinterest')">
+                    <div class="share-icon">📌</div>
+                    <div class="share-label">Pinterest</div>
+                </button>
+                <button class="share-btn tumblr" onclick="shareOn('tumblr')">
+                    <div class="share-icon">📝</div>
+                    <div class="share-label">Tumblr</div>
+                </button>
+                <button class="share-btn tiktok" onclick="shareOn('tiktok')">
+                    <div class="share-icon">🎵</div>
+                    <div class="share-label">TikTok</div>
+                </button>
+                <button class="share-btn snapchat" onclick="shareOn('snapchat')">
+                    <div class="share-icon">👻</div>
+                    <div class="share-label">Snapchat</div>
+                </button>
             </div>
-            <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('timeMachineModal')">Close</button>
+        </div>
+        
+        <!-- Messaging Apps -->
+        <div class="share-category">
+            <div class="category-title">Messaging Apps</div>
+            <div class="share-grid">
+                <button class="share-btn whatsapp" onclick="shareOn('whatsapp')">
+                    <div class="share-icon">💬</div>
+                    <div class="share-label">WhatsApp</div>
+                </button>
+                <button class="share-btn telegram" onclick="shareOn('telegram')">
+                    <div class="share-icon">✈️</div>
+                    <div class="share-label">Telegram</div>
+                </button>
+                <button class="share-btn messenger" onclick="shareOn('messenger')">
+                    <div class="share-icon">💭</div>
+                    <div class="share-label">Messenger</div>
+                </button>
+                <button class="share-btn wechat" onclick="shareOn('wechat')">
+                    <div class="share-icon">💚</div>
+                    <div class="share-label">WeChat</div>
+                </button>
+                <button class="share-btn viber" onclick="shareOn('viber')">
+                    <div class="share-icon">📞</div>
+                    <div class="share-label">Viber</div>
+                </button>
+                <button class="share-btn line" onclick="shareOn('line')">
+                    <div class="share-icon">🟢</div>
+                    <div class="share-label">LINE</div>
+                </button>
             </div>
+        </div>
+        
+        <!-- Professional Tools -->
+        <div class="share-category">
+            <div class="category-title">Professional</div>
+            <div class="share-grid">
+                <button class="share-btn email" onclick="shareOn('email')">
+                    <div class="share-icon">📧</div>
+                    <div class="share-label">Email</div>
+                </button>
+                <button class="share-btn slack" onclick="shareOn('slack')">
+                    <div class="share-icon">💼</div>
+                    <div class="share-label">Slack</div>
+                </button>
+                <button class="share-btn teams" onclick="shareOn('teams')">
+                    <div class="share-icon">👥</div>
+                    <div class="share-label">Teams</div>
+                </button>
+                <button class="share-btn discord" onclick="shareOn('discord')">
+                    <div class="share-icon">🎮</div>
+                    <div class="share-label">Discord</div>
+                </button>
+                <button class="share-btn skype" onclick="shareOn('skype')">
+                    <div class="share-icon">📹</div>
+                    <div class="share-label">Skype</div>
+                </button>
+            </div>
+        </div>
+        
+        <!-- QR Code -->
+        <div class="qr-section">
+            <div class="qr-title">Scan QR Code to Share</div>
+            <div class="qr-code">
+                <svg viewBox="0 0 200 200" style="width: 100%; height: 100%;">
+                    <!-- Simplified QR Code Pattern -->
+                    <rect x="10" y="10" width="180" height="180" fill="white"/>
+                    <rect x="20" y="20" width="30" height="30" fill="black"/>
+                    <rect x="150" y="20" width="30" height="30" fill="black"/>
+                    <rect x="20" y="150" width="30" height="30" fill="black"/>
+                    <rect x="70" y="70" width="60" height="60" fill="black"/>
+                    <rect x="85" y="85" width="30" height="30" fill="white"/>
+                    <rect x="95" y="95" width="10" height="10" fill="black"/>
+                    <!-- Pattern dots -->
+                    <rect x="60" y="20" width="10" height="10" fill="black"/>
+                    <rect x="80" y="20" width="10" height="10" fill="black"/>
+                    <rect x="100" y="20" width="10" height="10" fill="black"/>
+                    <rect x="120" y="20" width="10" height="10" fill="black"/>
+                    <rect x="60" y="40" width="10" height="10" fill="black"/>
+                    <rect x="120" y="40" width="10" height="10" fill="black"/>
+                    <rect x="20" y="60" width="10" height="10" fill="black"/>
+                    <rect x="40" y="60" width="10" height="10" fill="black"/>
+                    <rect x="150" y="60" width="10" height="10" fill="black"/>
+                    <rect x="170" y="60" width="10" height="10" fill="black"/>
+                </svg>
+            </div>
+        </div>
+        
+        <!-- More Options -->
+        <div class="more-options">
+            <button class="option-btn" onclick="downloadQR()">
+                <span>📥</span>
+                <span>Download QR</span>
+            </button>
+            <button class="option-btn" onclick="toggleEmbed()">
+                <span>🔗</span>
+                <span>Embed Code</span>
+            </button>
+            <button class="option-btn" onclick="printShare()">
+                <span>🖨️</span>
+                <span>Print</span>
+            </button>
+        </div>
+        
+        <!-- Embed Code Section -->
+        <div class="embed-section" id="embedSection">
+            <div class="embed-title">Embed Code</div>
+            <textarea class="embed-code" readonly><iframe src="https://builderpro.app/embed/abc123xyz" width="600" height="400" frameborder="0"></iframe></textarea>
         </div>
     </div>
     
-    <div id="shareModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">🔗 Share Project</div>
-            <div class="form-group">
-                <label class="form-label">Select Project</label>
-                <select class="form-select" id="shareProjectSelect"></select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Share Options</label>
-                <div style="margin: 10px 0;">
-                    <label>
-                        <input type="checkbox" id="shareReadOnly" checked> Read-only access
-                    </label>
-                </div>
-                <div style="margin: 10px 0;">
-                    <label>
-                        <input type="checkbox" id="shareExpiry"> Expires in 7 days
-                    </label>
-                </div>
-            </div>
-            <div class="share-link">
-                <input type="text" class="share-input" id="shareLink" readonly value="Generating link...">
-                <button class="copy-btn" onclick="copyShareLink()">Copy</button>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('shareModal')">Close</button>
-                <button class="btn btn-primary" onclick="generateShareLink()">Generate Link</button>
-            </div>
-        </div>
+    <!-- Success Popup -->
+    <div class="share-success" id="successPopup">
+        <div class="success-icon">✅</div>
+        <div class="success-text">Shared Successfully!</div>
     </div>
-    
-    <div id="toast" class="toast"></div>
     
     <script>
-        // Enhanced Data Structure
-        let data = {
-            projects: [],
-            tasks: [],
-            transactions: [],
-            dependencies: [],
-            snapshots: [],
-            sharedLinks: [],
-            trash: [],
-            settings: {
-                nightMode: false,
-                currency: 'USD',
-                theme: 'rose',
-                voiceEnabled: true,
-                autoSnapshot: true
-            }
-        };
+        // Get the share URL
+        const shareUrl = document.getElementById('shareUrl').value;
+        const projectTitle = 'Website Redesign Project';
         
-        // App State
-        let currentView = 'projects';
-        let voiceRecognition = null;
-        let isListening = false;
-        let draggedTask = null;
+        // Character counter
+        const messageInput = document.getElementById('customMessage');
+        const charCount = document.getElementById('charCount');
         
-        // Initialize App
-        function init() {
-            loadData();
-            initializeVoiceRecognition();
-            createInitialSnapshot();
-            renderView();
-            updateStats();
-            checkKanbanTasks();
-            
-            // Create sample data for demo
-            createSampleData();
-        }
+        messageInput.addEventListener('input', () => {
+            charCount.textContent = messageInput.value.length;
+        });
         
-        // Create Sample Data
-        function createSampleData() {
-            // Sample project
-            const project = {
-                id: 'p1',
-                name: 'Website Redesign',
-                description: 'Complete overhaul of company website',
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: new Date(Date.now() + 60*24*60*60*1000).toISOString().split('T')[0],
-                budget: 5000,
-                created: Date.now()
-            };
-            data.projects.push(project);
+        // Copy URL function
+        function copyUrl() {
+            const urlInput = document.getElementById('shareUrl');
+            const copyBtn = document.getElementById('copyBtn');
             
-            // Sample tasks with different statuses
-            const taskStatuses = ['To Do', 'In Progress', 'Review', 'Done'];
-            const taskSamples = [
-                { description: 'Research competitors', status: 'Done', priority: 'high' },
-                { description: 'Create wireframes', status: 'Done', priority: 'high' },
-                { description: 'Design mockups', status: 'Review', priority: 'medium' },
-                { description: 'Develop frontend', status: 'In Progress', priority: 'high' },
-                { description: 'Backend API', status: 'In Progress', priority: 'medium' },
-                { description: 'Testing', status: 'To Do', priority: 'low' },
-                { description: 'Deployment', status: 'To Do', priority: 'high' }
-            ];
-            
-            taskSamples.forEach((task, index) => {
-                data.tasks.push({
-                    id: 't' + index,
-                    projectId: 'p1',
-                    description: task.description,
-                    status: task.status,
-                    priority: task.priority,
-                    duration: Math.floor(Math.random() * 10) + 1,
-                    dependencies: index > 0 ? ['t' + (index - 1)] : [],
-                    completed: task.status === 'Done',
-                    created: Date.now()
-                });
-            });
-            
-            // Create dependencies
-            data.dependencies = [
-                { from: 't0', to: 't1', type: 'finish-to-start' },
-                { from: 't1', to: 't2', type: 'finish-to-start' },
-                { from: 't2', to: 't3', type: 'finish-to-start' },
-                { from: 't3', to: 't4', type: 'start-to-start' },
-                { from: 't4', to: 't5', type: 'finish-to-start' },
-                { from: 't5', to: 't6', type: 'finish-to-start' }
-            ];
-            
-            saveData();
-        }
-        
-        // Load Data
-        function loadData() {
-            const saved = localStorage.getItem('builderPro22Data');
-            if (saved) {
-                try {
-                    data = JSON.parse(saved);
-                } catch (e) {
-                    console.error('Error loading data:', e);
-                }
-            }
-        }
-        
-        // Save Data
-        function saveData() {
-            localStorage.setItem('builderPro22Data', JSON.stringify(data));
-            if (data.settings.autoSnapshot) {
-                createSnapshot();
-            }
-        }
-        
-        // Render View
-        function renderView() {
-            switch(currentView) {
-                case 'projects':
-                    renderProjects();
-                    break;
-                case 'kanban':
-                    renderKanban();
-                    break;
-                case 'schedule':
-                    renderSchedule();
-                    break;
-                case 'dependencies':
-                    renderDependencies();
-                    break;
-                case 'settings':
-                    renderSettings();
-                    break;
-            }
-        }
-        
-        // Render Kanban Board
-        function renderKanban() {
-            const container = document.getElementById('kanbanSection');
-            const columns = ['To Do', 'In Progress', 'Review', 'Done'];
-            
-            container.innerHTML = `
-                <div class="view-switcher">
-                    <button class="view-btn active" onclick="setKanbanView('board')">Board View</button>
-                    <button class="view-btn" onclick="setKanbanView('list')">List View</button>
-                </div>
-                <div class="kanban-board" id="kanbanBoard">
-                    ${columns.map(column => {
-                        const tasks = data.tasks.filter(t => t.status === column && !t.deleted);
-                        return `
-                            <div class="kanban-column" data-status="${column}">
-                                <div class="kanban-header">
-                                    ${column}
-                                    <span>${tasks.length}</span>
-                                </div>
-                                <div class="kanban-cards" ondrop="dropTask(event)" ondragover="allowDrop(event)" data-status="${column}">
-                                    ${tasks.map(task => `
-                                        <div class="kanban-card" draggable="true" ondragstart="dragTask(event, '${task.id}')" id="task-${task.id}">
-                                            <div class="kanban-card-title">${task.description}</div>
-                                            <div class="kanban-card-meta">
-                                                <span class="kanban-priority priority-${task.priority || 'medium'}">${task.priority || 'medium'}</span>
-                                                <span>${task.duration || 1}d</span>
-                                            </div>
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            </div>
-                        `;
-                    }).join('')}
-                </div>
-            `;
-        }
-        
-        // Drag and Drop Functions
-        function allowDrop(ev) {
-            ev.preventDefault();
-        }
-        
-        function dragTask(ev, taskId) {
-            draggedTask = taskId;
-            ev.target.classList.add('dragging');
-        }
-        
-        function dropTask(ev) {
-            ev.preventDefault();
-            const newStatus = ev.target.closest('.kanban-cards').dataset.status;
-            
-            if (draggedTask && newStatus) {
-                const task = data.tasks.find(t => t.id === draggedTask);
-                if (task) {
-                    task.status = newStatus;
-                    task.completed = newStatus === 'Done';
-                    saveData();
-                    renderKanban();
-                    updateStats();
-                    showToast(`Task moved to ${newStatus}`);
-                }
-            }
-            
-            // Reset
-            document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
-            draggedTask = null;
-        }
-        
-        // Render Dependencies View
-        function renderDependencies() {
-            const container = document.getElementById('dependenciesSection');
-            
-            container.innerHTML = `
-                <div class="ai-panel">
-                    <div class="ai-panel-header">
-                        <div class="ai-icon">🔗</div>
-                        <div class="ai-title">Task Dependencies</div>
-                    </div>
-                    <div style="color: white; margin-top: 10px;">
-                        Visual dependency mapping shows task relationships and critical path
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">Dependency Map</div>
-                    <div style="position: relative; height: 400px;">
-                        <svg class="dependency-svg" id="depSvg"></svg>
-                        ${renderDependencyNodes()}
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">Critical Path</div>
-                    <div id="criticalPath">${calculateCriticalPath()}</div>
-                </div>
-            `;
-            
-            setTimeout(() => drawDependencyLines(), 100);
-        }
-        
-        // Render Dependency Nodes
-        function renderDependencyNodes() {
-            const tasks = data.tasks.filter(t => !t.deleted);
-            let html = '';
-            
-            tasks.forEach((task, index) => {
-                const x = (index % 4) * 200 + 50;
-                const y = Math.floor(index / 4) * 100 + 50;
-                
-                html += `
-                    <div style="position: absolute; left: ${x}px; top: ${y}px; 
-                                background: var(--card-bg); padding: 8px 12px; 
-                                border-radius: 8px; border: 2px solid var(--accent-color);
-                                cursor: pointer; z-index: 2;" 
-                         id="node-${task.id}"
-                         onclick="showTaskDetails('${task.id}')">
-                        <div style="font-weight: 600; font-size: 12px;">${task.description}</div>
-                        <div style="font-size: 10px; color: var(--text-secondary);">
-                            ${task.duration || 1} days | ${task.status || 'To Do'}
-                        </div>
-                    </div>
-                `;
-            });
-            
-            return html;
-        }
-        
-        // Draw Dependency Lines
-        function drawDependencyLines() {
-            const svg = document.getElementById('depSvg');
-            if (!svg) return;
-            
-            svg.innerHTML = '';
-            
-            data.dependencies.forEach(dep => {
-                const fromNode = document.getElementById(`node-${dep.from}`);
-                const toNode = document.getElementById(`node-${dep.to}`);
-                
-                if (fromNode && toNode) {
-                    const fromRect = fromNode.getBoundingClientRect();
-                    const toRect = toNode.getBoundingClientRect();
-                    const svgRect = svg.getBoundingClientRect();
-                    
-                    const x1 = fromRect.left - svgRect.left + fromRect.width;
-                    const y1 = fromRect.top - svgRect.top + fromRect.height / 2;
-                    const x2 = toRect.left - svgRect.left;
-                    const y2 = toRect.top - svgRect.top + toRect.height / 2;
-                    
-                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-                    const d = `M ${x1} ${y1} C ${x1 + 50} ${y1}, ${x2 - 50} ${y2}, ${x2} ${y2}`;
-                    line.setAttribute('d', d);
-                    line.setAttribute('class', 'dependency-line');
-                    
-                    // Add arrow
-                    const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
-                    arrow.setAttribute('points', `${x2},${y2} ${x2-10},${y2-5} ${x2-10},${y2+5}`);
-                    arrow.setAttribute('class', 'dependency-arrow');
-                    
-                    svg.appendChild(line);
-                    svg.appendChild(arrow);
-                }
-            });
-        }
-        
-        // Calculate Critical Path
-        function calculateCriticalPath() {
-            // Simplified critical path calculation
-            const criticalTasks = data.tasks.filter(t => t.priority === 'high' && !t.deleted);
-            const totalDuration = criticalTasks.reduce((sum, t) => sum + (t.duration || 1), 0);
-            
-            return `
-                <div style="padding: 10px; background: var(--bg-color); border-radius: 8px;">
-                    <div style="margin-bottom: 10px;">
-                        <strong>Critical Tasks:</strong> ${criticalTasks.length}
-                    </div>
-                    <div style="margin-bottom: 10px;">
-                        <strong>Total Duration:</strong> ${totalDuration} days
-                    </div>
-                    <div style="margin-top: 15px;">
-                        ${criticalTasks.map(t => `
-                            <div style="padding: 8px; margin: 5px 0; background: white; border-radius: 4px; 
-                                        border-left: 4px solid var(--danger);">
-                                ${t.description} (${t.duration || 1} days)
-                            </div>
-                        `).join('')}
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Voice Recognition
-        function initializeVoiceRecognition() {
-            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
-                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-                voiceRecognition = new SpeechRecognition();
-                voiceRecognition.continuous = false;
-                voiceRecognition.interimResults = false;
-                voiceRecognition.lang = 'en-US';
-                
-                voiceRecognition.onresult = function(event) {
-                    const command = event.results[0][0].transcript.toLowerCase();
-                    processVoiceCommand(command);
-                };
-                
-                voiceRecognition.onerror = function(event) {
-                    console.error('Voice recognition error:', event.error);
-                    stopListening();
-                };
-                
-                voiceRecognition.onend = function() {
-                    stopListening();
-                };
-            }
-        }
-        
-        // Toggle Voice Command
-        function toggleVoiceCommand() {
-            if (isListening) {
-                stopListening();
-            } else {
-                startListening();
-            }
-        }
-        
-        // Start Listening
-        function startListening() {
-            if (voiceRecognition) {
-                voiceRecognition.start();
-                isListening = true;
-                document.getElementById('voiceBtn').classList.add('voice-active');
-                document.getElementById('voiceIndicator').classList.add('active');
-                showToast('Listening for voice commands...');
-            } else {
-                showToast('Voice recognition not supported');
-            }
-        }
-        
-        // Stop Listening
-        function stopListening() {
-            if (voiceRecognition) {
-                voiceRecognition.stop();
-            }
-            isListening = false;
-            document.getElementById('voiceBtn').classList.remove('voice-active');
-            document.getElementById('voiceIndicator').classList.remove('active');
-        }
-        
-        // Process Voice Command
-        function processVoiceCommand(command) {
-            console.log('Voice command:', command);
-            
-            // Parse commands
-            if (command.includes('create project')) {
-                const name = command.replace('create project', '').trim();
-                createProjectByVoice(name || 'New Voice Project');
-            } else if (command.includes('add task')) {
-                const desc = command.replace('add task', '').trim();
-                createTaskByVoice(desc || 'New Voice Task');
-            } else if (command.includes('show') && command.includes('kanban')) {
-                switchView('kanban');
-                showToast('Switching to Kanban view');
-            } else if (command.includes('show') && command.includes('schedule')) {
-                switchView('schedule');
-                showToast('Switching to Schedule view');
-            } else if (command.includes('complete task')) {
-                completeTaskByVoice(command);
-            } else {
-                showToast(`Command not recognized: "${command}"`);
-            }
-        }
-        
-        // Create Project by Voice
-        function createProjectByVoice(name) {
-            const project = {
-                id: Date.now().toString(),
-                name: name,
-                description: 'Created by voice command',
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
-                budget: 0,
-                created: Date.now()
-            };
-            
-            data.projects.push(project);
-            saveData();
-            renderView();
-            updateStats();
-            showToast(`Project "${name}" created!`);
-        }
-        
-        // Create Task by Voice
-        function createTaskByVoice(description) {
-            if (data.projects.length === 0) {
-                showToast('Create a project first');
-                return;
-            }
-            
-            const task = {
-                id: Date.now().toString(),
-                projectId: data.projects[0].id,
-                description: description,
-                status: 'To Do',
-                priority: 'medium',
-                duration: 1,
-                completed: false,
-                created: Date.now()
-            };
-            
-            data.tasks.push(task);
-            saveData();
-            renderView();
-            updateStats();
-            checkKanbanTasks();
-            showToast(`Task "${description}" added!`);
-        }
-        
-        // Time Machine Functions
-        function showTimeMachine() {
-            openModal('timeMachineModal');
-            updateTimeMachine();
-        }
-        
-        function createSnapshot() {
-            const snapshot = {
-                id: Date.now().toString(),
-                timestamp: Date.now(),
-                data: JSON.parse(JSON.stringify(data)),
-                description: 'Auto-snapshot'
-            };
-            
-            data.snapshots.push(snapshot);
-            
-            // Keep only last 20 snapshots
-            if (data.snapshots.length > 20) {
-                data.snapshots.shift();
-            }
-        }
-        
-        function createInitialSnapshot() {
-            if (data.snapshots.length === 0) {
-                createSnapshot();
-            }
-        }
-        
-        function updateTimeMachine() {
-            const slider = document.getElementById('timeSlider');
-            const snapshots = data.snapshots;
-            
-            if (snapshots.length > 0) {
-                slider.max = snapshots.length - 1;
-                slider.value = snapshots.length - 1;
-                updateSnapshotInfo();
-            }
-        }
-        
-        function updateSnapshotInfo() {
-            const slider = document.getElementById('timeSlider');
-            const index = parseInt(slider.value);
-            const snapshot = data.snapshots[index];
-            
-            if (snapshot) {
-                const date = new Date(snapshot.timestamp);
-                document.getElementById('selectedTime').textContent = date.toLocaleString();
-                
-                const info = document.getElementById('snapshotInfo');
-                info.innerHTML = `
-                    <div><strong>Projects:</strong> ${snapshot.data.projects.length}</div>
-                    <div><strong>Tasks:</strong> ${snapshot.data.tasks.length}</div>
-                    <div><strong>Completed:</strong> ${snapshot.data.tasks.filter(t => t.completed).length}</div>
-                    <div><strong>Description:</strong> ${snapshot.description}</div>
-                `;
-            }
-        }
-        
-        function restoreSnapshot() {
-            const slider = document.getElementById('timeSlider');
-            const index = parseInt(slider.value);
-            const snapshot = data.snapshots[index];
-            
-            if (snapshot && confirm('Restore to this point? Current data will be overwritten.')) {
-                // Preserve snapshots array
-                const currentSnapshots = data.snapshots;
-                data = JSON.parse(JSON.stringify(snapshot.data));
-                data.snapshots = currentSnapshots;
-                
-                saveData();
-                renderView();
-                updateStats();
-                closeModal('timeMachineModal');
-                showToast('Data restored successfully!');
-            }
-        }
-        
-        // Share Functions
-        function shareProject() {
-            const projects = data.projects.filter(p => !p.deleted);
-            if (projects.length === 0) {
-                showToast('No projects to share');
-                return;
-            }
-            
-            const select = document.getElementById('shareProjectSelect');
-            select.innerHTML = projects.map(p => 
-                `<option value="${p.id}">${p.name}</option>`
-            ).join('');
-            
-            openModal('shareModal');
-        }
-        
-        function generateShareLink() {
-            const projectId = document.getElementById('shareProjectSelect').value;
-            const readOnly = document.getElementById('shareReadOnly').checked;
-            const expires = document.getElementById('shareExpiry').checked;
-            
-            const shareData = {
-                id: Date.now().toString(),
-                projectId: projectId,
-                readOnly: readOnly,
-                expires: expires ? Date.now() + 7*24*60*60*1000 : null,
-                created: Date.now()
-            };
-            
-            data.sharedLinks.push(shareData);
-            saveData();
-            
-            // Generate shareable link
-            const baseUrl = window.location.origin + window.location.pathname;
-            const shareLink = `${baseUrl}#share/${shareData.id}`;
-            
-            document.getElementById('shareLink').value = shareLink;
-            showToast('Share link generated!');
-        }
-        
-        function copyShareLink() {
-            const input = document.getElementById('shareLink');
-            input.select();
+            urlInput.select();
             document.execCommand('copy');
-            showToast('Link copied to clipboard!');
-        }
-        
-        // Check Kanban Tasks
-        function checkKanbanTasks() {
-            const inProgressTasks = data.tasks.filter(t => 
-                t.status === 'In Progress' && !t.deleted
-            ).length;
             
-            const badge = document.getElementById('kanbanBadge');
-            if (inProgressTasks > 0) {
-                badge.textContent = inProgressTasks;
-                badge.style.display = 'block';
-            } else {
-                badge.style.display = 'none';
-            }
-        }
-        
-        // Render Projects (Enhanced)
-        function renderProjects() {
-            const container = document.getElementById('projectsSection');
-            const projects = data.projects.filter(p => !p.deleted);
-            
-            if (projects.length === 0) {
-                container.innerHTML = `
-                    <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
-                        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;">📁</div>
-                        <div>No projects yet<br>Use voice command or tap + to create</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = projects.map(project => {
-                const tasks = data.tasks.filter(t => t.projectId === project.id && !t.deleted);
-                const completed = tasks.filter(t => t.completed).length;
-                const progress = tasks.length > 0 ? (completed / tasks.length * 100) : 0;
-                
-                return `
-                    <div class="card">
-                        <div class="card-header">
-                            <div>
-                                <div class="card-title">${project.name}</div>
-                                <div class="card-meta">
-                                    ${tasks.length} tasks • ${completed} completed
-                                    ${project.budget ? ` • Budget: $${project.budget}` : ''}
-                                </div>
-                            </div>
-                        </div>
-                        ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
-                        <div style="height: 8px; background: var(--border-color); border-radius: 4px; margin-top: 10px; overflow: hidden;">
-                            <div style="height: 100%; width: ${progress}%; background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));"></div>
-                        </div>
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        // Render Schedule (placeholder)
-        function renderSchedule() {
-            const container = document.getElementById('scheduleSection');
-            container.innerHTML = `
-                <div class="ai-panel">
-                    <div class="ai-panel-header">
-                        <div class="ai-icon">📊</div>
-                        <div class="ai-title">Smart Schedule</div>
-                    </div>
-                    <div style="color: white; margin-top: 10px;">
-                        Gantt chart and timeline view coming here...
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Render Settings (placeholder)
-        function renderSettings() {
-            const container = document.getElementById('settingsSection');
-            container.innerHTML = `
-                <div class="card">
-                    <div class="card-title">Settings</div>
-                    <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
-                        Settings panel coming soon...
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Switch View
-        function switchView(view) {
-            currentView = view;
-            
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            event.target.classList.add('active');
-            
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById(view + 'Section').classList.add('active');
-            
-            document.getElementById('addBtn').style.display = 
-                (view === 'settings' || view === 'schedule' || view === 'dependencies') ? 'none' : 'block';
-            
-            renderView();
-        }
-        
-        // Go Home
-        function goHome() {
-            currentView = 'projects';
-            document.querySelectorAll('.nav-tab').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            document.querySelector('.nav-tab').classList.add('active');
-            
-            document.querySelectorAll('.section').forEach(section => {
-                section.classList.remove('active');
-            });
-            document.getElementById('projectsSection').classList.add('active');
-            
-            renderView();
-        }
-        
-        // Update Stats
-        function updateStats() {
-            const projects = data.projects.filter(p => !p.deleted);
-            const tasks = data.tasks.filter(t => !t.deleted);
-            const completedTasks = tasks.filter(t => t.completed);
-            
-            document.getElementById('projectCount').textContent = projects.length;
-            document.getElementById('taskCount').textContent = tasks.length;
-            document.getElementById('completionRate').textContent = 
-                tasks.length > 0 ? Math.round(completedTasks.length / tasks.length * 100) + '%' : '0%';
-            document.getElementById('totalBalance').textContent = '$0';
-        }
-        
-        // Modal Functions
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.add('active');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.remove('active');
-        }
-        
-        // Toast
-        function showToast(message, duration = 3000) {
-            const toast = document.getElementById('toast');
-            toast.textContent = message;
-            toast.classList.add('show');
+            copyBtn.textContent = '✓ Copied!';
+            copyBtn.classList.add('copied');
             
             setTimeout(() => {
-                toast.classList.remove('show');
-            }, duration);
+                copyBtn.textContent = 'Copy Link';
+                copyBtn.classList.remove('copied');
+            }, 2000);
         }
         
-        // Placeholder functions
-        function openAddModal() {
-            showToast('Add functionality coming soon!');
-        }
-        
-        function showAIAssistant() {
-            showToast('AI Assistant ready to help!');
-        }
-        
-        // Initialize on load
-        window.addEventListener('load', init);
-        
-        // Handle window resize for dependency lines
-        window.addEventListener('resize', () => {
-            if (currentView === 'dependencies') {
-                drawDependencyLines();
+        // Share functions for each platform
+        function shareOn(platform) {
+            const message = document.getElementById('customMessage').value;
+            const encodedUrl = encodeURIComponent(shareUrl);
+            const encodedMessage = encodeURIComponent(message);
+            const encodedTitle = encodeURIComponent(projectTitle);
+            
+            let shareLink = '';
+            
+            switch(platform) {
+                // Social Media
+                case 'facebook':
+                    shareLink = `https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}&quote=${encodedMessage}`;
+                    break;
+                case 'twitter':
+                    shareLink = `https://twitter.com/intent/tweet?text=${encodedMessage}&url=${encodedUrl}`;
+                    break;
+                case 'linkedin':
+                    shareLink = `https://www.linkedin.com/sharing/share-offsite/?url=${encodedUrl}&title=${encodedTitle}&summary=${encodedMessage}`;
+                    break;
+                case 'reddit':
+                    shareLink = `https://reddit.com/submit?url=${encodedUrl}&title=${encodedTitle}`;
+                    break;
+                case 'pinterest':
+                    shareLink = `https://pinterest.com/pin/create/button/?url=${encodedUrl}&description=${encodedMessage}`;
+                    break;
+                case 'tumblr':
+                    shareLink = `https://www.tumblr.com/share/link?url=${encodedUrl}&name=${encodedTitle}&description=${encodedMessage}`;
+                    break;
+                    
+                // Messaging Apps
+                case 'whatsapp':
+                    shareLink = `https://wa.me/?text=${encodedMessage}%20${encodedUrl}`;
+                    break;
+                case 'telegram':
+                    shareLink = `https://t.me/share/url?url=${encodedUrl}&text=${encodedMessage}`;
+                    break;
+                case 'messenger':
+                    shareLink = `fb-messenger://share?link=${encodedUrl}`;
+                    break;
+                case 'viber':
+                    shareLink = `viber://forward?text=${encodedMessage}%20${encodedUrl}`;
+                    break;
+                case 'line':
+                    shareLink = `https://line.me/R/msg/text/?${encodedMessage}%20${encodedUrl}`;
+                    break;
+                    
+                // Professional
+                case 'email':
+                    shareLink = `mailto:?subject=${encodedTitle}&body=${encodedMessage}%20${encodedUrl}`;
+                    break;
+                case 'slack':
+                    alert('Copy the link and paste in your Slack channel!');
+                    copyUrl();
+                    return;
+                case 'teams':
+                    alert('Copy the link and paste in Microsoft Teams!');
+                    copyUrl();
+                    return;
+                case 'discord':
+                    alert('Copy the link and paste in Discord!');
+                    copyUrl();
+                    return;
+                case 'skype':
+                    shareLink = `https://web.skype.com/share?url=${encodedUrl}&text=${encodedMessage}`;
+                    break;
+                    
+                // Visual platforms
+                case 'instagram':
+                    alert('Instagram: Copy link to share in bio or story!');
+                    copyUrl();
+                    return;
+                case 'tiktok':
+                    alert('TikTok: Copy link to share in bio or comments!');
+                    copyUrl();
+                    return;
+                case 'snapchat':
+                    alert('Snapchat: Copy link to share in chat or story!');
+                    copyUrl();
+                    return;
+                case 'wechat':
+                    alert('WeChat: Copy link to share in chat!');
+                    copyUrl();
+                    return;
             }
-        });
+            
+            if (shareLink) {
+                // Show success animation
+                showSuccess();
+                
+                // Open share link
+                window.open(shareLink, '_blank', 'width=600,height=400');
+            }
+        }
+        
+        // Show success popup
+        function showSuccess() {
+            const popup = document.getElementById('successPopup');
+            popup.style.display = 'block';
+            
+            setTimeout(() => {
+                popup.style.display = 'none';
+            }, 2000);
+        }
+        
+        // Toggle embed code
+        function toggleEmbed() {
+            const embedSection = document.getElementById('embedSection');
+            embedSection.classList.toggle('active');
+            
+            if (embedSection.classList.contains('active')) {
+                embedSection.querySelector('.embed-code').select();
+            }
+        }
+        
+        // Download QR Code
+        function downloadQR() {
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = 200;
+            canvas.height = 200;
+            const ctx = canvas.getContext('2d');
+            
+            // Draw QR background
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, 200, 200);
+            
+            // Draw QR pattern (simplified)
+            ctx.fillStyle = 'black';
+            // Corner squares
+            ctx.fillRect(20, 20, 30, 30);
+            ctx.fillRect(150, 20, 30, 30);
+            ctx.fillRect(20, 150, 30, 30);
+            // Center square
+            ctx.fillRect(70, 70, 60, 60);
+            ctx.fillStyle = 'white';
+            ctx.fillRect(85, 85, 30, 30);
+            ctx.fillStyle = 'black';
+            ctx.fillRect(95, 95, 10, 10);
+            
+            // Convert to image and download
+            canvas.toBlob(blob => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = 'builderpro-qr.png';
+                a.click();
+                URL.revokeObjectURL(url);
+            });
+            
+            showSuccess();
+        }
+        
+        // Print share info
+        function printShare() {
+            window.print();
+            showSuccess();
+        }
+        
+        // Native Share API (if available)
+        if (navigator.share) {
+            // Add native share button
+            const nativeBtn = document.createElement('button');
+            nativeBtn.className = 'option-btn';
+            nativeBtn.innerHTML = '<span>📱</span><span>Native Share</span>';
+            nativeBtn.onclick = async () => {
+                try {
+                    await navigator.share({
+                        title: projectTitle,
+                        text: document.getElementById('customMessage').value,
+                        url: shareUrl
+                    });
+                    showSuccess();
+                } catch (err) {
+                    console.log('Share canceled');
+                }
+            };
+            document.querySelector('.more-options').appendChild(nativeBtn);
+        }
     </script>
 </body>
 </html>
