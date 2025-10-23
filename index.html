@@ -15,7 +15,7 @@
     <meta name="msapplication-starturl" content="/">
     <meta name="format-detection" content="telephone=no">
     
-    <title>Builder Pro 2.1 - AI-Powered Project Manager</title>
+    <title>Builder Pro 2.2 - Ultra AI-Powered Project Manager</title>
     
     <style>
         :root {
@@ -46,6 +46,19 @@
             --contrast: 1;
             --brightness: 1;
             --font-scale: 1;
+            
+            /* Gantt Chart Colors */
+            --gantt-bg: #f8f9fa;
+            --gantt-grid: #e0e0e0;
+            --gantt-today: #ff6b6b;
+            --gantt-weekend: #f0f0f0;
+            --gantt-task-1: #4ecdc4;
+            --gantt-task-2: #45b7d1;
+            --gantt-task-3: #96ceb4;
+            --gantt-task-4: #ffeaa7;
+            --gantt-task-5: #dfe6e9;
+            --gantt-task-6: #a29bfe;
+            --gantt-task-7: #fd79a8;
         }
 
         /* Theme Color Schemes */
@@ -108,6 +121,9 @@
             --text-secondary: #c0c0c8 !important; 
             --border-color: #4a4246 !important; 
             --shadow-color: rgba(0,0,0,0.3) !important;
+            --gantt-bg: #2d2729 !important;
+            --gantt-grid: #4a4246 !important;
+            --gantt-weekend: #3d3739 !important;
         }
         
         * { 
@@ -134,26 +150,6 @@
             flex-direction: column;
             padding-left: env(safe-area-inset-left);
             padding-right: env(safe-area-inset-right);
-        }
-        
-        @media (display-mode: standalone) {
-            .fixed-header-section {
-                padding-top: max(20px, env(safe-area-inset-top));
-            }
-            
-            .main-content-wrapper {
-                margin-top: calc(260px + max(20px, env(safe-area-inset-top)));
-            }
-        }
-        
-        @supports (padding-top: max(0px)) {
-            .fixed-header-section {
-                padding-top: max(20px, env(safe-area-inset-top));
-            }
-            
-            .header {
-                padding-top: 12px;
-            }
         }
         
         .fixed-header-section {
@@ -225,31 +221,26 @@
             background: rgba(255,255,255,0.3);
         }
         
-        .sync-indicator { 
-            position: absolute; 
-            top: -2px; 
-            right: -2px; 
-            width: 8px; 
-            height: 8px; 
-            background: #10b981; 
-            border-radius: 50%; 
-            animation: pulse 2s infinite; 
-            display: none; 
+        .ai-badge {
+            position: absolute;
+            top: -4px;
+            right: -4px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 8px;
+            padding: 2px 4px;
+            border-radius: 4px;
+            font-weight: bold;
         }
         
-        .sync-indicator.syncing { 
-            display: block; 
-            background: #f39c12; 
-            animation: spin 1s linear infinite; 
+        .voice-active {
+            animation: pulse 1s infinite;
+            background: rgba(255,0,0,0.3) !important;
         }
         
         @keyframes pulse { 
             0%, 100% { opacity: 1; } 
             50% { opacity: 0.5; } 
-        }
-        
-        @keyframes spin { 
-            to { transform: rotate(360deg); } 
         }
         
         .stats-bar { 
@@ -298,12 +289,25 @@
             color: var(--text-secondary); 
             transition: all 0.2s; 
             font-size: calc(13px * var(--font-scale)); 
+            position: relative;
         }
         
         .nav-tab.active { 
             color: var(--highlight-color); 
             border-bottom-color: var(--highlight-color); 
             font-weight: 500; 
+        }
+        
+        .nav-tab .badge {
+            position: absolute;
+            top: 6px;
+            right: -10px;
+            background: var(--danger);
+            color: white;
+            font-size: 10px;
+            padding: 2px 4px;
+            border-radius: 8px;
+            font-weight: bold;
         }
         
         .main-content-wrapper {
@@ -390,107 +394,316 @@
             margin-top: 4px; 
         }
         
-        .card-actions { 
-            display: flex; 
-            gap: 6px;
-            flex-shrink: 0;
-        }
-        
-        .card-btn { 
-            background: transparent; 
-            border: none; 
-            color: var(--text-secondary); 
-            cursor: pointer; 
-            padding: 6px; 
-            border-radius: 50%; 
-            font-size: calc(16px * var(--font-scale)); 
-            transition: background 0.2s;
+        /* Kanban Board Styles */
+        .kanban-board {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 32px;
-            height: 32px;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 20px;
+            min-height: 500px;
         }
         
-        .card-btn:active { 
-            background: var(--border-color); 
+        .kanban-column {
+            min-width: 280px;
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 12px;
+            box-shadow: 0 2px 8px var(--shadow-color);
         }
         
-        .progress-bar { 
-            height: 6px; 
-            background: var(--border-color); 
-            border-radius: 3px; 
-            overflow: hidden; 
-            margin-top: 10px; 
-        }
-        
-        .progress-fill { 
-            height: 100%; 
-            background: linear-gradient(90deg, var(--accent-color), var(--highlight-color)); 
-            border-radius: 3px; 
-            transition: width 0.3s; 
-        }
-        
-        .task-item { 
-            display: flex; 
-            align-items: center; 
-            padding: 8px; 
-            background: var(--bg-color); 
-            border-radius: 8px; 
-            margin-bottom: 6px; 
-            gap: 10px;
-        }
-        
-        .task-checkbox { 
-            width: 20px; 
-            height: 20px; 
-            accent-color: var(--highlight-color); 
-            flex-shrink: 0; 
-        }
-        
-        .task-text { 
-            flex: 1; 
-            font-size: calc(13px * var(--font-scale)); 
-            word-break: break-word; 
-        }
-        
-        .task-text.completed { 
-            text-decoration: line-through; 
-            opacity: 0.6; 
-        }
-        
-        .delete-task-btn {
-            background: transparent;
-            border: none;
-            color: var(--danger);
-            cursor: pointer;
-            padding: 4px;
+        .kanban-header {
+            font-weight: 600;
             font-size: calc(14px * var(--font-scale));
-            opacity: 0.7;
-        }
-        
-        .delete-task-btn:active {
-            opacity: 1;
-        }
-        
-        .transaction-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
             padding: 10px;
             background: var(--bg-color);
             border-radius: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .kanban-cards {
+            min-height: 400px;
+            padding: 4px;
+        }
+        
+        .kanban-card {
+            background: var(--bg-color);
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 8px;
+            cursor: move;
+            transition: all 0.2s;
+            border-left: 4px solid var(--accent-color);
+        }
+        
+        .kanban-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px var(--shadow-color);
+        }
+        
+        .kanban-card.dragging {
+            opacity: 0.5;
+            transform: rotate(5deg);
+        }
+        
+        .kanban-card-title {
+            font-weight: 500;
             margin-bottom: 6px;
         }
         
-        .transaction-amount {
-            font-weight: bold;
-            font-size: calc(14px * var(--font-scale));
+        .kanban-card-meta {
+            display: flex;
+            justify-content: space-between;
+            font-size: calc(11px * var(--font-scale));
+            color: var(--text-secondary);
         }
         
-        .income { color: var(--income-color); }
-        .expense { color: var(--expense-color); }
+        .kanban-priority {
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
         
+        .priority-high {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .priority-medium {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .priority-low {
+            background: var(--success);
+            color: white;
+        }
+        
+        /* Dependency Lines */
+        .dependency-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .dependency-line {
+            stroke: var(--accent-color);
+            stroke-width: 2;
+            fill: none;
+            stroke-dasharray: 5,5;
+            animation: dash 20s linear infinite;
+        }
+        
+        @keyframes dash {
+            to {
+                stroke-dashoffset: -100;
+            }
+        }
+        
+        .dependency-arrow {
+            fill: var(--accent-color);
+        }
+        
+        /* Time Machine */
+        .time-machine {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px var(--shadow-color);
+        }
+        
+        .time-slider {
+            width: 100%;
+            margin: 20px 0;
+            -webkit-appearance: none;
+            height: 8px;
+            border-radius: 4px;
+            background: var(--border-color);
+            outline: none;
+        }
+        
+        .time-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+        }
+        
+        .time-display {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .snapshot-info {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+        
+        /* Voice Indicator */
+        .voice-indicator {
+            position: fixed;
+            bottom: calc(100px + env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255,0,0,0.9);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+        }
+        
+        .voice-indicator.active {
+            display: flex;
+            animation: pulse 1s infinite;
+        }
+        
+        .voice-wave {
+            width: 4px;
+            height: 20px;
+            background: white;
+            border-radius: 2px;
+            animation: wave 0.5s infinite ease-in-out;
+        }
+        
+        .voice-wave:nth-child(2) { animation-delay: 0.1s; }
+        .voice-wave:nth-child(3) { animation-delay: 0.2s; }
+        .voice-wave:nth-child(4) { animation-delay: 0.3s; }
+        .voice-wave:nth-child(5) { animation-delay: 0.4s; }
+        
+        @keyframes wave {
+            0%, 100% { height: 20px; }
+            50% { height: 40px; }
+        }
+        
+        /* Client Portal */
+        .share-link {
+            background: var(--bg-color);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .share-input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            font-size: calc(12px * var(--font-scale));
+            font-family: monospace;
+        }
+        
+        .copy-btn {
+            padding: 8px 12px;
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: calc(12px * var(--font-scale));
+        }
+        
+        /* View Switcher */
+        .view-switcher {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .view-btn {
+            padding: 8px 16px;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: calc(13px * var(--font-scale));
+        }
+        
+        .view-btn.active {
+            background: var(--highlight-color);
+            color: white;
+            border-color: var(--highlight-color);
+        }
+        
+        /* AI Insights Panel */
+        .ai-panel {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-radius: 12px;
+            padding: 16px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+        
+        .ai-panel-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+        
+        .ai-icon {
+            width: 32px;
+            height: 32px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        
+        .ai-title {
+            font-size: calc(16px * var(--font-scale));
+            font-weight: 600;
+        }
+        
+        /* Toast Notification */
+        .toast { 
+            position: fixed; 
+            bottom: calc(100px + env(safe-area-inset-bottom)); 
+            left: 50%; 
+            transform: translateX(-50%); 
+            background: var(--button-primary); 
+            color: white; 
+            padding: 12px 20px; 
+            border-radius: 20px; 
+            font-size: calc(13px * var(--font-scale)); 
+            z-index: 300; 
+            opacity: 0; 
+            transition: opacity 0.3s; 
+            pointer-events: none; 
+            max-width: 80%; 
+            text-align: center; 
+        }
+        
+        .toast.show { 
+            opacity: 0.95; 
+        }
+        
+        /* Modal */
         .modal { 
             display: none; 
             position: fixed; 
@@ -555,16 +768,6 @@
             transition: border-color 0.2s;
         }
         
-        .form-textarea { 
-            resize: vertical; 
-            min-height: 80px; 
-        }
-        
-        .form-input:focus, .form-select:focus, .form-textarea:focus { 
-            outline: none; 
-            border-color: var(--highlight-color); 
-        }
-        
         .form-actions { 
             display: flex; 
             gap: 10px; 
@@ -595,571 +798,6 @@
             background: var(--border-color); 
             color: var(--text-color); 
         }
-        
-        .empty-state { 
-            text-align: center; 
-            padding: 60px 20px; 
-            color: var(--text-secondary); 
-        }
-        
-        .empty-icon { 
-            font-size: 48px; 
-            margin-bottom: 16px; 
-            opacity: 0.3; 
-        }
-        
-        .empty-text { 
-            font-size: calc(14px * var(--font-scale)); 
-            line-height: 1.5; 
-        }
-        
-        .toast { 
-            position: fixed; 
-            bottom: calc(100px + env(safe-area-inset-bottom)); 
-            left: 50%; 
-            transform: translateX(-50%); 
-            background: var(--button-primary); 
-            color: white; 
-            padding: 12px 20px; 
-            border-radius: 20px; 
-            font-size: calc(13px * var(--font-scale)); 
-            z-index: 300; 
-            opacity: 0; 
-            transition: opacity 0.3s; 
-            pointer-events: none; 
-            max-width: 80%; 
-            text-align: center; 
-        }
-        
-        .toast.show { 
-            opacity: 0.95; 
-        }
-        
-        .settings-group {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 16px;
-        }
-        
-        .settings-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid var(--border-color);
-        }
-        
-        .settings-row:last-child {
-            border-bottom: none;
-        }
-        
-        .settings-label {
-            font-size: calc(14px * var(--font-scale));
-            color: var(--text-color);
-            flex: 1;
-        }
-        
-        .settings-value {
-            font-size: calc(13px * var(--font-scale));
-            color: var(--text-secondary);
-        }
-        
-        .switch {
-            position: relative;
-            width: 48px;
-            height: 26px;
-            background: var(--border-color);
-            border-radius: 13px;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        
-        .switch.active {
-            background: var(--highlight-color);
-        }
-        
-        .switch-handle {
-            position: absolute;
-            top: 3px;
-            left: 3px;
-            width: 20px;
-            height: 20px;
-            background: white;
-            border-radius: 50%;
-            transition: transform 0.3s;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-        }
-        
-        .switch.active .switch-handle {
-            transform: translateX(22px);
-        }
-        
-        .btn-group {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-        }
-        
-        .btn-option {
-            padding: 8px 12px;
-            border: 1px solid var(--border-color);
-            background: var(--card-bg);
-            color: var(--text-color);
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: calc(12px * var(--font-scale));
-            transition: all 0.2s;
-        }
-        
-        .btn-option.active {
-            background: var(--highlight-color);
-            color: white;
-            border-color: var(--highlight-color);
-        }
-        
-        #syncStatus {
-            padding: 8px 12px;
-            background: var(--bg-color);
-            border-radius: 8px;
-            font-size: calc(11px * var(--font-scale));
-            margin-top: 8px;
-        }
-        
-        .currency-note {
-            font-size: calc(11px * var(--font-scale));
-            color: var(--text-secondary);
-            font-style: italic;
-            margin-top: 4px;
-        }
-
-        /* Sticky Note Styles */
-        .sticky-note {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-2deg);
-            background: linear-gradient(135deg, #fff9c4 0%, #ffeb3b 100%);
-            width: 280px;
-            padding: 20px;
-            border-radius: 4px;
-            box-shadow: 
-                0 10px 40px rgba(0,0,0,0.3),
-                inset 0 -40px 40px rgba(0,0,0,0.05);
-            z-index: 1000;
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            animation: popIn 0.4s ease-out, wobble 0.5s ease-in-out 0.4s;
-            display: none;
-        }
-
-        .sticky-note::before {
-            content: '';
-            position: absolute;
-            top: -15px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60px;
-            height: 30px;
-            background: rgba(255,255,255,0.6);
-            border: 1px solid #ddd;
-            border-radius: 2px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-
-        .sticky-note.show {
-            display: block;
-        }
-
-        .sticky-note-header {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 10px;
-            text-align: center;
-            text-decoration: underline;
-            text-decoration-style: wavy;
-            text-decoration-color: #ff9800;
-        }
-
-        .sticky-note-content {
-            font-size: 14px;
-            color: #333;
-            line-height: 1.6;
-        }
-
-        .sticky-note-content .check-item {
-            margin: 8px 0;
-            padding-left: 20px;
-            position: relative;
-        }
-
-        .sticky-note-content .check-item::before {
-            content: '✓';
-            position: absolute;
-            left: 0;
-            color: #4caf50;
-            font-weight: bold;
-        }
-
-        .sticky-note-footer {
-            margin-top: 15px;
-            font-size: 11px;
-            color: #666;
-            text-align: center;
-            font-style: italic;
-        }
-
-        @keyframes popIn {
-            0% {
-                transform: translate(-50%, -50%) scale(0) rotate(-2deg);
-                opacity: 0;
-            }
-            70% {
-                transform: translate(-50%, -50%) scale(1.1) rotate(-2deg);
-            }
-            100% {
-                transform: translate(-50%, -50%) scale(1) rotate(-2deg);
-                opacity: 1;
-            }
-        }
-
-        @keyframes wobble {
-            0%, 100% { transform: translate(-50%, -50%) rotate(-2deg); }
-            25% { transform: translate(-50%, -50%) rotate(2deg); }
-            75% { transform: translate(-50%, -50%) rotate(-1deg); }
-        }
-
-        /* Theme Color Picker */
-        .theme-picker {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            margin-top: 10px;
-        }
-
-        .theme-option {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            border: 3px solid transparent;
-            cursor: pointer;
-            position: relative;
-            transition: all 0.3s;
-            overflow: hidden;
-        }
-
-        .theme-option::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            transition: all 0.3s;
-        }
-
-        .theme-option::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 50%;
-            transition: all 0.3s;
-        }
-
-        .theme-option.active {
-            border-color: var(--text-color);
-            transform: scale(1.1);
-            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-        }
-
-        .theme-option.active::before {
-            content: '✓';
-            color: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 20px;
-            font-weight: bold;
-            height: 100%;
-            background: rgba(0,0,0,0.3) !important;
-        }
-
-        .theme-option.active::after {
-            display: none;
-        }
-
-        /* Individual theme colors for picker */
-        .theme-option[data-theme="rose"]::before { background: #d2bcbf; }
-        .theme-option[data-theme="rose"]::after { background: #a67980; }
-
-        .theme-option[data-theme="sage"]::before { background: #c0ccb8; }
-        .theme-option[data-theme="sage"]::after { background: #60665c; }
-
-        .theme-option[data-theme="gold"]::before { background: #e0b558; }
-        .theme-option[data-theme="gold"]::after { background: #ecd299; }
-
-        .theme-option[data-theme="ocean"]::before { background: #99b3ec; }
-        .theme-option[data-theme="ocean"]::after { background: #151b73; }
-
-        .theme-option[data-theme="lavender"]::before { background: #8386a4; }
-        .theme-option[data-theme="lavender"]::after { background: #191a22; }
-
-        .theme-option[data-theme="teal"]::before { background: #90b2b8; }
-        .theme-option[data-theme="teal"]::after { background: #2c4144; }
-
-        .theme-option[data-theme="seafoam"]::before { background: #9cbbbf; }
-        .theme-option[data-theme="seafoam"]::after { background: #436266; }
-
-        /* Gantt Chart Styles */
-        .gantt-container {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 8px var(--shadow-color);
-            overflow-x: auto;
-        }
-        
-        .gantt-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 16px;
-        }
-        
-        .gantt-title {
-            font-weight: 600;
-            font-size: calc(16px * var(--font-scale));
-            color: var(--text-color);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .gantt-controls {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .gantt-btn {
-            padding: 6px 12px;
-            background: var(--bg-color);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
-            font-size: calc(12px * var(--font-scale));
-            color: var(--text-color);
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .gantt-btn.active {
-            background: var(--highlight-color);
-            color: white;
-            border-color: var(--highlight-color);
-        }
-        
-        .gantt-chart {
-            position: relative;
-            min-height: 200px;
-            background: #f8f9fa;
-            border-radius: 8px;
-            overflow: hidden;
-        }
-        
-        .gantt-grid {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            pointer-events: none;
-        }
-        
-        .gantt-row {
-            position: relative;
-            height: 40px;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            align-items: center;
-        }
-        
-        .gantt-label {
-            position: absolute;
-            left: 10px;
-            font-size: calc(12px * var(--font-scale));
-            color: var(--text-color);
-            white-space: nowrap;
-            z-index: 2;
-            background: #f8f9fa;
-            padding: 2px 6px;
-            border-radius: 4px;
-        }
-        
-        .gantt-bar {
-            position: absolute;
-            height: 28px;
-            border-radius: 4px;
-            display: flex;
-            align-items: center;
-            padding: 0 8px;
-            font-size: calc(11px * var(--font-scale));
-            color: white;
-            cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
-            z-index: 1;
-        }
-        
-        .gantt-bar:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-        }
-        
-        .gantt-today-line {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: #ff6b6b;
-            z-index: 3;
-            pointer-events: none;
-        }
-        
-        .gantt-weekend {
-            position: absolute;
-            top: 0;
-            bottom: 0;
-            background: #f0f0f0;
-            pointer-events: none;
-        }
-        
-        .mini-gantt {
-            height: 100px;
-            margin-top: 10px;
-            background: #f8f9fa;
-            border-radius: 6px;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .mini-gantt-bar {
-            position: absolute;
-            height: 20px;
-            border-radius: 3px;
-            top: 50%;
-            transform: translateY(-50%);
-        }
-        
-        /* AI Assistant Panel */
-        .ai-panel {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border-radius: 12px;
-            padding: 16px;
-            margin-bottom: 20px;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-        
-        .ai-panel-header {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
-        }
-        
-        .ai-icon {
-            width: 32px;
-            height: 32px;
-            background: rgba(255,255,255,0.2);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 18px;
-        }
-        
-        .ai-title {
-            font-size: calc(16px * var(--font-scale));
-            font-weight: 600;
-        }
-        
-        .ai-suggestions {
-            background: rgba(255,255,255,0.1);
-            border-radius: 8px;
-            padding: 12px;
-            margin-top: 10px;
-        }
-        
-        .ai-suggestion {
-            padding: 8px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            font-size: calc(13px * var(--font-scale));
-        }
-        
-        .ai-suggestion:last-child {
-            border-bottom: none;
-        }
-        
-        .ai-action-btn {
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 6px;
-            font-size: calc(12px * var(--font-scale));
-            font-weight: 500;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: transform 0.2s;
-        }
-        
-        .ai-action-btn:hover {
-            transform: scale(1.05);
-        }
-        
-        .ai-badge {
-            position: absolute;
-            top: -4px;
-            right: -4px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            font-size: 8px;
-            padding: 2px 4px;
-            border-radius: 4px;
-            font-weight: bold;
-        }
-        
-        .nav-tab .ai-indicator {
-            position: absolute;
-            top: 8px;
-            right: -8px;
-            width: 6px;
-            height: 6px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-        
-        .task-duration {
-            font-size: calc(11px * var(--font-scale));
-            color: var(--text-secondary);
-            padding: 2px 6px;
-            background: var(--bg-color);
-            border-radius: 4px;
-        }
-        
-        .date-inputs {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .btn-ai {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-        }
-
     </style>
 </head>
 <body>
@@ -1169,21 +807,23 @@
                 <div class="header-content">
                     <div class="header-left" onclick="goHome()">
                         <div>
-                            <h1>🏗️ Builder Pro</h1>
-                            <div class="header-subtitle">AI-Powered Project Manager</div>
+                            <h1>🏗️ Builder Pro 2.2</h1>
+                            <div class="header-subtitle">Ultra AI-Powered Manager</div>
                         </div>
                     </div>
                     <div class="header-controls">
-                                                <button class="header-btn" onclick="showAIAssistant()" title="AI Assistant">
+                        <button class="header-btn" id="voiceBtn" onclick="toggleVoiceCommand()" title="Voice Commands">
+                            🎤
+                        </button>
+                        <button class="header-btn" onclick="showTimeMachine()" title="Time Machine">
+                            ⏰
+                        </button>
+                        <button class="header-btn" onclick="shareProject()" title="Share">
+                            🔗
+                        </button>
+                        <button class="header-btn" onclick="showAIAssistant()" title="AI Assistant">
                             🤖
                             <span class="ai-badge">AI</span>
-                        </button>
-                        <button class="header-btn" onclick="performSync()" title="Sync">
-                            ☁️
-                            <span class="sync-indicator" id="syncIndicator"></span>
-                        </button>
-                        <button class="header-btn" onclick="showTrash()" title="Trash">
-                            🗑️
                         </button>
                     </div>
                 </div>
@@ -1210,12 +850,12 @@
             
             <nav class="nav-tabs">
                 <div class="nav-tab active" onclick="switchView('projects')">Projects</div>
-                <div class="nav-tab" onclick="switchView('tasks')">Tasks</div>
-                <div class="nav-tab" onclick="switchView('schedule')">
-                    Schedule
-                    <span class="ai-indicator"></span>
+                <div class="nav-tab" onclick="switchView('kanban')">
+                    Kanban
+                    <span class="badge" id="kanbanBadge" style="display: none;">0</span>
                 </div>
-                <div class="nav-tab" onclick="switchView('financial')">Financial</div>
+                <div class="nav-tab" onclick="switchView('schedule')">Schedule</div>
+                <div class="nav-tab" onclick="switchView('dependencies')">Dependencies</div>
                 <div class="nav-tab" onclick="switchView('settings')">Settings</div>
             </nav>
         </div>
@@ -1223,9 +863,9 @@
         <div class="main-content-wrapper">
             <main class="main-content">
                 <div id="projectsSection" class="section active"></div>
-                <div id="tasksSection" class="section"></div>
-                                <div id="scheduleSection" class="section"></div>
-                <div id="financialSection" class="section"></div>
+                <div id="kanbanSection" class="section"></div>
+                <div id="scheduleSection" class="section"></div>
+                <div id="dependenciesSection" class="section"></div>
                 <div id="settingsSection" class="section"></div>
             </main>
         </div>
@@ -1233,293 +873,747 @@
         <button class="add-btn" id="addBtn" onclick="openAddModal()">+</button>
     </div>
     
-    <!-- Modals -->
-    <div id="addProjectModal" class="modal">
+    <!-- Voice Indicator -->
+    <div id="voiceIndicator" class="voice-indicator">
+        <div class="voice-wave"></div>
+        <div class="voice-wave"></div>
+        <div class="voice-wave"></div>
+        <div class="voice-wave"></div>
+        <div class="voice-wave"></div>
+        <span>Listening...</span>
+    </div>
+    
+    <!-- Modals will go here -->
+    <div id="timeMachineModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">New Project</div>
-            <div class="form-group">
-                <label class="form-label">Project Name</label>
-                <input type="text" class="form-input" id="projectName" placeholder="Enter project name">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <textarea class="form-textarea" id="projectDescription" placeholder="Project description (optional)"></textarea>
-            </div>
-                        <div class="form-group">
-                <label class="form-label">Project Dates</label>
-                <div class="date-inputs">
-                    <input type="date" class="form-input" id="projectStartDate">
-                    <input type="date" class="form-input" id="projectEndDate">
+            <div class="modal-header">⏰ Time Machine</div>
+            <div class="time-machine">
+                <label class="form-label">Select Date & Time</label>
+                <input type="range" class="time-slider" id="timeSlider" min="0" max="100" value="100">
+                <div class="time-display">
+                    <span id="selectedTime">Current State</span>
+                    <button class="btn btn-primary" onclick="restoreSnapshot()">Restore</button>
+                </div>
+                <div class="snapshot-info" id="snapshotInfo">
+                    <!-- Snapshot details will appear here -->
                 </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">Budget (optional)</label>
-                <input type="number" class="form-input" id="projectBudget" placeholder="0.00">
-                <div class="currency-note">Currency: <span id="currencyDisplay">USD</span></div>
-            </div>
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('addProjectModal')">Cancel</button>
-                                <button class="btn btn-ai" onclick="generateAIProject()">🤖 AI Generate</button>
-                <button class="btn btn-primary" onclick="saveProject()">Create</button>
+                <button class="btn btn-secondary" onclick="closeModal('timeMachineModal')">Close</button>
             </div>
         </div>
     </div>
     
-    <div id="addTaskModal" class="modal">
+    <div id="shareModal" class="modal">
         <div class="modal-content">
-            <div class="modal-header">New Task</div>
+            <div class="modal-header">🔗 Share Project</div>
             <div class="form-group">
-                <label class="form-label">Task Description</label>
-                <input type="text" class="form-input" id="taskDescription" placeholder="What needs to be done?">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Project</label>
-                <select class="form-select" id="taskProject"></select>
+                <label class="form-label">Select Project</label>
+                <select class="form-select" id="shareProjectSelect"></select>
             </div>
             <div class="form-group">
-                <label class="form-label">Duration (days)</label>
-                <input type="number" class="form-input" id="taskDuration" placeholder="1" value="1" min="1">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Priority</label>
-                <select class="form-select" id="taskPriority">
-                    <option value="low">Low</option>
-                    <option value="medium" selected>Medium</option>
-                    <option value="high">High</option>
-                </select>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('addTaskModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveTask()">Add Task</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="addTransactionModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">New Transaction</div>
-            <div class="form-group">
-                <label class="form-label">Type</label>
-                <select class="form-select" id="transactionType">
-                    <option value="income">Income</option>
-                    <option value="expense">Expense</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label class="form-label">Amount</label>
-                <input type="number" class="form-input" id="transactionAmount" placeholder="0.00" step="0.01">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Description</label>
-                <input type="text" class="form-input" id="transactionDescription" placeholder="What is this for?">
-            </div>
-            <div class="form-group">
-                <label class="form-label">Project</label>
-                <select class="form-select" id="transactionProject">
-                    <option value="">No Project</option>
-                </select>
-            </div>
-            <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('addTransactionModal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveTransaction()">Add</button>
-            </div>
-        </div>
-    </div>
-    
-        
-    <div id="aiAssistantModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">🤖 AI Assistant</div>
-            <div class="ai-panel" style="margin: 0; box-shadow: none;">
-                <div class="ai-suggestions">
-                    <div id="aiSuggestionsList"></div>
+                <label class="form-label">Share Options</label>
+                <div style="margin: 10px 0;">
+                    <label>
+                        <input type="checkbox" id="shareReadOnly" checked> Read-only access
+                    </label>
                 </div>
-                <button class="ai-action-btn" onclick="generateSmartSchedule()">Generate Smart Schedule</button>
-                <button class="ai-action-btn" onclick="optimizeProjectTimeline()">Optimize Timeline</button>
-                <button class="ai-action-btn" onclick="analyzeBudgetHealth()">Analyze Budget Health</button>
+                <div style="margin: 10px 0;">
+                    <label>
+                        <input type="checkbox" id="shareExpiry"> Expires in 7 days
+                    </label>
+                </div>
+            </div>
+            <div class="share-link">
+                <input type="text" class="share-input" id="shareLink" readonly value="Generating link...">
+                <button class="copy-btn" onclick="copyShareLink()">Copy</button>
             </div>
             <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('aiAssistantModal')">Close</button>
-            </div>
-        </div>
-    </div>
-    
-    <div id="trashModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">🗑️ Trash</div>
-            <div id="trashContent"></div>
-            <div class="form-actions">
-                <button class="btn btn-secondary" onclick="closeModal('trashModal')">Close</button>
-                <button class="btn btn-primary" onclick="emptyTrash()">Empty Trash</button>
+                <button class="btn btn-secondary" onclick="closeModal('shareModal')">Close</button>
+                <button class="btn btn-primary" onclick="generateShareLink()">Generate Link</button>
             </div>
         </div>
     </div>
     
     <div id="toast" class="toast"></div>
-
-    <!-- Sticky Note Reminder -->
-    <div id="stickyNote" class="sticky-note">
-        <div class="sticky-note-header">📌 Quick Check!</div>
-        <div class="sticky-note-content" id="stickyNoteContent">
-            <!-- Content will be dynamically generated -->
-        </div>
-        <div class="sticky-note-footer">Auto-closing in 5 seconds...</div>
-    </div>
     
     <script>
-        // Data structure
+        // Enhanced Data Structure
         let data = {
             projects: [],
             tasks: [],
             transactions: [],
+            dependencies: [],
+            snapshots: [],
+            sharedLinks: [],
             trash: [],
-            permanentlyDeleted: [],
             settings: {
                 nightMode: false,
                 currency: 'USD',
-                contrast: 'normal',
-                fontSize: 'm',
-                saturation: 'normal',
-                theme: 'rose'
+                theme: 'rose',
+                voiceEnabled: true,
+                autoSnapshot: true
             }
         };
         
-        // App state
+        // App State
         let currentView = 'projects';
-        let syncApiKey = '';
-        let reminderInterval = null;
-        let apiTempDisabled = false;
+        let voiceRecognition = null;
+        let isListening = false;
+        let draggedTask = null;
         
-        // App configuration
-        const APP_CONFIG = {
-            baseUrl: 'https://api.jsonbin.io/v3',
-            binId: '678e017dacd3cb34a8c57f18'
-        };
-        
-        // Initialize app
+        // Initialize App
         function init() {
             loadData();
-            // Clear all data as requested
-            clearAllInitialData();
-            
-            applySettings();
+            initializeVoiceRecognition();
+            createInitialSnapshot();
             renderView();
             updateStats();
-            checkSyncStatus();
-            setupReminderSystem();
+            checkKanbanTasks();
             
-            // Load API key from localStorage
-            const savedApiKey = localStorage.getItem('builderProSyncApiKey');
-            if (savedApiKey) {
-                syncApiKey = savedApiKey;
-                document.getElementById('syncMode').textContent = 'Ready';
-            }
-            
-            // Check if launched as PWA
-            if (window.matchMedia('(display-mode: standalone)').matches) {
-                console.log('Running as PWA');
-            }
-            
-            // Auto-sync on load if API key exists
-            if (syncApiKey && navigator.onLine) {
-                setTimeout(() => performSync(), 2000);
-            }
+            // Create sample data for demo
+            createSampleData();
         }
         
-        // Load data from localStorage
+        // Create Sample Data
+        function createSampleData() {
+            // Sample project
+            const project = {
+                id: 'p1',
+                name: 'Website Redesign',
+                description: 'Complete overhaul of company website',
+                startDate: new Date().toISOString().split('T')[0],
+                endDate: new Date(Date.now() + 60*24*60*60*1000).toISOString().split('T')[0],
+                budget: 5000,
+                created: Date.now()
+            };
+            data.projects.push(project);
+            
+            // Sample tasks with different statuses
+            const taskStatuses = ['To Do', 'In Progress', 'Review', 'Done'];
+            const taskSamples = [
+                { description: 'Research competitors', status: 'Done', priority: 'high' },
+                { description: 'Create wireframes', status: 'Done', priority: 'high' },
+                { description: 'Design mockups', status: 'Review', priority: 'medium' },
+                { description: 'Develop frontend', status: 'In Progress', priority: 'high' },
+                { description: 'Backend API', status: 'In Progress', priority: 'medium' },
+                { description: 'Testing', status: 'To Do', priority: 'low' },
+                { description: 'Deployment', status: 'To Do', priority: 'high' }
+            ];
+            
+            taskSamples.forEach((task, index) => {
+                data.tasks.push({
+                    id: 't' + index,
+                    projectId: 'p1',
+                    description: task.description,
+                    status: task.status,
+                    priority: task.priority,
+                    duration: Math.floor(Math.random() * 10) + 1,
+                    dependencies: index > 0 ? ['t' + (index - 1)] : [],
+                    completed: task.status === 'Done',
+                    created: Date.now()
+                });
+            });
+            
+            // Create dependencies
+            data.dependencies = [
+                { from: 't0', to: 't1', type: 'finish-to-start' },
+                { from: 't1', to: 't2', type: 'finish-to-start' },
+                { from: 't2', to: 't3', type: 'finish-to-start' },
+                { from: 't3', to: 't4', type: 'start-to-start' },
+                { from: 't4', to: 't5', type: 'finish-to-start' },
+                { from: 't5', to: 't6', type: 'finish-to-start' }
+            ];
+            
+            saveData();
+        }
+        
+        // Load Data
         function loadData() {
-            const saved = localStorage.getItem('builderProData');
+            const saved = localStorage.getItem('builderPro22Data');
             if (saved) {
                 try {
                     data = JSON.parse(saved);
-                    // Ensure all properties exist
-                    data.projects = data.projects || [];
-                    data.tasks = data.tasks || [];
-                    data.transactions = data.transactions || [];
-                    data.trash = data.trash || [];
-                    data.permanentlyDeleted = data.permanentlyDeleted || [];
-                    data.settings = data.settings || {
-                        nightMode: false,
-                        currency: 'USD',
-                        contrast: 'normal',
-                        fontSize: 'm',
-                        saturation: 'normal',
-                        theme: 'rose'
-                    };
-                    // Ensure theme setting exists
-                    if (!data.settings.theme) {
-                        data.settings.theme = 'rose';
-                    }
                 } catch (e) {
                     console.error('Error loading data:', e);
                 }
             }
         }
         
-        // Save data to localStorage
+        // Save Data
         function saveData() {
-            localStorage.setItem('builderProData', JSON.stringify(data));
+            localStorage.setItem('builderPro22Data', JSON.stringify(data));
+            if (data.settings.autoSnapshot) {
+                createSnapshot();
+            }
         }
         
-        // Apply settings
-        function applySettings() {
-            document.body.classList.toggle('night-mode', data.settings.nightMode);
+        // Render View
+        function renderView() {
+            switch(currentView) {
+                case 'projects':
+                    renderProjects();
+                    break;
+                case 'kanban':
+                    renderKanban();
+                    break;
+                case 'schedule':
+                    renderSchedule();
+                    break;
+                case 'dependencies':
+                    renderDependencies();
+                    break;
+                case 'settings':
+                    renderSettings();
+                    break;
+            }
+        }
+        
+        // Render Kanban Board
+        function renderKanban() {
+            const container = document.getElementById('kanbanSection');
+            const columns = ['To Do', 'In Progress', 'Review', 'Done'];
             
-            // Remove all theme classes
-            document.body.classList.remove('theme-rose', 'theme-sage', 'theme-gold', 
-                                          'theme-ocean', 'theme-lavender', 'theme-teal', 'theme-seafoam');
-            // Add current theme
-            document.body.classList.add('theme-' + data.settings.theme);
+            container.innerHTML = `
+                <div class="view-switcher">
+                    <button class="view-btn active" onclick="setKanbanView('board')">Board View</button>
+                    <button class="view-btn" onclick="setKanbanView('list')">List View</button>
+                </div>
+                <div class="kanban-board" id="kanbanBoard">
+                    ${columns.map(column => {
+                        const tasks = data.tasks.filter(t => t.status === column && !t.deleted);
+                        return `
+                            <div class="kanban-column" data-status="${column}">
+                                <div class="kanban-header">
+                                    ${column}
+                                    <span>${tasks.length}</span>
+                                </div>
+                                <div class="kanban-cards" ondrop="dropTask(event)" ondragover="allowDrop(event)" data-status="${column}">
+                                    ${tasks.map(task => `
+                                        <div class="kanban-card" draggable="true" ondragstart="dragTask(event, '${task.id}')" id="task-${task.id}">
+                                            <div class="kanban-card-title">${task.description}</div>
+                                            <div class="kanban-card-meta">
+                                                <span class="kanban-priority priority-${task.priority || 'medium'}">${task.priority || 'medium'}</span>
+                                                <span>${task.duration || 1}d</span>
+                                            </div>
+                                        </div>
+                                    `).join('')}
+                                </div>
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+        }
+        
+        // Drag and Drop Functions
+        function allowDrop(ev) {
+            ev.preventDefault();
+        }
+        
+        function dragTask(ev, taskId) {
+            draggedTask = taskId;
+            ev.target.classList.add('dragging');
+        }
+        
+        function dropTask(ev) {
+            ev.preventDefault();
+            const newStatus = ev.target.closest('.kanban-cards').dataset.status;
             
-            // Update theme color meta tag
-            const themeColors = {
-                rose: '#d2bcbf',
-                sage: '#c0ccb8',
-                gold: '#e0b558',
-                ocean: '#99b3ec',
-                lavender: '#8386a4',
-                teal: '#90b2b8',
-                seafoam: '#9cbbbf'
+            if (draggedTask && newStatus) {
+                const task = data.tasks.find(t => t.id === draggedTask);
+                if (task) {
+                    task.status = newStatus;
+                    task.completed = newStatus === 'Done';
+                    saveData();
+                    renderKanban();
+                    updateStats();
+                    showToast(`Task moved to ${newStatus}`);
+                }
+            }
+            
+            // Reset
+            document.querySelectorAll('.dragging').forEach(el => el.classList.remove('dragging'));
+            draggedTask = null;
+        }
+        
+        // Render Dependencies View
+        function renderDependencies() {
+            const container = document.getElementById('dependenciesSection');
+            
+            container.innerHTML = `
+                <div class="ai-panel">
+                    <div class="ai-panel-header">
+                        <div class="ai-icon">🔗</div>
+                        <div class="ai-title">Task Dependencies</div>
+                    </div>
+                    <div style="color: white; margin-top: 10px;">
+                        Visual dependency mapping shows task relationships and critical path
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Dependency Map</div>
+                    <div style="position: relative; height: 400px;">
+                        <svg class="dependency-svg" id="depSvg"></svg>
+                        ${renderDependencyNodes()}
+                    </div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-title">Critical Path</div>
+                    <div id="criticalPath">${calculateCriticalPath()}</div>
+                </div>
+            `;
+            
+            setTimeout(() => drawDependencyLines(), 100);
+        }
+        
+        // Render Dependency Nodes
+        function renderDependencyNodes() {
+            const tasks = data.tasks.filter(t => !t.deleted);
+            let html = '';
+            
+            tasks.forEach((task, index) => {
+                const x = (index % 4) * 200 + 50;
+                const y = Math.floor(index / 4) * 100 + 50;
+                
+                html += `
+                    <div style="position: absolute; left: ${x}px; top: ${y}px; 
+                                background: var(--card-bg); padding: 8px 12px; 
+                                border-radius: 8px; border: 2px solid var(--accent-color);
+                                cursor: pointer; z-index: 2;" 
+                         id="node-${task.id}"
+                         onclick="showTaskDetails('${task.id}')">
+                        <div style="font-weight: 600; font-size: 12px;">${task.description}</div>
+                        <div style="font-size: 10px; color: var(--text-secondary);">
+                            ${task.duration || 1} days | ${task.status || 'To Do'}
+                        </div>
+                    </div>
+                `;
+            });
+            
+            return html;
+        }
+        
+        // Draw Dependency Lines
+        function drawDependencyLines() {
+            const svg = document.getElementById('depSvg');
+            if (!svg) return;
+            
+            svg.innerHTML = '';
+            
+            data.dependencies.forEach(dep => {
+                const fromNode = document.getElementById(`node-${dep.from}`);
+                const toNode = document.getElementById(`node-${dep.to}`);
+                
+                if (fromNode && toNode) {
+                    const fromRect = fromNode.getBoundingClientRect();
+                    const toRect = toNode.getBoundingClientRect();
+                    const svgRect = svg.getBoundingClientRect();
+                    
+                    const x1 = fromRect.left - svgRect.left + fromRect.width;
+                    const y1 = fromRect.top - svgRect.top + fromRect.height / 2;
+                    const x2 = toRect.left - svgRect.left;
+                    const y2 = toRect.top - svgRect.top + toRect.height / 2;
+                    
+                    const line = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+                    const d = `M ${x1} ${y1} C ${x1 + 50} ${y1}, ${x2 - 50} ${y2}, ${x2} ${y2}`;
+                    line.setAttribute('d', d);
+                    line.setAttribute('class', 'dependency-line');
+                    
+                    // Add arrow
+                    const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
+                    arrow.setAttribute('points', `${x2},${y2} ${x2-10},${y2-5} ${x2-10},${y2+5}`);
+                    arrow.setAttribute('class', 'dependency-arrow');
+                    
+                    svg.appendChild(line);
+                    svg.appendChild(arrow);
+                }
+            });
+        }
+        
+        // Calculate Critical Path
+        function calculateCriticalPath() {
+            // Simplified critical path calculation
+            const criticalTasks = data.tasks.filter(t => t.priority === 'high' && !t.deleted);
+            const totalDuration = criticalTasks.reduce((sum, t) => sum + (t.duration || 1), 0);
+            
+            return `
+                <div style="padding: 10px; background: var(--bg-color); border-radius: 8px;">
+                    <div style="margin-bottom: 10px;">
+                        <strong>Critical Tasks:</strong> ${criticalTasks.length}
+                    </div>
+                    <div style="margin-bottom: 10px;">
+                        <strong>Total Duration:</strong> ${totalDuration} days
+                    </div>
+                    <div style="margin-top: 15px;">
+                        ${criticalTasks.map(t => `
+                            <div style="padding: 8px; margin: 5px 0; background: white; border-radius: 4px; 
+                                        border-left: 4px solid var(--danger);">
+                                ${t.description} (${t.duration || 1} days)
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Voice Recognition
+        function initializeVoiceRecognition() {
+            if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                voiceRecognition = new SpeechRecognition();
+                voiceRecognition.continuous = false;
+                voiceRecognition.interimResults = false;
+                voiceRecognition.lang = 'en-US';
+                
+                voiceRecognition.onresult = function(event) {
+                    const command = event.results[0][0].transcript.toLowerCase();
+                    processVoiceCommand(command);
+                };
+                
+                voiceRecognition.onerror = function(event) {
+                    console.error('Voice recognition error:', event.error);
+                    stopListening();
+                };
+                
+                voiceRecognition.onend = function() {
+                    stopListening();
+                };
+            }
+        }
+        
+        // Toggle Voice Command
+        function toggleVoiceCommand() {
+            if (isListening) {
+                stopListening();
+            } else {
+                startListening();
+            }
+        }
+        
+        // Start Listening
+        function startListening() {
+            if (voiceRecognition) {
+                voiceRecognition.start();
+                isListening = true;
+                document.getElementById('voiceBtn').classList.add('voice-active');
+                document.getElementById('voiceIndicator').classList.add('active');
+                showToast('Listening for voice commands...');
+            } else {
+                showToast('Voice recognition not supported');
+            }
+        }
+        
+        // Stop Listening
+        function stopListening() {
+            if (voiceRecognition) {
+                voiceRecognition.stop();
+            }
+            isListening = false;
+            document.getElementById('voiceBtn').classList.remove('voice-active');
+            document.getElementById('voiceIndicator').classList.remove('active');
+        }
+        
+        // Process Voice Command
+        function processVoiceCommand(command) {
+            console.log('Voice command:', command);
+            
+            // Parse commands
+            if (command.includes('create project')) {
+                const name = command.replace('create project', '').trim();
+                createProjectByVoice(name || 'New Voice Project');
+            } else if (command.includes('add task')) {
+                const desc = command.replace('add task', '').trim();
+                createTaskByVoice(desc || 'New Voice Task');
+            } else if (command.includes('show') && command.includes('kanban')) {
+                switchView('kanban');
+                showToast('Switching to Kanban view');
+            } else if (command.includes('show') && command.includes('schedule')) {
+                switchView('schedule');
+                showToast('Switching to Schedule view');
+            } else if (command.includes('complete task')) {
+                completeTaskByVoice(command);
+            } else {
+                showToast(`Command not recognized: "${command}"`);
+            }
+        }
+        
+        // Create Project by Voice
+        function createProjectByVoice(name) {
+            const project = {
+                id: Date.now().toString(),
+                name: name,
+                description: 'Created by voice command',
+                startDate: new Date().toISOString().split('T')[0],
+                endDate: new Date(Date.now() + 30*24*60*60*1000).toISOString().split('T')[0],
+                budget: 0,
+                created: Date.now()
             };
-            document.querySelector('meta[name="theme-color"]').content = themeColors[data.settings.theme];
             
-            // Contrast settings
-            document.body.classList.remove('low-contrast', 'normal-contrast', 'high-contrast', 'extra-contrast');
-            document.body.classList.add(data.settings.contrast + '-contrast');
-            
-            // Font size settings
-            document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl');
-            document.body.classList.add('font-' + data.settings.fontSize);
-            
-            // Saturation settings
-            document.body.classList.remove('sat-low', 'sat-normal', 'sat-high', 'sat-vibrant');
-            document.body.classList.add('sat-' + data.settings.saturation);
+            data.projects.push(project);
+            saveData();
+            renderView();
+            updateStats();
+            showToast(`Project "${name}" created!`);
         }
         
-        // Switch view
+        // Create Task by Voice
+        function createTaskByVoice(description) {
+            if (data.projects.length === 0) {
+                showToast('Create a project first');
+                return;
+            }
+            
+            const task = {
+                id: Date.now().toString(),
+                projectId: data.projects[0].id,
+                description: description,
+                status: 'To Do',
+                priority: 'medium',
+                duration: 1,
+                completed: false,
+                created: Date.now()
+            };
+            
+            data.tasks.push(task);
+            saveData();
+            renderView();
+            updateStats();
+            checkKanbanTasks();
+            showToast(`Task "${description}" added!`);
+        }
+        
+        // Time Machine Functions
+        function showTimeMachine() {
+            openModal('timeMachineModal');
+            updateTimeMachine();
+        }
+        
+        function createSnapshot() {
+            const snapshot = {
+                id: Date.now().toString(),
+                timestamp: Date.now(),
+                data: JSON.parse(JSON.stringify(data)),
+                description: 'Auto-snapshot'
+            };
+            
+            data.snapshots.push(snapshot);
+            
+            // Keep only last 20 snapshots
+            if (data.snapshots.length > 20) {
+                data.snapshots.shift();
+            }
+        }
+        
+        function createInitialSnapshot() {
+            if (data.snapshots.length === 0) {
+                createSnapshot();
+            }
+        }
+        
+        function updateTimeMachine() {
+            const slider = document.getElementById('timeSlider');
+            const snapshots = data.snapshots;
+            
+            if (snapshots.length > 0) {
+                slider.max = snapshots.length - 1;
+                slider.value = snapshots.length - 1;
+                updateSnapshotInfo();
+            }
+        }
+        
+        function updateSnapshotInfo() {
+            const slider = document.getElementById('timeSlider');
+            const index = parseInt(slider.value);
+            const snapshot = data.snapshots[index];
+            
+            if (snapshot) {
+                const date = new Date(snapshot.timestamp);
+                document.getElementById('selectedTime').textContent = date.toLocaleString();
+                
+                const info = document.getElementById('snapshotInfo');
+                info.innerHTML = `
+                    <div><strong>Projects:</strong> ${snapshot.data.projects.length}</div>
+                    <div><strong>Tasks:</strong> ${snapshot.data.tasks.length}</div>
+                    <div><strong>Completed:</strong> ${snapshot.data.tasks.filter(t => t.completed).length}</div>
+                    <div><strong>Description:</strong> ${snapshot.description}</div>
+                `;
+            }
+        }
+        
+        function restoreSnapshot() {
+            const slider = document.getElementById('timeSlider');
+            const index = parseInt(slider.value);
+            const snapshot = data.snapshots[index];
+            
+            if (snapshot && confirm('Restore to this point? Current data will be overwritten.')) {
+                // Preserve snapshots array
+                const currentSnapshots = data.snapshots;
+                data = JSON.parse(JSON.stringify(snapshot.data));
+                data.snapshots = currentSnapshots;
+                
+                saveData();
+                renderView();
+                updateStats();
+                closeModal('timeMachineModal');
+                showToast('Data restored successfully!');
+            }
+        }
+        
+        // Share Functions
+        function shareProject() {
+            const projects = data.projects.filter(p => !p.deleted);
+            if (projects.length === 0) {
+                showToast('No projects to share');
+                return;
+            }
+            
+            const select = document.getElementById('shareProjectSelect');
+            select.innerHTML = projects.map(p => 
+                `<option value="${p.id}">${p.name}</option>`
+            ).join('');
+            
+            openModal('shareModal');
+        }
+        
+        function generateShareLink() {
+            const projectId = document.getElementById('shareProjectSelect').value;
+            const readOnly = document.getElementById('shareReadOnly').checked;
+            const expires = document.getElementById('shareExpiry').checked;
+            
+            const shareData = {
+                id: Date.now().toString(),
+                projectId: projectId,
+                readOnly: readOnly,
+                expires: expires ? Date.now() + 7*24*60*60*1000 : null,
+                created: Date.now()
+            };
+            
+            data.sharedLinks.push(shareData);
+            saveData();
+            
+            // Generate shareable link
+            const baseUrl = window.location.origin + window.location.pathname;
+            const shareLink = `${baseUrl}#share/${shareData.id}`;
+            
+            document.getElementById('shareLink').value = shareLink;
+            showToast('Share link generated!');
+        }
+        
+        function copyShareLink() {
+            const input = document.getElementById('shareLink');
+            input.select();
+            document.execCommand('copy');
+            showToast('Link copied to clipboard!');
+        }
+        
+        // Check Kanban Tasks
+        function checkKanbanTasks() {
+            const inProgressTasks = data.tasks.filter(t => 
+                t.status === 'In Progress' && !t.deleted
+            ).length;
+            
+            const badge = document.getElementById('kanbanBadge');
+            if (inProgressTasks > 0) {
+                badge.textContent = inProgressTasks;
+                badge.style.display = 'block';
+            } else {
+                badge.style.display = 'none';
+            }
+        }
+        
+        // Render Projects (Enhanced)
+        function renderProjects() {
+            const container = document.getElementById('projectsSection');
+            const projects = data.projects.filter(p => !p.deleted);
+            
+            if (projects.length === 0) {
+                container.innerHTML = `
+                    <div style="text-align: center; padding: 60px 20px; color: var(--text-secondary);">
+                        <div style="font-size: 48px; margin-bottom: 16px; opacity: 0.3;">📁</div>
+                        <div>No projects yet<br>Use voice command or tap + to create</div>
+                    </div>
+                `;
+                return;
+            }
+            
+            container.innerHTML = projects.map(project => {
+                const tasks = data.tasks.filter(t => t.projectId === project.id && !t.deleted);
+                const completed = tasks.filter(t => t.completed).length;
+                const progress = tasks.length > 0 ? (completed / tasks.length * 100) : 0;
+                
+                return `
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <div class="card-title">${project.name}</div>
+                                <div class="card-meta">
+                                    ${tasks.length} tasks • ${completed} completed
+                                    ${project.budget ? ` • Budget: $${project.budget}` : ''}
+                                </div>
+                            </div>
+                        </div>
+                        ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
+                        <div style="height: 8px; background: var(--border-color); border-radius: 4px; margin-top: 10px; overflow: hidden;">
+                            <div style="height: 100%; width: ${progress}%; background: linear-gradient(90deg, var(--accent-color), var(--highlight-color));"></div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        // Render Schedule (placeholder)
+        function renderSchedule() {
+            const container = document.getElementById('scheduleSection');
+            container.innerHTML = `
+                <div class="ai-panel">
+                    <div class="ai-panel-header">
+                        <div class="ai-icon">📊</div>
+                        <div class="ai-title">Smart Schedule</div>
+                    </div>
+                    <div style="color: white; margin-top: 10px;">
+                        Gantt chart and timeline view coming here...
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Render Settings (placeholder)
+        function renderSettings() {
+            const container = document.getElementById('settingsSection');
+            container.innerHTML = `
+                <div class="card">
+                    <div class="card-title">Settings</div>
+                    <div style="padding: 20px; text-align: center; color: var(--text-secondary);">
+                        Settings panel coming soon...
+                    </div>
+                </div>
+            `;
+        }
+        
+        // Switch View
         function switchView(view) {
             currentView = view;
             
-            // Update nav tabs
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.remove('active');
             });
             event.target.classList.add('active');
             
-            // Update sections
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
             document.getElementById(view + 'Section').classList.add('active');
             
-            // Update add button visibility
             document.getElementById('addBtn').style.display = 
-                (view === 'settings' || view === 'schedule') ? 'none' : 'block';
+                (view === 'settings' || view === 'schedule' || view === 'dependencies') ? 'none' : 'block';
             
             renderView();
         }
         
-        // Go home
+        // Go Home
         function goHome() {
             currentView = 'projects';
             document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -1535,717 +1629,29 @@
             renderView();
         }
         
-        // Render current view
-        function renderView() {
-            switch(currentView) {
-                case 'projects':
-                    renderProjects();
-                    break;
-                case 'tasks':
-                    renderTasks();
-                    break;
-                
-                case 'schedule':
-                    renderSchedule();
-                    break;
-                case 'financial':
-                    renderFinancial();
-                    break;
-                case 'settings':
-                    renderSettings();
-                    break;
-            }
-        }
-        
-        // Render projects
-        function renderProjects() {
-            const container = document.getElementById('projectsSection');
-            const projects = data.projects.filter(p => !p.deleted);
-            
-            if (projects.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">📁</div>
-                        <div class="empty-text">No projects yet<br>Tap + to create your first project</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            container.innerHTML = projects.map(project => {
-                const tasks = data.tasks.filter(t => t.projectId === project.id && !t.deleted);
-                const completed = tasks.filter(t => t.completed).length;
-                const progress = tasks.length > 0 ? (completed / tasks.length * 100) : 0;
-                
-                const transactions = data.transactions.filter(t => t.projectId === project.id && !t.deleted);
-                const income = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-                const expenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-                const balance = income - expenses;
-                
-                return `
-                    <div class="card" onclick="viewProject('${project.id}')">
-                        <div class="card-header">
-                            <div>
-                                <div class="card-title">${project.name}</div>
-                                <div class="card-meta">
-                                    ${tasks.length} tasks • ${getCurrencySymbol()}${balance.toFixed(2)}
-                                    ${project.budget ? ` • Budget: ${getCurrencySymbol()}${project.budget}` : ''}
-                                </div>
-                            </div>
-                            <div class="card-actions">
-                                <button class="card-btn" onclick="event.stopPropagation(); deleteProject('${project.id}')">🗑️</button>
-                            </div>
-                        </div>
-                        ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
-                        ${tasks.length > 0 ? `
-                            <div class="progress-bar">
-                                <div class="progress-fill" style="width: ${progress}%"></div>
-                            </div>
-                        ` : ''}
-                    </div>
-                `;
-            }).join('');
-        }
-        
-        // View project details
-        function viewProject(projectId) {
-            const project = data.projects.find(p => p.id === projectId);
-            if (!project) return;
-            
-            const tasks = data.tasks.filter(t => t.projectId === projectId && !t.deleted);
-            const transactions = data.transactions.filter(t => t.projectId === projectId && !t.deleted);
-            
-            const container = document.getElementById('projectsSection');
-            container.innerHTML = `
-                <div class="card">
-                    <div class="card-header">
-                        <div>
-                            <div class="card-title">${project.name}</div>
-                            <div class="card-meta">Created: ${new Date(project.created).toLocaleDateString()}</div>
-                        </div>
-                        <button class="card-btn" onclick="renderProjects()">←</button>
-                    </div>
-                    ${project.description ? `<div class="card-meta">${project.description}</div>` : ''}
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">Tasks (${tasks.length})</div>
-                    ${tasks.length > 0 ? tasks.map(task => `
-                        <div class="task-item">
-                            <input type="checkbox" class="task-checkbox" 
-                                   ${task.completed ? 'checked' : ''} 
-                                   onchange="toggleTask('${task.id}')">
-                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.description}</span>
-                            <button class="delete-task-btn" onclick="deleteTask('${task.id}')">×</button>
-                        </div>
-                    `).join('') : '<div class="card-meta">No tasks yet</div>'}
-                    <button class="btn btn-primary" style="margin-top: 10px" 
-                            onclick="openAddTaskForProject('${projectId}')">Add Task</button>
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">Transactions</div>
-                    ${transactions.length > 0 ? transactions.map(t => `
-                        <div class="transaction-item">
-                            <div>
-                                <div class="${t.type}">${getCurrencySymbol()}${t.amount.toFixed(2)}</div>
-                                <div class="card-meta">${t.description}</div>
-                            </div>
-                            <div class="card-meta">${new Date(t.date).toLocaleDateString()}</div>
-                        </div>
-                    `).join('') : '<div class="card-meta">No transactions yet</div>'}
-                </div>
-            `;
-        }
-        
-        // Render tasks
-        function renderTasks() {
-            const container = document.getElementById('tasksSection');
-            const tasks = data.tasks.filter(t => !t.deleted);
-            
-            if (tasks.length === 0) {
-                container.innerHTML = `
-                    <div class="empty-state">
-                        <div class="empty-icon">✅</div>
-                        <div class="empty-text">No tasks yet<br>Create a project first, then add tasks</div>
-                    </div>
-                `;
-                return;
-            }
-            
-            // Group tasks by project
-            const grouped = {};
-            tasks.forEach(task => {
-                const project = data.projects.find(p => p.id === task.projectId);
-                if (project) {
-                    if (!grouped[project.name]) {
-                        grouped[project.name] = [];
-                    }
-                    grouped[project.name].push(task);
-                }
-            });
-            
-            container.innerHTML = Object.entries(grouped).map(([projectName, tasks]) => `
-                <div class="card">
-                    <div class="card-title">${projectName}</div>
-                    ${tasks.map(task => `
-                        <div class="task-item">
-                            <input type="checkbox" class="task-checkbox" 
-                                   ${task.completed ? 'checked' : ''} 
-                                   onchange="toggleTask('${task.id}')">
-                            <span class="task-text ${task.completed ? 'completed' : ''}">${task.description}</span>
-                            <button class="delete-task-btn" onclick="deleteTask('${task.id}')">×</button>
-                        </div>
-                    `).join('')}
-                </div>
-            `).join('');
-        }
-        
-        // Render financial
-        function renderFinancial() {
-            const container = document.getElementById('financialSection');
-            const transactions = data.transactions.filter(t => !t.deleted);
-            
-            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const balance = totalIncome - totalExpenses;
-            
-            container.innerHTML = `
-                <div class="card">
-                    <div class="card-title">Summary</div>
-                    <div class="transaction-item">
-                        <span>Total Income</span>
-                        <span class="income">${getCurrencySymbol()}${totalIncome.toFixed(2)}</span>
-                    </div>
-                    <div class="transaction-item">
-                        <span>Total Expenses</span>
-                        <span class="expense">${getCurrencySymbol()}${totalExpenses.toFixed(2)}</span>
-                    </div>
-                    <div class="transaction-item">
-                        <span><strong>Balance</strong></span>
-                        <span class="${balance >= 0 ? 'income' : 'expense'}">
-                            <strong>${getCurrencySymbol()}${balance.toFixed(2)}</strong>
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card">
-                    <div class="card-title">Recent Transactions</div>
-                    ${transactions.length > 0 ? transactions.slice(-10).reverse().map(t => {
-                        const project = data.projects.find(p => p.id === t.projectId);
-                        return `
-                            <div class="transaction-item">
-                                <div>
-                                    <div class="${t.type}">${getCurrencySymbol()}${t.amount.toFixed(2)}</div>
-                                    <div class="card-meta">${t.description}</div>
-                                    ${project ? `<div class="card-meta">${project.name}</div>` : ''}
-                                </div>
-                                <div>
-                                    <div class="card-meta">${new Date(t.date).toLocaleDateString()}</div>
-                                    <button class="card-btn" onclick="deleteTransaction('${t.id}')">🗑️</button>
-                                </div>
-                            </div>
-                        `;
-                    }).join('') : '<div class="card-meta">No transactions yet</div>'}
-                </div>
-            `;
-        }
-        
-        // Render settings
-        function renderSettings() {
-            const container = document.getElementById('settingsSection');
-            container.innerHTML = `
-                <div class="settings-group">
-                    <div class="settings-row">
-                        <span class="settings-label">Night Mode</span>
-                        <div class="switch ${data.settings.nightMode ? 'active' : ''}" 
-                             onclick="toggleSetting('nightMode')">
-                            <div class="switch-handle"></div>
-                        </div>
-                    </div>
-                    
-                    <div class="settings-row">
-                        <span class="settings-label">Theme Color</span>
-                    </div>
-                    <div class="theme-picker">
-                        <div class="theme-option ${data.settings.theme === 'rose' ? 'active' : ''}" 
-                             data-theme="rose" onclick="setTheme('rose')"></div>
-                        <div class="theme-option ${data.settings.theme === 'sage' ? 'active' : ''}" 
-                             data-theme="sage" onclick="setTheme('sage')"></div>
-                        <div class="theme-option ${data.settings.theme === 'gold' ? 'active' : ''}" 
-                             data-theme="gold" onclick="setTheme('gold')"></div>
-                        <div class="theme-option ${data.settings.theme === 'ocean' ? 'active' : ''}" 
-                             data-theme="ocean" onclick="setTheme('ocean')"></div>
-                        <div class="theme-option ${data.settings.theme === 'lavender' ? 'active' : ''}" 
-                             data-theme="lavender" onclick="setTheme('lavender')"></div>
-                        <div class="theme-option ${data.settings.theme === 'teal' ? 'active' : ''}" 
-                             data-theme="teal" onclick="setTheme('teal')"></div>
-                        <div class="theme-option ${data.settings.theme === 'seafoam' ? 'active' : ''}" 
-                             data-theme="seafoam" onclick="setTheme('seafoam')"></div>
-                    </div>
-                    
-                    <div class="settings-row">
-                        <span class="settings-label">Contrast</span>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn-option ${data.settings.contrast === 'low' ? 'active' : ''}" 
-                                onclick="setSetting('contrast', 'low')">Low</button>
-                        <button class="btn-option ${data.settings.contrast === 'normal' ? 'active' : ''}" 
-                                onclick="setSetting('contrast', 'normal')">Normal</button>
-                        <button class="btn-option ${data.settings.contrast === 'high' ? 'active' : ''}" 
-                                onclick="setSetting('contrast', 'high')">High</button>
-                        <button class="btn-option ${data.settings.contrast === 'extra' ? 'active' : ''}" 
-                                onclick="setSetting('contrast', 'extra')">Extra</button>
-                    </div>
-                    
-                    <div class="settings-row">
-                        <span class="settings-label">Font Size</span>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn-option ${data.settings.fontSize === 's' ? 'active' : ''}" 
-                                onclick="setSetting('fontSize', 's')">S</button>
-                        <button class="btn-option ${data.settings.fontSize === 'm' ? 'active' : ''}" 
-                                onclick="setSetting('fontSize', 'm')">M</button>
-                        <button class="btn-option ${data.settings.fontSize === 'l' ? 'active' : ''}" 
-                                onclick="setSetting('fontSize', 'l')">L</button>
-                        <button class="btn-option ${data.settings.fontSize === 'xl' ? 'active' : ''}" 
-                                onclick="setSetting('fontSize', 'xl')">XL</button>
-                        <button class="btn-option ${data.settings.fontSize === 'xxl' ? 'active' : ''}" 
-                                onclick="setSetting('fontSize', 'xxl')">XXL</button>
-                    </div>
-                    
-                    <div class="settings-row">
-                        <span class="settings-label">Color Saturation</span>
-                    </div>
-                    <div class="btn-group">
-                        <button class="btn-option ${data.settings.saturation === 'low' ? 'active' : ''}" 
-                                onclick="setSetting('saturation', 'low')">Low</button>
-                        <button class="btn-option ${data.settings.saturation === 'normal' ? 'active' : ''}" 
-                                onclick="setSetting('saturation', 'normal')">Normal</button>
-                        <button class="btn-option ${data.settings.saturation === 'high' ? 'active' : ''}" 
-                                onclick="setSetting('saturation', 'high')">High</button>
-                        <button class="btn-option ${data.settings.saturation === 'vibrant' ? 'active' : ''}" 
-                                onclick="setSetting('saturation', 'vibrant')">Vibrant</button>
-                    </div>
-                    
-                    <div class="settings-row">
-                        <span class="settings-label">Currency</span>
-                        <select class="form-select" style="width: auto" onchange="setCurrency(this.value)">
-                            <option value="USD" ${data.settings.currency === 'USD' ? 'selected' : ''}>USD ($)</option>
-                            <option value="EUR" ${data.settings.currency === 'EUR' ? 'selected' : ''}>EUR (€)</option>
-                            <option value="GBP" ${data.settings.currency === 'GBP' ? 'selected' : ''}>GBP (£)</option>
-                            <option value="JPY" ${data.settings.currency === 'JPY' ? 'selected' : ''}>JPY (¥)</option>
-                            <option value="CNY" ${data.settings.currency === 'CNY' ? 'selected' : ''}>CNY (¥)</option>
-                            <option value="INR" ${data.settings.currency === 'INR' ? 'selected' : ''}>INR (₹)</option>
-                            <option value="MYR" ${data.settings.currency === 'MYR' ? 'selected' : ''}>MYR (RM)</option>
-                        </select>
-                    </div>
-                </div>
-                
-                <div class="settings-group">
-                    <div class="card-title">Cloud Sync (JSONBin.io)</div>
-                    <div id="syncStatus">
-                        <div>Status: <span id="syncMode">Not configured</span></div>
-                        <div id="lastSyncTime"></div>
-                    </div>
-                    <div class="form-group">
-                        <label class="form-label">API Key (from jsonbin.io)</label>
-                        <input type="password" class="form-input" id="apiKeyInput" 
-                               placeholder="Enter your JSONBin API key">
-                    </div>
-                    <button class="btn btn-primary" onclick="saveApiKey()">Save API Key</button>
-                    <button class="btn btn-secondary" onclick="testSync()" style="margin-top: 8px">Test Connection</button>
-                </div>
-                
-                <div class="settings-group">
-                    <div class="card-title">Data Management</div>
-                    <button class="btn btn-secondary" onclick="exportData()">Export Data</button>
-                    <input type="file" id="importFile" accept=".json" style="display: none" onchange="importData(event)">
-                    <button class="btn btn-secondary" onclick="document.getElementById('importFile').click()" 
-                            style="margin-top: 8px">Import Data</button>
-                    <button class="btn btn-secondary" onclick="showTrash()" style="margin-top: 8px">
-                        View Trash (${data.trash.length} items)
-                    </button>
-                </div>
-                
-                <div class="settings-group">
-                    <div class="card-title">About</div>
-                    <div class="card-meta">
-                        Builder Pro v2.0<br>
-                        AI-Powered Project Manager<br>
-                        © 2025 - All rights reserved
-                    </div>
-                </div>
-            `;
-        }
-        
-        // Toggle setting
-        function toggleSetting(setting) {
-            data.settings[setting] = !data.settings[setting];
-            saveData();
-            applySettings();
-            renderSettings();
-        }
-        
-        // Set setting
-        function setSetting(setting, value) {
-            data.settings[setting] = value;
-            saveData();
-            applySettings();
-            renderSettings();
-        }
-        
-        // Set theme
-        function setTheme(theme) {
-            data.settings.theme = theme;
-            saveData();
-            applySettings();
-            renderSettings();
-        }
-        
-        // Set currency
-        function setCurrency(currency) {
-            data.settings.currency = currency;
-            saveData();
-            renderView();
-            updateStats();
-        }
-        
-        // Get currency symbol
-        function getCurrencySymbol() {
-            const symbols = {
-                USD: '$',
-                EUR: '€',
-                GBP: '£',
-                JPY: '¥',
-                CNY: '¥',
-                INR: '₹',
-                MYR: 'RM'
-            };
-            return symbols[data.settings.currency] || '$';
-        }
-        
-        // Update stats
+        // Update Stats
         function updateStats() {
             const projects = data.projects.filter(p => !p.deleted);
             const tasks = data.tasks.filter(t => !t.deleted);
             const completedTasks = tasks.filter(t => t.completed);
-            const transactions = data.transactions.filter(t => !t.deleted);
-            
-            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const balance = totalIncome - totalExpenses;
             
             document.getElementById('projectCount').textContent = projects.length;
             document.getElementById('taskCount').textContent = tasks.length;
             document.getElementById('completionRate').textContent = 
                 tasks.length > 0 ? Math.round(completedTasks.length / tasks.length * 100) + '%' : '0%';
-            document.getElementById('totalBalance').textContent = 
-                getCurrencySymbol() + balance.toFixed(0);
+            document.getElementById('totalBalance').textContent = '$0';
         }
         
-        // Open add modal
-        function openAddModal() {
-            switch(currentView) {
-                case 'projects':
-                    openModal('addProjectModal');
-                    document.getElementById('currencyDisplay').textContent = data.settings.currency;
-                    break;
-                case 'tasks':
-                    if (data.projects.filter(p => !p.deleted).length === 0) {
-                        showToast('Create a project first');
-                        return;
-                    }
-                    openAddTaskModal();
-                    break;
-                case 'financial':
-                    openAddTransactionModal();
-                    break;
-            }
-        }
-        
-        // Open add task modal
-        function openAddTaskModal() {
-            const select = document.getElementById('taskProject');
-            select.innerHTML = data.projects.filter(p => !p.deleted).map(p => 
-                `<option value="${p.id}">${p.name}</option>`
-            ).join('');
-            openModal('addTaskModal');
-        }
-        
-        // Open add task for specific project
-        function openAddTaskForProject(projectId) {
-            const select = document.getElementById('taskProject');
-            select.innerHTML = data.projects.filter(p => !p.deleted).map(p => 
-                `<option value="${p.id}" ${p.id === projectId ? 'selected' : ''}>${p.name}</option>`
-            ).join('');
-            openModal('addTaskModal');
-        }
-        
-        // Open add transaction modal
-        function openAddTransactionModal() {
-            const select = document.getElementById('transactionProject');
-            select.innerHTML = '<option value="">No Project</option>' + 
-                data.projects.filter(p => !p.deleted).map(p => 
-                    `<option value="${p.id}">${p.name}</option>`
-                ).join('');
-            openModal('addTransactionModal');
-        }
-        
-        // Open modal
+        // Modal Functions
         function openModal(modalId) {
             document.getElementById(modalId).classList.add('active');
         }
         
-        // Close modal
         function closeModal(modalId) {
             document.getElementById(modalId).classList.remove('active');
-            // Clear inputs
-            document.querySelectorAll(`#${modalId} input, #${modalId} textarea`).forEach(input => {
-                input.value = '';
-            });
         }
         
-        // Save project
-        function saveProject() {
-            const name = document.getElementById('projectName').value.trim();
-            const description = document.getElementById('projectDescription').value.trim();
-            const budget = parseFloat(document.getElementById('projectBudget').value) || 0;
-            
-            if (!name) {
-                showToast('Please enter a project name');
-                return;
-            }
-            
-            const project = {
-                id: Date.now().toString(),
-                name,
-                description,
-                budget,
-                created: Date.now(),
-                updated: Date.now()
-            };
-            
-            data.projects.push(project);
-            saveData();
-            closeModal('addProjectModal');
-            renderProjects();
-            updateStats();
-            showToast('Project created');
-        }
-        
-        // Save task
-        function saveTask() {
-            const description = document.getElementById('taskDescription').value.trim();
-            const projectId = document.getElementById('taskProject').value;
-            
-            if (!description) {
-                showToast('Please enter task description');
-                return;
-            }
-            
-            const task = {
-                id: Date.now().toString(),
-                description,
-                projectId,
-                completed: false,
-                created: Date.now(),
-                updated: Date.now()
-            };
-            
-            data.tasks.push(task);
-            saveData();
-            closeModal('addTaskModal');
-            renderView();
-            updateStats();
-            showToast('Task added');
-        }
-        
-        // Save transaction
-        function saveTransaction() {
-            const type = document.getElementById('transactionType').value;
-            const amount = parseFloat(document.getElementById('transactionAmount').value);
-            const description = document.getElementById('transactionDescription').value.trim();
-            const projectId = document.getElementById('transactionProject').value;
-            
-            if (!amount || amount <= 0) {
-                showToast('Please enter a valid amount');
-                return;
-            }
-            
-            if (!description) {
-                showToast('Please enter a description');
-                return;
-            }
-            
-            const transaction = {
-                id: Date.now().toString(),
-                type,
-                amount,
-                description,
-                projectId,
-                date: Date.now()
-            };
-            
-            data.transactions.push(transaction);
-            saveData();
-            closeModal('addTransactionModal');
-            renderFinancial();
-            updateStats();
-            showToast('Transaction added');
-        }
-        
-        // Toggle task
-        function toggleTask(taskId) {
-            const task = data.tasks.find(t => t.id === taskId);
-            if (task) {
-                task.completed = !task.completed;
-                task.updated = Date.now();
-                saveData();
-                renderView();
-                updateStats();
-            }
-        }
-        
-        // Delete project
-        function deleteProject(projectId) {
-            if (!confirm('Delete this project and all its tasks/transactions?')) return;
-            
-            const project = data.projects.find(p => p.id === projectId);
-            if (project) {
-                project.deleted = true;
-                project.deletedAt = Date.now();
-                data.trash.push({ type: 'project', item: project });
-                
-                // Also delete related tasks and transactions
-                data.tasks.filter(t => t.projectId === projectId).forEach(task => {
-                    task.deleted = true;
-                    task.deletedAt = Date.now();
-                    data.trash.push({ type: 'task', item: task });
-                });
-                
-                data.transactions.filter(t => t.projectId === projectId).forEach(transaction => {
-                    transaction.deleted = true;
-                    transaction.deletedAt = Date.now();
-                    data.trash.push({ type: 'transaction', item: transaction });
-                });
-                
-                saveData();
-                renderProjects();
-                updateStats();
-                showToast('Project moved to trash');
-            }
-        }
-        
-        // Delete task
-        function deleteTask(taskId) {
-            const task = data.tasks.find(t => t.id === taskId);
-            if (task) {
-                task.deleted = true;
-                task.deletedAt = Date.now();
-                data.trash.push({ type: 'task', item: task });
-                saveData();
-                renderView();
-                updateStats();
-                showToast('Task deleted');
-            }
-        }
-        
-        // Delete transaction
-        function deleteTransaction(transactionId) {
-            const transaction = data.transactions.find(t => t.id === transactionId);
-            if (transaction) {
-                transaction.deleted = true;
-                transaction.deletedAt = Date.now();
-                data.trash.push({ type: 'transaction', item: transaction });
-                saveData();
-                renderFinancial();
-                updateStats();
-                showToast('Transaction deleted');
-            }
-        }
-        
-        // Show trash
-        function showTrash() {
-            const modal = document.getElementById('trashModal');
-            const content = document.getElementById('trashContent');
-            
-            if (data.trash.length === 0) {
-                content.innerHTML = '<div class="empty-state"><div class="empty-text">Trash is empty</div></div>';
-            } else {
-                content.innerHTML = data.trash.map(item => {
-                    const deletedDate = new Date(item.item.deletedAt).toLocaleDateString();
-                    return `
-                        <div class="task-item">
-                            <div style="flex: 1">
-                                <div>${item.type}: ${item.item.name || item.item.description}</div>
-                                <div class="card-meta">Deleted: ${deletedDate}</div>
-                            </div>
-                            <button class="btn btn-primary" onclick="restoreItem('${item.item.id}', '${item.type}')">
-                                Restore
-                            </button>
-                        </div>
-                    `;
-                }).join('');
-            }
-            
-            openModal('trashModal');
-        }
-        
-        // Restore item
-        function restoreItem(itemId, type) {
-            let item;
-            switch(type) {
-                case 'project':
-                    item = data.projects.find(p => p.id === itemId);
-                    break;
-                case 'task':
-                    item = data.tasks.find(t => t.id === itemId);
-                    break;
-                case 'transaction':
-                    item = data.transactions.find(t => t.id === itemId);
-                    break;
-            }
-            
-            if (item) {
-                delete item.deleted;
-                delete item.deletedAt;
-                data.trash = data.trash.filter(t => t.item.id !== itemId);
-                saveData();
-                showTrash();
-                renderView();
-                updateStats();
-                showToast('Item restored');
-            }
-        }
-        
-        // Empty trash
-        function emptyTrash() {
-            if (!confirm('Permanently delete all items in trash?')) return;
-            
-            // Move items to permanently deleted for record keeping
-            data.trash.forEach(item => {
-                data.permanentlyDeleted.push({
-                    ...item,
-                    permanentlyDeletedAt: Date.now()
-                });
-            });
-            
-            // Remove from main arrays
-            const trashIds = data.trash.map(t => t.item.id);
-            data.projects = data.projects.filter(p => !trashIds.includes(p.id));
-            data.tasks = data.tasks.filter(t => !trashIds.includes(t.id));
-            data.transactions = data.transactions.filter(t => !trashIds.includes(t.id));
-            
-            data.trash = [];
-            saveData();
-            closeModal('trashModal');
-            renderView();
-            updateStats();
-            showToast('Trash emptied');
-        }
-        
-        // Show toast
+        // Toast
         function showToast(message, duration = 3000) {
             const toast = document.getElementById('toast');
             toast.textContent = message;
@@ -2256,816 +1662,24 @@
             }, duration);
         }
         
-        // Check sync status
-        function checkSyncStatus() {
-            const lastSync = localStorage.getItem('lastSyncTime');
-            if (lastSync) {
-                const date = new Date(parseInt(lastSync));
-                document.getElementById('lastSyncTime').textContent = 
-                    `Last: ${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
-            }
+        // Placeholder functions
+        function openAddModal() {
+            showToast('Add functionality coming soon!');
         }
         
-        // Perform sync (temporarily disabled for Builder Pro 2.0 development)
-        async function performSync() {
-            if (apiTempDisabled) {
-                showToast('🔧 Sync temporarily disabled for Builder Pro 2.0 development', 4000);
-                return;
-            }
-            
-            if (!syncApiKey) {
-                showToast('⚠️ No API key set! Go to Settings.');
-                return;
-            }
-            
-            const indicator = document.getElementById('syncIndicator');
-            const syncMode = document.getElementById('syncMode');
-            indicator.classList.add('syncing');
-            syncMode.textContent = 'Syncing...';
-            
-            const startTime = Date.now();
-            
-            try {
-                console.log('🔄 Starting sync process...');
-                
-                // STEP 1: FETCH cloud data
-                console.log('🔄 Step 1: Fetching cloud data...');
-                syncMode.textContent = 'Fetching...';
-                const getResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
-                    headers: {
-                        'X-Master-Key': syncApiKey
-                    }
-                });
-                
-                if (!getResponse.ok) {
-                    throw new Error(`Fetch failed: ${getResponse.status} - ${getResponse.statusText}`);
-                }
-                
-                const cloudResult = await getResponse.json();
-                const cloudData = cloudResult.record || {};
-                
-                // STEP 2: MERGE data intelligently
-                console.log('🔄 Step 2: Merging data...');
-                syncMode.textContent = 'Merging...';
-                
-                if (cloudData.projects || cloudData.tasks || cloudData.transactions) {
-                    const beforeCounts = {
-                        projects: data.projects.length,
-                        tasks: data.tasks.length,
-                        transactions: data.transactions.length
-                    };
-                    
-                    // Merge projects
-                    if (cloudData.projects) {
-                        const localIds = new Set(data.projects.map(p => p.id));
-                        const newProjects = cloudData.projects.filter(p => !localIds.has(p.id));
-                        data.projects = [...data.projects, ...newProjects];
-                        
-                        // Update existing projects if cloud version is newer
-                        cloudData.projects.forEach(cloudProject => {
-                            const localIndex = data.projects.findIndex(p => p.id === cloudProject.id);
-                            if (localIndex !== -1) {
-                                const localProject = data.projects[localIndex];
-                                if (cloudProject.updated > localProject.updated) {
-                                    data.projects[localIndex] = cloudProject;
-                                }
-                            }
-                        });
-                    }
-                    
-                    // Merge tasks
-                    if (cloudData.tasks) {
-                        const localIds = new Set(data.tasks.map(t => t.id));
-                        const newTasks = cloudData.tasks.filter(t => !localIds.has(t.id));
-                        data.tasks = [...data.tasks, ...newTasks];
-                        
-                        cloudData.tasks.forEach(cloudTask => {
-                            const localIndex = data.tasks.findIndex(t => t.id === cloudTask.id);
-                            if (localIndex !== -1) {
-                                const localTask = data.tasks[localIndex];
-                                if (cloudTask.updated > localTask.updated) {
-                                    data.tasks[localIndex] = cloudTask;
-                                }
-                            }
-                        });
-                    }
-                    
-                    // Merge transactions
-                    if (cloudData.transactions) {
-                        const localIds = new Set(data.transactions.map(t => t.id));
-                        const newTransactions = cloudData.transactions.filter(t => !localIds.has(t.id));
-                        data.transactions = [...data.transactions, ...newTransactions];
-                    }
-                    
-                    // Merge trash
-                    if (cloudData.trash) {
-                        data.trash = [
-                            ...(data.trash || []),
-                            ...cloudData.trash
-                        ];
-                        data.trash = Array.from(
-                            new Map(data.trash.map(item => [item.item.id, item])).values()
-                        );
-                    }
-                    
-                    // Merge permanently deleted
-                    if (cloudData.permanentlyDeleted) {
-                        data.permanentlyDeleted = [
-                            ...(data.permanentlyDeleted || []),
-                            ...cloudData.permanentlyDeleted
-                        ];
-                        data.permanentlyDeleted = Array.from(
-                            new Map(data.permanentlyDeleted.map(item => [item.id, item])).values()
-                        );
-                    }
-                    
-                    const afterCounts = {
-                        projects: data.projects.length,
-                        tasks: data.tasks.length,
-                        transactions: data.transactions.length
-                    };
-                    
-                    // Show what changed during merge
-                    const changes = [];
-                    if (afterCounts.projects !== beforeCounts.projects) {
-                        changes.push(`${afterCounts.projects - beforeCounts.projects > 0 ? '+' : ''}${afterCounts.projects - beforeCounts.projects} projects`);
-                    }
-                    if (afterCounts.tasks !== beforeCounts.tasks) {
-                        changes.push(`${afterCounts.tasks - beforeCounts.tasks > 0 ? '+' : ''}${afterCounts.tasks - beforeCounts.tasks} tasks`);
-                    }
-                    if (afterCounts.transactions !== beforeCounts.transactions) {
-                        changes.push(`${afterCounts.transactions - beforeCounts.transactions > 0 ? '+' : ''}${afterCounts.transactions - beforeCounts.transactions} trans`);
-                    }
-                    
-                    console.log('✅ Merge complete:', changes.length > 0 ? changes.join(', ') : 'No changes');
-                    
-                    saveData();
-                    renderView();
-                    updateStats();
-                }
-                
-                // STEP 3: PUSH merged data back to cloud
-                console.log('🔄 Step 3: Pushing merged data to cloud...');
-                syncMode.textContent = 'Pushing...';
-                const putResponse = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Master-Key': syncApiKey
-                    },
-                    body: JSON.stringify(data)
-                });
-                
-                if (!putResponse.ok) {
-                    throw new Error(`Push failed: ${putResponse.status} - ${putResponse.statusText}`);
-                }
-                
-                const syncDuration = ((Date.now() - startTime) / 1000).toFixed(1);
-                console.log(`✅ Sync complete in ${syncDuration}s`);
-                
-                localStorage.setItem('lastSyncTime', Date.now().toString());
-                const nowTime = new Date().toLocaleTimeString();
-                document.getElementById('lastSyncTime').textContent = `Last: ${nowTime}`;
-                showToast(`✅ Synced ${data.projects.length}p ${data.tasks.length}t ${data.transactions.length}tr in ${syncDuration}s!`, 5000);
-                indicator.classList.remove('syncing');
-                syncMode.textContent = 'Connected';
-                
-            } catch (error) {
-                const syncDuration = ((Date.now() - startTime) / 1000).toFixed(1);
-                console.error('❌ Sync error:', error);
-                
-                let errorMsg = error.message;
-                if (error.message.includes('401')) {
-                    errorMsg = 'Invalid API key! Check Settings';
-                } else if (error.message.includes('404')) {
-                    errorMsg = 'Bin not found! Check Bin ID';
-                } else if (error.message.includes('Failed to fetch')) {
-                    errorMsg = 'No internet connection!';
-                }
-                
-                showToast(`❌ ${errorMsg}`, 6000);
-                indicator.classList.remove('syncing');
-                syncMode.textContent = 'Error';
-                
-                // Show detailed error in console
-                console.log('Sync diagnostics:', {
-                    duration: syncDuration + 's',
-                    apiKey: syncApiKey ? 'SET (length: ' + syncApiKey.length + ')' : 'NOT SET',
-                    binId: APP_CONFIG.binId,
-                    online: navigator.onLine,
-                    localData: {
-                        projects: data.projects.length,
-                        tasks: data.tasks.length,
-                        transactions: data.transactions.length
-                    }
-                });
-            }
+        function showAIAssistant() {
+            showToast('AI Assistant ready to help!');
         }
-
-        function saveApiKey() {
-            const key = document.getElementById('apiKeyInput').value.trim();
-            if (!key) {
-                showToast('Please enter an API key');
-                return;
-            }
-            
-            syncApiKey = key;
-            localStorage.setItem('builderProSyncApiKey', key);
-            document.getElementById('apiKeyInput').value = '';
-            document.getElementById('syncMode').textContent = 'Ready';
-            showToast('✅ API key saved! Now click "Test Sync Connection"', 5000);
-        }
-
-        async function testSync() {
-            if (!syncApiKey) {
-                showToast('⚠️ No API key set! Enter your JSONBin API key first.');
-                return;
-            }
-            
-            showToast('🔍 Testing connection...');
-            
-            try {
-                console.log('🔍 Testing sync connection...');
-                console.log('API Key length:', syncApiKey.length);
-                console.log('Bin ID:', APP_CONFIG.binId);
-                console.log('Base URL:', APP_CONFIG.baseUrl);
-                
-                const response = await fetch(`${APP_CONFIG.baseUrl}/b/${APP_CONFIG.binId}/latest`, {
-                    headers: {
-                        'X-Master-Key': syncApiKey
-                    }
-                });
-                
-                console.log('Response status:', response.status);
-                console.log('Response OK:', response.ok);
-                
-                if (response.ok) {
-                    const result = await response.json();
-                    console.log('✅ Connection successful!');
-                    console.log('Cloud data:', {
-                        projects: result.record?.projects?.length || 0,
-                        tasks: result.record?.tasks?.length || 0,
-                        transactions: result.record?.transactions?.length || 0
-                    });
-                    
-                    showToast('✅ Connection works! Your API key is valid.');
-                    document.getElementById('syncMode').textContent = 'Connected';
-                } else if (response.status === 401) {
-                    showToast('❌ Invalid API key! Get a new one from jsonbin.io');
-                    document.getElementById('syncMode').textContent = 'Invalid Key';
-                } else if (response.status === 404) {
-                    showToast('❌ Bin not found! Check your Bin ID.');
-                    document.getElementById('syncMode').textContent = 'Invalid Bin';
-                } else {
-                    showToast(`❌ Error ${response.status}: ${response.statusText}`);
-                    document.getElementById('syncMode').textContent = 'Error';
-                }
-            } catch (error) {
-                console.error('❌ Test failed:', error);
-                showToast('❌ Connection failed! Check internet & open browser console (F12)');
-                document.getElementById('syncMode').textContent = 'Offline';
-            }
-        }
-
-        function exportData() {
-            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'builder-pro-backup.json';
-            a.click();
-            URL.revokeObjectURL(url);
-            showToast('Data exported');
-        }
-
-        function importData(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    try {
-                        const imported = JSON.parse(e.target.result);
-                        if (confirm('Replace all current data?')) {
-                            data = imported;
-                            saveData();
-                            applySettings();
-                            renderView();
-                            updateStats();
-                            showToast('Data imported');
-                        }
-                    } catch (error) {
-                        showToast('Import failed');
-                    }
-                };
-                reader.readAsText(file);
-            }
-        }
-
-        // Sticky Note Reminder System
-        function setupReminderSystem() {
-            // Temporarily disable API for Builder Pro 2.0 development
-            apiTempDisabled = true;
-            showToast('🔧 API temporarily disabled for Builder Pro 2.0 development', 5000);
-            
-            // Set random interval between 35-45 minutes
-            const randomMinutes = 35 + Math.random() * 10; // 35-45 minutes
-            const intervalMs = randomMinutes * 60 * 1000;
-            
-            reminderInterval = setInterval(() => {
-                showStickyNote();
-            }, intervalMs);
-            
-            // Show initial reminder after 2 minutes for testing
-            setTimeout(() => {
-                showStickyNote();
-            }, 2 * 60 * 1000);
-        }
-
-        function showStickyNote() {
-            const stickyNote = document.getElementById('stickyNote');
-            const content = document.getElementById('stickyNoteContent');
-            
-            // Generate dynamic check items based on current app state
-            const checkItems = [];
-            
-            // Check incomplete tasks
-            const incompleteTasks = data.tasks.filter(t => !t.deleted && !t.completed).length;
-            if (incompleteTasks > 0) {
-                checkItems.push(`${incompleteTasks} pending task${incompleteTasks > 1 ? 's' : ''} to complete`);
-            }
-            
-            // Check project progress
-            const projectsWithNoTasks = data.projects.filter(p => {
-                return !p.deleted && !data.tasks.some(t => t.projectId === p.id && !t.deleted);
-            }).length;
-            if (projectsWithNoTasks > 0) {
-                checkItems.push(`${projectsWithNoTasks} project${projectsWithNoTasks > 1 ? 's' : ''} need tasks`);
-            }
-            
-            // Check financial balance
-            const transactions = data.transactions.filter(t => !t.deleted);
-            const totalIncome = transactions.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-            const totalExpenses = transactions.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-            const balance = totalIncome - totalExpenses;
-            if (balance < 0) {
-                checkItems.push(`Budget deficit: ${getCurrencySymbol()}${Math.abs(balance).toFixed(0)}`);
-            }
-            
-            // Check trash
-            if (data.trash.length > 10) {
-                checkItems.push(`Trash has ${data.trash.length} items`);
-            }
-            
-            // Default items if nothing specific
-            if (checkItems.length === 0) {
-                checkItems.push('Review your projects');
-                checkItems.push('Update task progress');
-                checkItems.push('Check financial summary');
-            }
-            
-            // Add development reminder
-            checkItems.push('Builder Pro 2.0 in development! 🚀');
-            
-            // Generate HTML for check items
-            content.innerHTML = checkItems.map(item => 
-                `<div class="check-item">${item}</div>`
-            ).join('');
-            
-            // Show sticky note
-            stickyNote.classList.add('show');
-            
-            // Auto-hide after 5 seconds
-            setTimeout(() => {
-                stickyNote.classList.remove('show');
-            }, 5000);
-        }
-
+        
         // Initialize on load
         window.addEventListener('load', init);
-
-        // Clear all data on initialization (as requested)
-        function clearAllInitialData() {
-            data.projects = [];
-            data.tasks = [];
-            data.transactions = [];
-            data.trash = [];
-            saveData();
-            console.log('All data cleared - Ready for fresh start!');
-        }
         
-        // Render schedule with master Gantt chart
-        function renderSchedule() {
-            const container = document.getElementById('scheduleSection');
-            const projects = data.projects.filter(p => !p.deleted && p.startDate);
-            
-            if (projects.length === 0) {
-                container.innerHTML = `
-                    <div class="ai-panel">
-                        <div class="ai-panel-header">
-                            <div class="ai-icon">🤖</div>
-                            <div class="ai-title">AI Schedule Assistant</div>
-                        </div>
-                        <div class="ai-suggestions">
-                            <div class="ai-suggestion">No projects with timelines yet. Create projects with start/end dates to see the schedule.</div>
-                        </div>
-                        <button class="ai-action-btn" onclick="generateSampleProject()">Generate Sample Project</button>
-                    </div>
-                `;
-                return;
+        // Handle window resize for dependency lines
+        window.addEventListener('resize', () => {
+            if (currentView === 'dependencies') {
+                drawDependencyLines();
             }
-            
-            const insights = generateScheduleInsights();
-            
-            container.innerHTML = `
-                ${insights ? `
-                    <div class="ai-panel">
-                        <div class="ai-panel-header">
-                            <div class="ai-icon">🤖</div>
-                            <div class="ai-title">AI Schedule Insights</div>
-                        </div>
-                        <div class="ai-suggestions">
-                            ${insights}
-                        </div>
-                    </div>
-                ` : ''}
-                
-                <div class="gantt-container">
-                    <div class="gantt-header">
-                        <div class="gantt-title">
-                            📊 Master Schedule
-                            <span style="font-size: 12px; color: var(--text-secondary); margin-left: 10px;">
-                                ${projects.length} active projects
-                            </span>
-                        </div>
-                        <div class="gantt-controls">
-                            <button class="gantt-btn ${data.settings.ganttView === 'week' ? 'active' : ''}" 
-                                    onclick="changeGanttView('week')">Week</button>
-                            <button class="gantt-btn ${data.settings.ganttView === 'month' ? 'active' : ''}" 
-                                    onclick="changeGanttView('month')">Month</button>
-                            <button class="gantt-btn ${data.settings.ganttView === 'quarter' ? 'active' : ''}" 
-                                    onclick="changeGanttView('quarter')">Quarter</button>
-                        </div>
-                    </div>
-                    <div id="masterGantt"></div>
-                </div>
-            `;
-            
-            setTimeout(() => renderMasterGantt(), 100);
-        }
-        
-        // Render master Gantt chart
-        function renderMasterGantt() {
-            const container = document.getElementById('masterGantt');
-            if (!container) return;
-            
-            const projects = data.projects.filter(p => !p.deleted && p.startDate);
-            const ganttView = data.settings.ganttView || 'month';
-            
-            let minDate = new Date();
-            let maxDate = new Date();
-            
-            projects.forEach(project => {
-                const start = new Date(project.startDate);
-                const end = new Date(project.endDate);
-                if (start < minDate) minDate = start;
-                if (end > maxDate) maxDate = end;
-            });
-            
-            const today = new Date();
-            if (ganttView === 'week') {
-                minDate = new Date(today.getTime() - 7*24*60*60*1000);
-                maxDate = new Date(today.getTime() + 7*24*60*60*1000);
-            } else if (ganttView === 'month') {
-                minDate = new Date(today.getFullYear(), today.getMonth(), 1);
-                maxDate = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-            } else if (ganttView === 'quarter') {
-                const quarter = Math.floor(today.getMonth() / 3);
-                minDate = new Date(today.getFullYear(), quarter * 3, 1);
-                maxDate = new Date(today.getFullYear(), (quarter + 1) * 3, 0);
-            }
-            
-            const totalDays = Math.ceil((maxDate - minDate) / (24*60*60*1000));
-            
-            let html = '<div class="gantt-chart" style="height: ' + (projects.length * 50 + 50) + 'px;">';
-            
-            projects.forEach((project, index) => {
-                const startDate = new Date(project.startDate);
-                const endDate = new Date(project.endDate);
-                
-                const projectStart = Math.max(0, Math.ceil((startDate - minDate) / (24*60*60*1000)));
-                const projectEnd = Math.min(totalDays, Math.ceil((endDate - minDate) / (24*60*60*1000)));
-                const projectDuration = projectEnd - projectStart;
-                
-                const left = (projectStart / totalDays) * 100;
-                const width = (projectDuration / totalDays) * 100;
-                
-                const colors = ['#4ecdc4', '#45b7d1', '#96ceb4', '#ffeaa7', '#dfe6e9', '#a29bfe', '#fd79a8'];
-                const color = colors[index % colors.length];
-                
-                const tasks = data.tasks.filter(t => t.projectId === project.id && !t.deleted);
-                const completed = tasks.filter(t => t.completed).length;
-                const progress = tasks.length > 0 ? (completed / tasks.length * 100) : 0;
-                
-                html += `
-                    <div class="gantt-row">
-                        <div class="gantt-label">${project.name}</div>
-                        <div class="gantt-bar" style="
-                            left: ${left}%;
-                            width: ${width}%;
-                            background: linear-gradient(90deg, ${color} ${progress}%, rgba(255,255,255,0.3) ${progress}%);
-                            border: 2px solid ${color};
-                        " onclick="viewProject('${project.id}')">
-                            ${projectDuration}d (${Math.round(progress)}%)
-                        </div>
-                    </div>
-                `;
-            });
-            
-            if (today >= minDate && today <= maxDate) {
-                const todayPosition = ((today - minDate) / (24*60*60*1000) / totalDays) * 100;
-                html += `<div class="gantt-today-line" style="left: ${todayPosition}%;"></div>`;
-            }
-            
-            html += '</div>';
-            container.innerHTML = html;
-        }
-        
-        // Change Gantt view
-        function changeGanttView(view) {
-            data.settings.ganttView = view;
-            saveData();
-            renderSchedule();
-        }
-        
-        // Generate schedule insights
-        function generateScheduleInsights() {
-            const projects = data.projects.filter(p => !p.deleted);
-            const tasks = data.tasks.filter(t => !t.deleted);
-            
-            if (projects.length === 0) return null;
-            
-            let insights = [];
-            
-            const today = new Date();
-            const overdueProjects = projects.filter(p => {
-                if (!p.endDate) return false;
-                const endDate = new Date(p.endDate);
-                const projectTasks = tasks.filter(t => t.projectId === p.id);
-                const incompleteTasks = projectTasks.filter(t => !t.completed);
-                return endDate < today && incompleteTasks.length > 0;
-            });
-            
-            if (overdueProjects.length > 0) {
-                insights.push(`<div class="ai-suggestion">⚠️ ${overdueProjects.length} project${overdueProjects.length > 1 ? 's are' : ' is'} overdue with incomplete tasks</div>`);
-            }
-            
-            const nextWeek = new Date(today.getTime() + 7*24*60*60*1000);
-            const endingSoon = projects.filter(p => {
-                if (!p.endDate) return false;
-                const endDate = new Date(p.endDate);
-                return endDate >= today && endDate <= nextWeek;
-            });
-            
-            if (endingSoon.length > 0) {
-                insights.push(`<div class="ai-suggestion">📅 ${endingSoon.length} project${endingSoon.length > 1 ? 's' : ''} ending within 7 days</div>`);
-            }
-            
-            const activeTasks = tasks.filter(t => !t.completed);
-            if (activeTasks.length > 10) {
-                insights.push(`<div class="ai-suggestion">📊 High workload detected: ${activeTasks.length} active tasks across projects</div>`);
-            }
-            
-            const completedProjects = projects.filter(p => {
-                const projectTasks = tasks.filter(t => t.projectId === p.id);
-                return projectTasks.length > 0 && projectTasks.every(t => t.completed);
-            });
-            
-            if (projects.length > 0) {
-                const successRate = Math.round((completedProjects.length / projects.length) * 100);
-                insights.push(`<div class="ai-suggestion">✅ Project completion rate: ${successRate}%</div>`);
-            }
-            
-            return insights.length > 0 ? insights.join('') : '<div class="ai-suggestion">All projects on track! Keep up the great work! 🎯</div>';
-        }
-        
-        // AI Assistant functions
-        function showAIAssistant() {
-            const suggestions = generateAISuggestions();
-            document.getElementById('aiSuggestionsList').innerHTML = suggestions;
-            openModal('aiAssistantModal');
-        }
-        
-        function generateAISuggestions() {
-            const projects = data.projects.filter(p => !p.deleted);
-            const tasks = data.tasks.filter(t => !t.deleted);
-            
-            let suggestions = [];
-            
-            if (projects.length === 0) {
-                suggestions.push('<div class="ai-suggestion">📁 Start by creating your first project</div>');
-            } else {
-                const projectTaskCounts = {};
-                projects.forEach(p => {
-                    projectTaskCounts[p.id] = tasks.filter(t => t.projectId === p.id).length;
-                });
-                
-                const unbalanced = Object.values(projectTaskCounts).some(count => count === 0);
-                if (unbalanced) {
-                    suggestions.push('<div class="ai-suggestion">⚠️ Some projects have no tasks assigned</div>');
-                }
-                
-                const projectsWithoutDates = projects.filter(p => !p.startDate).length;
-                if (projectsWithoutDates > 0) {
-                    suggestions.push(`<div class="ai-suggestion">📅 ${projectsWithoutDates} project${projectsWithoutDates > 1 ? 's' : ''} missing timeline dates</div>`);
-                }
-                
-                const completionRate = tasks.length > 0 ? 
-                    Math.round((tasks.filter(t => t.completed).length / tasks.length) * 100) : 0;
-                
-                if (completionRate < 30 && tasks.length > 5) {
-                    suggestions.push('<div class="ai-suggestion">💡 Consider breaking down large tasks into smaller ones</div>');
-                } else if (completionRate > 80) {
-                    suggestions.push('<div class="ai-suggestion">🎯 Excellent progress! Time to plan next phase?</div>');
-                }
-            }
-            
-            return suggestions.length > 0 ? suggestions.join('') : 
-                '<div class="ai-suggestion">✨ Everything looks good! Keep up the great work!</div>';
-        }
-        
-        function generateSmartSchedule() {
-            const projects = data.projects.filter(p => !p.deleted);
-            
-            if (projects.length === 0) {
-                showToast('No projects to schedule. Create projects first!');
-                return;
-            }
-            
-            let currentDate = new Date();
-            let updated = 0;
-            
-            projects.forEach(project => {
-                if (!project.startDate) {
-                    project.startDate = currentDate.toISOString().split('T')[0];
-                    project.endDate = new Date(currentDate.getTime() + 30*24*60*60*1000).toISOString().split('T')[0];
-                    currentDate = new Date(currentDate.getTime() + 31*24*60*60*1000);
-                    updated++;
-                }
-            });
-            
-            if (updated > 0) {
-                saveData();
-                renderView();
-                showToast(`🤖 AI scheduled ${updated} project${updated > 1 ? 's' : ''} automatically!`);
-            } else {
-                showToast('All projects already have schedules!');
-            }
-            
-            closeModal('aiAssistantModal');
-        }
-        
-        function optimizeProjectTimeline() {
-            const projects = data.projects.filter(p => !p.deleted && p.startDate);
-            
-            if (projects.length === 0) {
-                showToast('No scheduled projects to optimize!');
-                return;
-            }
-            
-            projects.sort((a, b) => {
-                const aTasks = data.tasks.filter(t => t.projectId === a.id);
-                const bTasks = data.tasks.filter(t => t.projectId === b.id);
-                const aUrgency = aTasks.filter(t => !t.completed).length;
-                const bUrgency = bTasks.filter(t => !t.completed).length;
-                return bUrgency - aUrgency;
-            });
-            
-            let currentDate = new Date();
-            projects.forEach(project => {
-                const tasks = data.tasks.filter(t => t.projectId === project.id);
-                const totalDuration = tasks.reduce((sum, t) => sum + (t.duration || 1), 0) || 30;
-                
-                project.startDate = currentDate.toISOString().split('T')[0];
-                project.endDate = new Date(currentDate.getTime() + totalDuration*24*60*60*1000).toISOString().split('T')[0];
-                
-                currentDate = new Date(currentDate.getTime() + (totalDuration + 7)*24*60*60*1000);
-            });
-            
-            saveData();
-            renderView();
-            showToast('🤖 Timeline optimized for better workflow!');
-            closeModal('aiAssistantModal');
-        }
-        
-        function analyzeBudgetHealth() {
-            const projects = data.projects.filter(p => !p.deleted);
-            const transactions = data.transactions.filter(t => !t.deleted);
-            
-            let analysis = '📊 Budget Analysis:\n\n';
-            
-            projects.forEach(project => {
-                const projectTrans = transactions.filter(t => t.projectId === project.id);
-                const income = projectTrans.filter(t => t.type === 'income').reduce((sum, t) => sum + t.amount, 0);
-                const expenses = projectTrans.filter(t => t.type === 'expense').reduce((sum, t) => sum + t.amount, 0);
-                const balance = income - expenses;
-                
-                if (project.budget) {
-                    const budgetUsage = (expenses / project.budget) * 100;
-                    if (budgetUsage > 90) {
-                        analysis += `⚠️ ${project.name}: Budget nearly exhausted (${budgetUsage.toFixed(0)}% used)\n`;
-                    } else if (budgetUsage > 75) {
-                        analysis += `📍 ${project.name}: Budget warning (${budgetUsage.toFixed(0)}% used)\n`;
-                    } else {
-                        analysis += `✅ ${project.name}: Budget healthy (${budgetUsage.toFixed(0)}% used)\n`;
-                    }
-                } else {
-                    analysis += `📝 ${project.name}: No budget set (Balance: ${getCurrencySymbol()}${balance.toFixed(2)})\n`;
-                }
-            });
-            
-            alert(analysis);
-            closeModal('aiAssistantModal');
-        }
-        
-        function generateAIProject() {
-            const templates = [
-                {
-                    name: 'Website Redesign',
-                    description: 'Complete overhaul of company website with modern design',
-                    budget: 5000,
-                    duration: 60
-                },
-                {
-                    name: 'Mobile App Development',
-                    description: 'Native mobile application for iOS and Android',
-                    budget: 15000,
-                    duration: 90
-                },
-                {
-                    name: 'Marketing Campaign',
-                    description: 'Q1 digital marketing campaign across all channels',
-                    budget: 3000,
-                    duration: 30
-                }
-            ];
-            
-            const template = templates[Math.floor(Math.random() * templates.length)];
-            
-            document.getElementById('projectName').value = template.name;
-            document.getElementById('projectDescription').value = template.description;
-            document.getElementById('projectBudget').value = template.budget;
-            
-            const today = new Date();
-            const endDate = new Date(today.getTime() + template.duration*24*60*60*1000);
-            document.getElementById('projectStartDate').value = today.toISOString().split('T')[0];
-            document.getElementById('projectEndDate').value = endDate.toISOString().split('T')[0];
-            
-            showToast('🤖 AI generated project template!');
-        }
-        
-        function generateSampleProject() {
-            const project = {
-                id: Date.now().toString(),
-                name: 'Sample Project - AI Generated',
-                description: 'This is a sample project to demonstrate the scheduling features',
-                budget: 10000,
-                startDate: new Date().toISOString().split('T')[0],
-                endDate: new Date(Date.now() + 60*24*60*60*1000).toISOString().split('T')[0],
-                created: Date.now(),
-                updated: Date.now()
-            };
-            
-            data.projects.push(project);
-            
-            const sampleTasks = [
-                { description: 'Project kickoff meeting', duration: 1, priority: 'high' },
-                { description: 'Requirements gathering', duration: 5, priority: 'high' },
-                { description: 'Design phase', duration: 10, priority: 'medium' },
-                { description: 'Development sprint 1', duration: 14, priority: 'medium' },
-                { description: 'Testing and QA', duration: 7, priority: 'high' },
-                { description: 'Deployment preparation', duration: 3, priority: 'medium' },
-                { description: 'Go-live and monitoring', duration: 2, priority: 'high' }
-            ];
-            
-            sampleTasks.forEach(task => {
-                data.tasks.push({
-                    id: Date.now().toString() + Math.random(),
-                    projectId: project.id,
-                    description: task.description,
-                    duration: task.duration,
-                    priority: task.priority,
-                    completed: false,
-                    created: Date.now(),
-                    updated: Date.now()
-                });
-            });
-            
-            saveData();
-            renderView();
-            updateStats();
-            showToast('🤖 Sample project created with tasks!');
-        }
-
+        });
     </script>
 </body>
 </html>
