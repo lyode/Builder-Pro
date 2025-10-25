@@ -2077,6 +2077,9 @@
                     console.log('🔄 Step 2: Merging data...');
                     syncMode.textContent = 'Merging...';
                     
+                    // IMPORTANT: Preserve local settings - never overwrite from cloud
+                    const localSettings = { ...data.settings };
+                    
                     const beforeCounts = {
                         projects: data.projects.length,
                         tasks: data.tasks.length,
@@ -2136,6 +2139,10 @@
                     }
                     
                     console.log('✅ Merge complete:', changes.length > 0 ? changes.join(', ') : 'No changes');
+                    
+                    // Restore local settings (theme, font size, etc.) - these are device-specific
+                    data.settings = localSettings;
+                    console.log('✅ Local settings preserved:', localSettings.theme);
                     
                     saveData();
                     renderView();
