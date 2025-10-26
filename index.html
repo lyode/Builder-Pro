@@ -1360,68 +1360,46 @@
         let reminderTimer = null;
         let reminderCountdownInterval = null;
 
-        // ============ ICON GENERATOR FOR IPAD ============
+        // ============ ICON GENERATOR WITH CUSTOM IMAGE ============
         function generateAppIcons() {
+            // Your construction worker image (base64)
+            const builderImage = 'data:image/jpeg;base64,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';
+            
             const sizes = [
                 { id: 'icon180', size: 180 },
                 { id: 'icon152', size: 152 },
                 { id: 'icon120', size: 120 },
                 { id: 'favicon', size: 64 }
             ];
-            sizes.forEach(({ id, size }) => {
-                const canvas = document.createElement('canvas');
-                canvas.width = size;
-                canvas.height = size;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = '#E8A9B3';
-                ctx.fillRect(0, 0, size, size);
-                ctx.fillStyle = 'white';
-                ctx.font = `bold ${size * 0.5}px -apple-system, sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('B', size / 2, size / 2);
-                const link = document.getElementById(id);
-                if (link) {
-                    link.href = canvas.toDataURL('image/png');
-                }
-            });
+            
+            // Load the image first
+            const img = new Image();
+            img.onload = function() {
+                sizes.forEach(({ id, size }) => {
+                    const canvas = document.createElement('canvas');
+                    canvas.width = size;
+                    canvas.height = size;
+                    const ctx = canvas.getContext('2d');
+                    
+                    // Draw the image to fit the canvas
+                    ctx.drawImage(img, 0, 0, size, size);
+                    
+                    const link = document.getElementById(id);
+                    if (link) {
+                        link.href = canvas.toDataURL('image/png');
+                    }
+                });
+                
+                console.log('✅ Construction worker icons generated!');
+            };
+            
+            img.src = builderImage;
         }
 
         function updateAppIcons(theme) {
-            const themeColors = {
-                'pink-rose': '#d2bcbf',
-                'sage': '#c0ccb8',
-                'gold': '#e0b558',
-                'periwinkle': '#99b3ec',
-                'slate': '#8386a4',
-                'teal': '#90b2b8',
-                'aqua': '#9cbbbf',
-                'terracotta': '#c48779'
-            };
-            const color = themeColors[theme] || '#E8A9B3';
-            const sizes = [
-                { id: 'icon180', size: 180 },
-                { id: 'icon152', size: 152 },
-                { id: 'icon120', size: 120 },
-                { id: 'favicon', size: 64 }
-            ];
-            sizes.forEach(({ id, size }) => {
-                const canvas = document.createElement('canvas');
-                canvas.width = size;
-                canvas.height = size;
-                const ctx = canvas.getContext('2d');
-                ctx.fillStyle = color;
-                ctx.fillRect(0, 0, size, size);
-                ctx.fillStyle = 'white';
-                ctx.font = `bold ${size * 0.5}px -apple-system, sans-serif`;
-                ctx.textAlign = 'center';
-                ctx.textBaseline = 'middle';
-                ctx.fillText('B', size / 2, size / 2);
-                const link = document.getElementById(id);
-                if (link) {
-                    link.href = canvas.toDataURL('image/png');
-                }
-            });
+            // Icon doesn't change with theme anymore since we're using a fixed image
+            // But we can still call this for consistency
+            generateAppIcons();
         }
 
         // ============ REMINDER SYSTEM ============
@@ -1553,7 +1531,6 @@
             if (theme) {
                 document.body.classList.add(`theme-${theme}`);
                 updateThemeSelector(theme);
-                updateAppIcons(theme);
             }
             
             // Apply night mode
