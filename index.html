@@ -1363,7 +1363,7 @@
         // ============ ICON GENERATOR WITH CUSTOM IMAGE ============
         function generateAppIcons() {
             // Your construction worker image from GitHub
-            const builderImageUrl = 'https://raw.githubusercontent.com/lyode/Builder-Pro/main/images_copy.png';
+            const builderImageUrl = 'https://cdn.jsdelivr.net/gh/lyode/Builder-Pro@main/images_copy.png';
             
             const sizes = [
                 { id: 'icon180', size: 180 },
@@ -1374,7 +1374,10 @@
             
             // Load the image first
             const img = new Image();
+            img.crossOrigin = 'anonymous';
+            
             img.onload = function() {
+                console.log('✅ Image loaded successfully');
                 sizes.forEach(({ id, size }) => {
                     const canvas = document.createElement('canvas');
                     canvas.width = size;
@@ -1393,6 +1396,12 @@
                 console.log('✅ Construction worker icons generated!');
             };
             
+            img.onerror = function() {
+                console.error('❌ Failed to load image from GitHub:', builderImageUrl);
+                console.log('📝 Check the console for details. Image URL might be incorrect or GitHub might be blocking the request.');
+            };
+            
+            console.log('🔄 Attempting to load image from:', builderImageUrl);
             img.src = builderImageUrl;
         }
 
