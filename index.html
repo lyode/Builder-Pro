@@ -338,17 +338,30 @@
             background: rgba(255, 255, 255, 0.25);
             color: white;
             border: none;
-            padding: 10px 20px;
+            padding: 8px 16px;
             border-radius: 20px;
             cursor: pointer;
             font-size: calc(14px * var(--font-scale));
             backdrop-filter: blur(10px);
             transition: all 0.3s;
+            min-width: 100px;
+            text-align: center;
+            position: relative;
         }
 
         .sync-button:hover {
             background: rgba(255, 255, 255, 0.35);
             transform: translateY(-2px);
+        }
+
+        .sync-button.syncing {
+            animation: syncPulse 1s infinite;
+        }
+
+        @keyframes syncPulse {
+            0% { background: rgba(255, 255, 255, 0.25); }
+            50% { background: rgba(255, 255, 255, 0.45); }
+            100% { background: rgba(255, 255, 255, 0.25); }
         }
 
         .container {
@@ -1281,8 +1294,9 @@
                 <span id="header-text">🏗️ Builder Pro v3</span>
                 <img id="header-media" class="header-media" style="display: none;">
             </div>
-            <button class="sync-button" onclick="syncData()">
+            <button class="sync-button" onclick="syncData()" title="Click to sync">
                 <span id="sync-text">☁️ Sync</span>
+                <span id="last-sync" style="display: block; font-size: 10px; opacity: 0.8; margin-top: 2px;"></span>
             </button>
         </div>
     </div>
@@ -1715,28 +1729,133 @@
             generateIcons();
             checkViewportHeight();
             updateHeaderTitle();
+            updateLastSyncDisplay();
+            
+            // Auto-sync on load if configured
+            if (data.settings.apiKey && data.settings.binId) {
+                setTimeout(() => {
+                    showToast('Auto-syncing with cloud...', 'info');
+                    syncData();
+                }, 1000);
+            }
+            
+            // Update last sync display every minute
+            setInterval(updateLastSyncDisplay, 60000);
+            
+            // Auto-sync every 5 minutes if configured
+            setInterval(() => {
+                if (data.settings.apiKey && data.settings.binId) {
+                    console.log('Auto-syncing data...');
+                    syncData();
+                }
+            }, 300000); // 5 minutes
         });
+
+        // Update Last Sync Display
+        function updateLastSyncDisplay() {
+            const lastSyncElement = document.getElementById('last-sync');
+            
+            if (data.lastSync) {
+                const lastSyncDate = new Date(data.lastSync);
+                const now = new Date();
+                const diffMs = now - lastSyncDate;
+                const diffMins = Math.floor(diffMs / 60000);
+                const diffHours = Math.floor(diffMs / 3600000);
+                const diffDays = Math.floor(diffMs / 86400000);
+                
+                let timeAgo = '';
+                if (diffMins < 1) {
+                    timeAgo = 'Just now';
+                } else if (diffMins < 60) {
+                    timeAgo = `${diffMins}m ago`;
+                } else if (diffHours < 24) {
+                    timeAgo = `${diffHours}h ago`;
+                } else {
+                    timeAgo = `${diffDays}d ago`;
+                }
+                
+                lastSyncElement.textContent = timeAgo;
+                lastSyncElement.style.display = 'block';
+            } else {
+                lastSyncElement.textContent = 'Never synced';
+                lastSyncElement.style.display = 'block';
+            }
+        }
 
         // Generate PWA Icons
         function generateIcons() {
             const sizes = [180, 152, 120, 32];
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
             
             sizes.forEach(size => {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
                 canvas.width = size;
                 canvas.height = size;
                 
-                // Background
-                ctx.fillStyle = '#E8A9B3';
+                // Background gradient
+                const gradient = ctx.createLinearGradient(0, 0, size, size);
+                gradient.addColorStop(0, '#E8A9B3');
+                gradient.addColorStop(1, '#D47C90');
+                ctx.fillStyle = gradient;
                 ctx.fillRect(0, 0, size, size);
                 
-                // Icon
+                // Draw building/construction icon
                 ctx.fillStyle = 'white';
-                ctx.font = `${size * 0.5}px Arial`;
+                ctx.strokeStyle = 'white';
+                ctx.lineWidth = size * 0.04;
+                ctx.lineCap = 'round';
+                ctx.lineJoin = 'round';
+                
+                const scale = size / 100;
+                
+                // Draw simple building icon
+                ctx.save();
+                ctx.translate(size / 2, size / 2);
+                ctx.scale(scale, scale);
+                
+                // Building base
+                ctx.beginPath();
+                ctx.moveTo(-25, 25);
+                ctx.lineTo(-25, -10);
+                ctx.lineTo(-5, -20);
+                ctx.lineTo(-5, 25);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Building tall section
+                ctx.beginPath();
+                ctx.moveTo(5, 25);
+                ctx.lineTo(5, -25);
+                ctx.lineTo(25, -15);
+                ctx.lineTo(25, 25);
+                ctx.closePath();
+                ctx.fill();
+                
+                // Windows
+                ctx.fillStyle = '#E8A9B3';
+                // Left building windows
+                ctx.fillRect(-20, -5, 6, 6);
+                ctx.fillRect(-20, 5, 6, 6);
+                ctx.fillRect(-20, 15, 6, 6);
+                
+                // Right building windows
+                ctx.fillRect(10, -20, 6, 6);
+                ctx.fillRect(10, -10, 6, 6);
+                ctx.fillRect(10, 0, 6, 6);
+                ctx.fillRect(10, 10, 6, 6);
+                
+                // Add "B" letter in center for Builder
+                ctx.fillStyle = 'white';
+                ctx.font = `bold ${35}px Arial`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                ctx.fillText('🏗️', size / 2, size / 2);
+                ctx.fillText('B', 0, 0);
+                
+                ctx.restore();
+                
+                // Add subtle shadow
+                ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+                ctx.shadowBlur = size * 0.05;
                 
                 const dataUrl = canvas.toDataURL('image/png');
                 
@@ -1750,6 +1869,58 @@
                     document.getElementById('favicon').href = dataUrl;
                 }
             });
+            
+            // Also create and set a high-quality SVG icon as fallback
+            const svgIcon = `
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                    <defs>
+                        <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" style="stop-color:#E8A9B3;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#D47C90;stop-opacity:1" />
+                        </linearGradient>
+                    </defs>
+                    <rect width="512" height="512" rx="100" fill="url(#bg-gradient)"/>
+                    <g transform="translate(256, 256)">
+                        <!-- Building shapes -->
+                        <rect x="-140" y="-50" width="100" height="180" fill="white" rx="5"/>
+                        <rect x="-20" y="-100" width="120" height="230" fill="white" rx="5"/>
+                        <rect x="60" y="-30" width="80" height="160" fill="white" rx="5"/>
+                        
+                        <!-- Windows -->
+                        <rect x="-120" y="-30" width="25" height="25" fill="#E8A9B3"/>
+                        <rect x="-80" y="-30" width="25" height="25" fill="#E8A9B3"/>
+                        <rect x="-120" y="10" width="25" height="25" fill="#E8A9B3"/>
+                        <rect x="-80" y="10" width="25" height="25" fill="#E8A9B3"/>
+                        <rect x="-120" y="50" width="25" height="25" fill="#E8A9B3"/>
+                        <rect x="-80" y="50" width="25" height="25" fill="#E8A9B3"/>
+                        
+                        <rect x="0" y="-80" width="30" height="30" fill="#E8A9B3"/>
+                        <rect x="50" y="-80" width="30" height="30" fill="#E8A9B3"/>
+                        <rect x="0" y="-30" width="30" height="30" fill="#E8A9B3"/>
+                        <rect x="50" y="-30" width="30" height="30" fill="#E8A9B3"/>
+                        <rect x="0" y="20" width="30" height="30" fill="#E8A9B3"/>
+                        <rect x="50" y="20" width="30" height="30" fill="#E8A9B3"/>
+                        
+                        <rect x="75" y="-10" width="20" height="20" fill="#E8A9B3"/>
+                        <rect x="105" y="-10" width="20" height="20" fill="#E8A9B3"/>
+                        <rect x="75" y="20" width="20" height="20" fill="#E8A9B3"/>
+                        <rect x="105" y="20" width="20" height="20" fill="#E8A9B3"/>
+                        
+                        <!-- B Letter overlay -->
+                        <text x="0" y="10" font-family="Arial" font-size="120" font-weight="bold" fill="white" text-anchor="middle" opacity="0.9">B</text>
+                    </g>
+                </svg>
+            `;
+            
+            // Convert SVG to data URL
+            const svgBlob = new Blob([svgIcon], {type: 'image/svg+xml'});
+            const svgUrl = URL.createObjectURL(svgBlob);
+            
+            // Set meta theme color
+            const metaTheme = document.querySelector('meta[name="theme-color"]');
+            if (metaTheme) {
+                metaTheme.content = '#E8A9B3';
+            }
         }
 
         // Check viewport height for iPhone
@@ -2407,6 +2578,7 @@
             const task = data.tasks.find(t => t.id === taskId);
             if (task) {
                 task.status = 'Completed';
+                task.updatedAt = new Date().toISOString();
                 saveData();
                 renderHome();
                 renderProjects();
@@ -2514,6 +2686,7 @@
         function saveProject() {
             const modal = document.getElementById('project-modal');
             const editId = modal.dataset.editId;
+            const now = new Date().toISOString();
             
             const projectData = {
                 id: editId || Date.now().toString(),
@@ -2522,7 +2695,9 @@
                 budget: document.getElementById('project-budget').value,
                 startDate: document.getElementById('project-start-date').value,
                 endDate: document.getElementById('project-end-date').value,
-                description: document.getElementById('project-description').value
+                description: document.getElementById('project-description').value,
+                createdAt: editId ? (data.projects.find(p => p.id === editId)?.createdAt || now) : now,
+                updatedAt: now
             };
             
             if (!projectData.name || !projectData.client) {
@@ -2547,6 +2722,7 @@
         function saveTask() {
             const modal = document.getElementById('task-modal');
             const editId = modal.dataset.editId;
+            const now = new Date().toISOString();
             
             const taskData = {
                 id: editId || Date.now().toString(),
@@ -2555,7 +2731,9 @@
                 priority: document.getElementById('task-priority').value,
                 status: document.getElementById('task-status').value,
                 dueDate: document.getElementById('task-due-date').value,
-                description: document.getElementById('task-description').value
+                description: document.getElementById('task-description').value,
+                createdAt: editId ? (data.tasks.find(t => t.id === editId)?.createdAt || now) : now,
+                updatedAt: now
             };
             
             if (!taskData.name) {
@@ -2578,13 +2756,17 @@
         }
 
         function saveTransaction() {
+            const now = new Date().toISOString();
+            
             const transactionData = {
                 id: Date.now().toString(),
                 type: document.getElementById('transaction-type').value,
                 projectId: document.getElementById('transaction-project').value,
                 amount: document.getElementById('transaction-amount').value,
                 date: document.getElementById('transaction-date').value,
-                description: document.getElementById('transaction-description').value
+                description: document.getElementById('transaction-description').value,
+                createdAt: now,
+                updatedAt: now
             };
             
             if (!transactionData.amount || !transactionData.description) {
@@ -2638,9 +2820,10 @@
             showToast('Settings saved', 'success');
         }
 
-        // Sync Functions
+        // Smart Sync Functions
         async function syncData() {
-            const syncButton = document.getElementById('sync-text');
+            const syncButton = document.getElementById('sync-text').parentElement;
+            const syncText = document.getElementById('sync-text');
             
             if (!data.settings.apiKey || !data.settings.binId) {
                 showToast('Please configure API settings first', 'warning');
@@ -2648,9 +2831,13 @@
                 return;
             }
             
-            syncButton.textContent = '⏳ Syncing...';
+            syncButton.classList.add('syncing');
+            syncText.textContent = 'Smart Syncing...';
             
             try {
+                // Add timestamps to local data before sync
+                addTimestamps();
+                
                 // Pull data from JSONBin
                 const pullResponse = await fetch(`https://api.jsonbin.io/v3/b/${data.settings.binId}/latest`, {
                     headers: {
@@ -2658,11 +2845,13 @@
                     }
                 });
                 
+                let syncResult = { added: 0, updated: 0, conflicts: 0 };
+                
                 if (pullResponse.ok) {
                     const remoteData = await pullResponse.json();
                     
-                    // Smart merge - combine local and remote data
-                    mergeData(remoteData.record);
+                    // Smart merge - intelligently combine local and remote data
+                    syncResult = smartMergeData(remoteData.record);
                     
                     // Push merged data back to JSONBin
                     const pushResponse = await fetch(`https://api.jsonbin.io/v3/b/${data.settings.binId}`, {
@@ -2675,10 +2864,27 @@
                     });
                     
                     if (pushResponse.ok) {
-                        syncButton.textContent = '✅ Synced';
-                        showToast('Data synced successfully', 'success');
+                        syncButton.classList.remove('syncing');
+                        syncText.textContent = '✅ Smart Synced';
+                        
+                        // Show detailed sync results
+                        let message = 'Smart Sync Complete! ';
+                        if (syncResult.added > 0) message += `Added: ${syncResult.added} `;
+                        if (syncResult.updated > 0) message += `Updated: ${syncResult.updated} `;
+                        if (syncResult.conflicts > 0) message += `Conflicts resolved: ${syncResult.conflicts}`;
+                        if (syncResult.added === 0 && syncResult.updated === 0 && syncResult.conflicts === 0) {
+                            message = 'Already up to date!';
+                        }
+                        
+                        showToast(message, 'success');
+                        
+                        // Update last sync time
+                        data.lastSync = new Date().toISOString();
+                        saveData();
+                        updateLastSyncDisplay();
+                        
                         setTimeout(() => {
-                            syncButton.textContent = '☁️ Sync';
+                            syncText.textContent = '☁️ Sync';
                         }, 2000);
                     } else {
                         throw new Error('Push failed');
@@ -2690,7 +2896,8 @@
                         headers: {
                             'Content-Type': 'application/json',
                             'X-Access-Key': data.settings.apiKey,
-                            'X-Bin-Name': 'Builder Pro Data'
+                            'X-Bin-Name': 'Builder Pro Data',
+                            'X-Bin-Private': false
                         },
                         body: JSON.stringify(data)
                     });
@@ -2699,67 +2906,193 @@
                         const result = await createResponse.json();
                         data.settings.binId = result.metadata.id;
                         document.getElementById('bin-id').value = result.metadata.id;
+                        data.lastSync = new Date().toISOString();
                         saveData();
+                        updateLastSyncDisplay();
                         
-                        syncButton.textContent = '✅ Created';
-                        showToast('Cloud storage created', 'success');
+                        syncButton.classList.remove('syncing');
+                        syncText.textContent = '✅ Created & Synced';
+                        showToast('Cloud storage created and synced!', 'success');
                         setTimeout(() => {
-                            syncButton.textContent = '☁️ Sync';
+                            syncText.textContent = '☁️ Sync';
                         }, 2000);
                     } else {
                         throw new Error('Create failed');
                     }
                 }
+                
+                // Refresh current view
+                renderHome();
+                renderProjects();
+                
             } catch (error) {
-                syncButton.textContent = '❌ Error';
-                showToast('Sync failed: ' + error.message, 'error');
+                syncButton.classList.remove('syncing');
+                syncText.textContent = '❌ Sync Error';
+                showToast('Smart Sync failed: ' + error.message, 'error');
                 setTimeout(() => {
-                    syncButton.textContent = '☁️ Sync';
+                    syncText.textContent = '☁️ Sync';
                 }, 2000);
             }
         }
 
-        // Merge Data Function
-        function mergeData(remoteData) {
-            if (!remoteData) return;
+        // Add timestamps to data items
+        function addTimestamps() {
+            const now = new Date().toISOString();
             
-            // Merge projects
+            // Add timestamps to projects
+            data.projects.forEach(project => {
+                if (!project.createdAt) project.createdAt = now;
+                if (!project.updatedAt) project.updatedAt = now;
+            });
+            
+            // Add timestamps to tasks
+            data.tasks.forEach(task => {
+                if (!task.createdAt) task.createdAt = now;
+                if (!task.updatedAt) task.updatedAt = now;
+            });
+            
+            // Add timestamps to transactions
+            data.transactions.forEach(transaction => {
+                if (!transaction.createdAt) transaction.createdAt = now;
+                if (!transaction.updatedAt) transaction.updatedAt = now;
+            });
+        }
+
+        // Smart Merge Data Function
+        function smartMergeData(remoteData) {
+            if (!remoteData) return { added: 0, updated: 0, conflicts: 0 };
+            
+            let syncStats = { added: 0, updated: 0, conflicts: 0 };
+            
+            // Smart merge projects
             if (remoteData.projects) {
                 remoteData.projects.forEach(remoteProject => {
                     const localProject = data.projects.find(p => p.id === remoteProject.id);
+                    
                     if (!localProject) {
+                        // New project from remote
                         data.projects.push(remoteProject);
+                        syncStats.added++;
+                    } else if (remoteProject.updatedAt && localProject.updatedAt) {
+                        // Compare timestamps and keep the newer version
+                        if (new Date(remoteProject.updatedAt) > new Date(localProject.updatedAt)) {
+                            Object.assign(localProject, remoteProject);
+                            syncStats.updated++;
+                        } else if (new Date(remoteProject.updatedAt) < new Date(localProject.updatedAt)) {
+                            // Local is newer, keep local version
+                            syncStats.conflicts++;
+                        }
+                    }
+                });
+                
+                // Check for local projects not in remote (need to be added to remote)
+                data.projects.forEach(localProject => {
+                    const remoteProject = remoteData.projects.find(p => p.id === localProject.id);
+                    if (!remoteProject) {
+                        // This is a new local project that needs to be synced
+                        if (!localProject.updatedAt) {
+                            localProject.updatedAt = new Date().toISOString();
+                        }
                     }
                 });
             }
             
-            // Merge tasks
+            // Smart merge tasks
             if (remoteData.tasks) {
                 remoteData.tasks.forEach(remoteTask => {
                     const localTask = data.tasks.find(t => t.id === remoteTask.id);
+                    
                     if (!localTask) {
+                        // New task from remote
                         data.tasks.push(remoteTask);
+                        syncStats.added++;
+                    } else if (remoteTask.updatedAt && localTask.updatedAt) {
+                        // Compare timestamps and keep the newer version
+                        if (new Date(remoteTask.updatedAt) > new Date(localTask.updatedAt)) {
+                            Object.assign(localTask, remoteTask);
+                            syncStats.updated++;
+                        } else if (new Date(remoteTask.updatedAt) < new Date(localTask.updatedAt)) {
+                            // Local is newer, keep local version
+                            syncStats.conflicts++;
+                        }
+                    }
+                });
+                
+                // Check for local tasks not in remote
+                data.tasks.forEach(localTask => {
+                    const remoteTask = remoteData.tasks.find(t => t.id === localTask.id);
+                    if (!remoteTask) {
+                        if (!localTask.updatedAt) {
+                            localTask.updatedAt = new Date().toISOString();
+                        }
                     }
                 });
             }
             
-            // Merge transactions
+            // Smart merge transactions
             if (remoteData.transactions) {
                 remoteData.transactions.forEach(remoteTrans => {
                     const localTrans = data.transactions.find(t => t.id === remoteTrans.id);
+                    
                     if (!localTrans) {
+                        // New transaction from remote
                         data.transactions.push(remoteTrans);
+                        syncStats.added++;
+                    } else if (remoteTrans.updatedAt && localTrans.updatedAt) {
+                        // Compare timestamps and keep the newer version
+                        if (new Date(remoteTrans.updatedAt) > new Date(localTrans.updatedAt)) {
+                            Object.assign(localTrans, remoteTrans);
+                            syncStats.updated++;
+                        } else if (new Date(remoteTrans.updatedAt) < new Date(localTrans.updatedAt)) {
+                            // Local is newer, keep local version
+                            syncStats.conflicts++;
+                        }
+                    }
+                });
+                
+                // Check for local transactions not in remote
+                data.transactions.forEach(localTrans => {
+                    const remoteTrans = remoteData.transactions.find(t => t.id === localTrans.id);
+                    if (!remoteTrans) {
+                        if (!localTrans.updatedAt) {
+                            localTrans.updatedAt = new Date().toISOString();
+                        }
                     }
                 });
             }
             
-            // Update settings if remote is newer
+            // Smart merge settings - keep the most recently modified
             if (remoteData.settings) {
-                data.settings = { ...data.settings, ...remoteData.settings };
+                // Preserve API settings
+                const currentApiKey = data.settings.apiKey;
+                const currentBinId = data.settings.binId;
+                
+                // Check if remote settings are newer
+                if (remoteData.lastSync && data.lastSync) {
+                    if (new Date(remoteData.lastSync) > new Date(data.lastSync)) {
+                        // Remote is newer, use remote settings but preserve API keys
+                        data.settings = { ...remoteData.settings };
+                        data.settings.apiKey = currentApiKey;
+                        data.settings.binId = currentBinId;
+                        syncStats.updated++;
+                    }
+                } else {
+                    // Merge settings intelligently
+                    Object.keys(remoteData.settings).forEach(key => {
+                        if (key !== 'apiKey' && key !== 'binId' && remoteData.settings[key] !== data.settings[key]) {
+                            // Only update if remote has a value and local doesn't
+                            if (remoteData.settings[key] && !data.settings[key]) {
+                                data.settings[key] = remoteData.settings[key];
+                            }
+                        }
+                    });
+                }
             }
             
             saveData();
             applySettings();
+            
+            return syncStats;
         }
 
         // Helper Functions
