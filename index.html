@@ -341,11 +341,22 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s;
+            min-width: 180px;
+        }
+
+        .header-title:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
         }
 
         .header-media {
             max-height: 40px;
             border-radius: 8px;
+            object-fit: cover;
         }
 
         .sync-button {
@@ -1320,9 +1331,10 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <div class="header-title" id="header-title" onclick="editHeaderTitle()">
+            <div class="header-title" id="header-title" onclick="editHeaderTitle()" title="Click to edit app title">
                 <span id="header-text">🏗️ Builder Pro v3</span>
                 <img id="header-media" class="header-media" style="display: none;">
+                <span style="margin-left: 8px; opacity: 0.7; font-size: 16px;">✏️</span>
             </div>
             <button class="sync-button" onclick="syncData()" title="Click to sync">
                 <span id="sync-text">☁️ Sync</span>
@@ -1414,10 +1426,11 @@
                 <h2>⚙️ Settings</h2>
                 
                 <div class="form-group">
-                    <label>🏗️ App Title (Text/Media)</label>
+                    <label>🏗️ App Title (Click header to edit)</label>
                     <input type="text" class="form-control" id="app-title" placeholder="Enter app title or media URL">
                     <small style="color: var(--text-secondary); margin-top: 5px; display: block;">
-                        Supports: Text, YouTube/Facebook/Instagram links, or image URLs
+                        <strong>Quick tip:</strong> Click the app name in the top-left corner to edit it directly!<br>
+                        Supports: Text, YouTube videos (autoplay), Images, Video files (.mp4), Social media links
                     </small>
                 </div>
                 
@@ -1474,7 +1487,12 @@
                     </small>
                 </div>
                 
-                <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+                <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+                    <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+                    <button class="btn btn-secondary" onclick="testSync()">🔄 Test Sync</button>
+                </div>
+                
+                <div id="sync-status" style="padding: 10px; border-radius: 8px; margin-top: 10px; display: none;"></div>
             </div>
         </div>
     </div>
@@ -1698,7 +1716,15 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label>Enter Title or Media URL</label>
-                    <input type="text" class="form-control" id="header-input" placeholder="Text, YouTube/FB/IG link, or image URL">
+                    <input type="text" class="form-control" id="header-input" placeholder="Text, YouTube/FB/IG link, video URL, or image URL">
+                    <small style="color: var(--text-secondary); margin-top: 8px; display: block;">
+                        <strong>Supported formats:</strong><br>
+                        • Text: Any text or emoji (e.g., "🏗️ My Company")<br>
+                        • YouTube: Full URL (will autoplay muted)<br>
+                        • Video: Direct .mp4, .webm, .mov links (will autoplay)<br>
+                        • Image: Direct .jpg, .png, .gif links<br>
+                        • Social: Instagram, Facebook, TikTok links
+                    </small>
                 </div>
             </div>
             <div class="modal-footer">
@@ -1728,8 +1754,17 @@
                 nightMode: false,
                 fontSize: 'm',
                 appTitle: '🏗️ Builder Pro v3'
-            }
+            },
+            lastSync: null
         };
+
+        // Initialize data arrays if missing (for compatibility)
+        function initializeDataArrays() {
+            if (!data.projects) data.projects = [];
+            if (!data.tasks) data.tasks = [];
+            if (!data.transactions) data.transactions = [];
+            if (!data.settings) data.settings = {};
+        }
 
         // Theme Colors Configuration
         const themeColors = [
@@ -1770,7 +1805,9 @@
             // Auto-sync on load if configured (with delay to ensure everything is loaded)
             if (data.settings.apiKey) {
                 setTimeout(() => {
-                    syncData();
+                    syncData().catch(error => {
+                        console.log('Auto-sync failed:', error.message);
+                    });
                 }, 2000);
             }
             
@@ -1780,7 +1817,9 @@
             // Auto-sync every 5 minutes if configured
             setInterval(() => {
                 if (data.settings.apiKey) {
-                    syncData();
+                    syncData().catch(error => {
+                        console.log('Periodic sync failed:', error.message);
+                    });
                 }
             }, 300000); // 5 minutes
         });
@@ -1907,6 +1946,7 @@
             const stored = localStorage.getItem('builderProData');
             if (stored) {
                 data = JSON.parse(stored);
+                initializeDataArrays(); // Ensure arrays exist
                 applySettings();
             }
         }
@@ -1958,51 +1998,129 @@
             const headerText = document.getElementById('header-text');
             const headerMedia = document.getElementById('header-media');
             
+            // Reset display
+            headerText.style.display = 'block';
+            headerMedia.style.display = 'none';
+            headerText.innerHTML = '';
+            
             // Check if it's a URL
             if (title.includes('http') || title.includes('www')) {
-                // Check if it's an image
-                if (title.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
+                // Check for YouTube video
+                if (title.includes('youtube.com') || title.includes('youtu.be')) {
+                    const videoId = extractYouTubeId(title);
+                    if (videoId) {
+                        headerText.innerHTML = `
+                            <iframe 
+                                width="160" 
+                                height="40" 
+                                src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&modestbranding=1&loop=1&playlist=${videoId}" 
+                                frameborder="0" 
+                                allow="autoplay; encrypted-media" 
+                                style="border-radius: 8px; pointer-events: none;"
+                                title="Header Video">
+                            </iframe>
+                        `;
+                    }
+                } 
+                // Check for video files
+                else if (title.match(/\.(mp4|webm|ogg|mov)$/i)) {
+                    headerText.innerHTML = `
+                        <video 
+                            width="160" 
+                            height="40" 
+                            autoplay 
+                            muted 
+                            loop 
+                            playsinline
+                            style="border-radius: 8px; object-fit: cover;">
+                            <source src="${title}" type="video/${title.split('.').pop()}">
+                        </video>
+                    `;
+                }
+                // Check for image
+                else if (title.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
                     headerText.style.display = 'none';
                     headerMedia.src = title;
                     headerMedia.style.display = 'block';
-                } else if (title.includes('youtube.com') || title.includes('youtu.be')) {
-                    // YouTube embed
-                    const videoId = extractYouTubeId(title);
-                    if (videoId) {
-                        headerText.innerHTML = `<iframe width="120" height="40" src="https://www.youtube.com/embed/${videoId}" frameborder="0" style="border-radius: 8px;"></iframe>`;
-                    }
-                } else {
-                    // Other links - show as clickable link
-                    headerText.innerHTML = `<a href="${title}" target="_blank" style="color: white; text-decoration: none;">🔗 Link</a>`;
+                    headerMedia.style.maxHeight = '40px';
+                    headerMedia.style.borderRadius = '8px';
                 }
-            } else {
-                // Regular text
-                headerText.style.display = 'block';
+                // Check for Instagram
+                else if (title.includes('instagram.com')) {
+                    headerText.innerHTML = `
+                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 20px;">📷</span> Instagram
+                        </a>
+                    `;
+                }
+                // Check for Facebook
+                else if (title.includes('facebook.com') || title.includes('fb.com')) {
+                    headerText.innerHTML = `
+                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 20px;">📘</span> Facebook
+                        </a>
+                    `;
+                }
+                // Check for TikTok
+                else if (title.includes('tiktok.com')) {
+                    headerText.innerHTML = `
+                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 20px;">🎵</span> TikTok
+                        </a>
+                    `;
+                }
+                // Other links
+                else {
+                    headerText.innerHTML = `
+                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 20px;">🔗</span> Link
+                        </a>
+                    `;
+                }
+            } 
+            // Check for emoji at start
+            else if (title.match(/^[\u{1F300}-\u{1F9FF}]/u)) {
+                headerText.innerHTML = title;
+            }
+            // Regular text
+            else {
                 headerText.textContent = title;
-                headerMedia.style.display = 'none';
             }
         }
 
         // Extract YouTube Video ID
         function extractYouTubeId(url) {
-            const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\n?#]+)/);
-            return match ? match[1] : null;
+            // Handle different YouTube URL formats
+            const patterns = [
+                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
+                /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
+                /youtube\.com\/v\/([^&\n?#]+)/
+            ];
+            
+            for (const pattern of patterns) {
+                const match = url.match(pattern);
+                if (match) return match[1];
+            }
+            return null;
         }
 
         // Edit Header Title
         function editHeaderTitle() {
-            document.getElementById('header-input').value = data.settings.appTitle || '';
-            openModal('header-edit-modal');
+            const modal = document.getElementById('header-edit-modal');
+            if (modal) {
+                document.getElementById('header-input').value = data.settings.appTitle || '';
+                openModal('header-edit-modal');
+            }
         }
 
         // Save Header Title
         function saveHeaderTitle() {
-            const newTitle = document.getElementById('header-input').value;
+            const newTitle = document.getElementById('header-input').value.trim();
             data.settings.appTitle = newTitle || '🏗️ Builder Pro v3';
             saveData();
             updateHeaderTitle();
             closeModal('header-edit-modal');
-            showToast('Header updated', 'success');
+            showToast('Header updated successfully!', 'success');
         }
 
         // Render Theme Options
@@ -2089,6 +2207,9 @@
 
         // Render Home
         function renderHome() {
+            // Ensure arrays exist
+            initializeDataArrays();
+            
             // Update stats
             document.getElementById('total-projects').textContent = data.projects.length;
             
@@ -2116,6 +2237,9 @@
 
         // Render Projects
         function renderProjects() {
+            // Ensure arrays exist
+            initializeDataArrays();
+            
             const container = document.getElementById('projects-list');
             
             if (data.projects.length === 0) {
@@ -2809,6 +2933,33 @@
             showToast('Transaction saved', 'success');
         }
 
+        // Test Sync Function
+        function testSync() {
+            const statusDiv = document.getElementById('sync-status');
+            statusDiv.style.display = 'block';
+            statusDiv.className = '';
+            statusDiv.innerHTML = '⏳ Testing sync connection...';
+            statusDiv.style.background = '#f0f0f0';
+            statusDiv.style.color = '#333';
+            
+            // Save settings first
+            saveSettings();
+            
+            // Wait a moment for settings to save
+            setTimeout(() => {
+                // Try to sync
+                syncData().then(() => {
+                    statusDiv.innerHTML = '✅ Sync test successful! Your data is now synced.';
+                    statusDiv.style.background = '#d4edda';
+                    statusDiv.style.color = '#155724';
+                }).catch(error => {
+                    statusDiv.innerHTML = `❌ Sync test failed: ${error.message || 'Unknown error'}`;
+                    statusDiv.style.background = '#f8d7da';
+                    statusDiv.style.color = '#721c24';
+                });
+            }, 500);
+        }
+
         // Settings Functions
         function changeTheme(theme) {
             // Remove all theme classes
@@ -2849,105 +3000,91 @@
 
         // Smart Sync Functions
         async function syncData() {
-            console.log('Starting sync process...');
-            const syncButton = document.getElementById('sync-text').parentElement;
-            const syncText = document.getElementById('sync-text');
-            
-            if (!data.settings.apiKey) {
-                console.log('Missing API key');
-                showToast('Please enter your JSONBin API key in Settings', 'warning');
-                switchTab('settings');
-                return;
-            }
-            
-            // Ensure we have valid API credentials
-            const apiKey = data.settings.apiKey.trim();
-            const binId = data.settings.binId.trim();
-            
-            console.log('API Key present:', !!apiKey);
-            console.log('Bin ID:', binId || 'Will create new');
-            
-            if (!apiKey) {
-                showToast('Please enter your JSONBin API key in Settings', 'error');
-                return;
-            }
-            
-            syncButton.classList.add('syncing');
-            syncText.textContent = 'Smart Syncing...';
-            
-            try {
-                // Add timestamps to local data before sync
-                addTimestamps();
+            return new Promise(async (resolve, reject) => {
+                const syncButton = document.getElementById('sync-text').parentElement;
+                const syncText = document.getElementById('sync-text');
                 
-                if (binId) {
-                    // Try to fetch existing data
-                    console.log('Fetching from existing bin:', binId);
-                    const pullResponse = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
-                        method: 'GET',
-                        headers: {
-                            'X-Access-Key': apiKey,
-                            'Content-Type': 'application/json'
-                        }
-                    });
+                // Check for API key
+                const apiKey = (data.settings.apiKey || '').trim();
+                if (!apiKey) {
+                    const error = 'Please enter your JSONBin API key in Settings';
+                    showToast(error, 'warning');
+                    switchTab('settings');
+                    reject(new Error(error));
+                    return;
+                }
+                
+                // Get or create bin ID
+                let binId = (data.settings.binId || '').trim();
+                
+                syncButton.classList.add('syncing');
+                syncText.textContent = 'Syncing...';
+                
+                try {
+                    // Add timestamps before sync
+                    addTimestamps();
                     
-                    console.log('Fetch response status:', pullResponse.status);
-                    let syncResult = { added: 0, updated: 0, conflicts: 0 };
-                    
-                    if (pullResponse.ok) {
-                        const remoteData = await pullResponse.json();
-                        console.log('Remote data fetched successfully');
-                        
-                        // Smart merge - intelligently combine local and remote data
-                        syncResult = smartMergeData(remoteData.record);
-                        
-                        // Push merged data back to JSONBin
-                        console.log('Pushing merged data back...');
-                        const pushResponse = await fetch(`https://api.jsonbin.io/v3/b/${binId}`, {
-                            method: 'PUT',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-Access-Key': apiKey
-                            },
-                            body: JSON.stringify(data)
-                        });
-                        
-                        console.log('Push response status:', pushResponse.status);
-                        
-                        if (pushResponse.ok) {
-                            syncButton.classList.remove('syncing');
-                            syncText.textContent = '✅ Smart Synced';
+                    if (binId) {
+                        // Try to fetch existing bin
+                        try {
+                            const fetchUrl = `https://api.jsonbin.io/v3/b/${binId}/latest`;
+                            const fetchResponse = await fetch(fetchUrl, {
+                                method: 'GET',
+                                headers: {
+                                    'X-Access-Key': apiKey
+                                }
+                            });
                             
-                            // Show detailed sync results
-                            let message = 'Smart Sync Complete! ';
-                            if (syncResult.added > 0) message += `Added: ${syncResult.added} `;
-                            if (syncResult.updated > 0) message += `Updated: ${syncResult.updated} `;
-                            if (syncResult.conflicts > 0) message += `Conflicts resolved: ${syncResult.conflicts}`;
-                            if (syncResult.added === 0 && syncResult.updated === 0 && syncResult.conflicts === 0) {
-                                message = 'Already up to date!';
+                            if (fetchResponse.ok) {
+                                const remoteData = await fetchResponse.json();
+                                const syncResult = smartMergeData(remoteData.record);
+                                
+                                // Update the bin with merged data
+                                const updateUrl = `https://api.jsonbin.io/v3/b/${binId}`;
+                                const updateResponse = await fetch(updateUrl, {
+                                    method: 'PUT',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-Access-Key': apiKey
+                                    },
+                                    body: JSON.stringify(data)
+                                });
+                                
+                                if (updateResponse.ok) {
+                                    data.lastSync = new Date().toISOString();
+                                    saveData();
+                                    updateLastSyncDisplay();
+                                    
+                                    syncButton.classList.remove('syncing');
+                                    syncText.textContent = '✅ Synced';
+                                    
+                                    let message = 'Sync Complete! ';
+                                    if (syncResult.added > 0 || syncResult.updated > 0) {
+                                        message += `Changes: ${syncResult.added + syncResult.updated}`;
+                                    } else {
+                                        message = 'Already up to date!';
+                                    }
+                                    showToast(message, 'success');
+                                    
+                                    setTimeout(() => {
+                                        syncText.textContent = '☁️ Sync';
+                                    }, 2000);
+                                    
+                                    renderHome();
+                                    renderProjects();
+                                    resolve(syncResult);
+                                    return;
+                                }
                             }
-                            
-                            showToast(message, 'success');
-                            
-                            // Update last sync time
-                            data.lastSync = new Date().toISOString();
-                            saveData();
-                            updateLastSyncDisplay();
-                            
-                            setTimeout(() => {
-                                syncText.textContent = '☁️ Sync';
-                            }, 2000);
-                        } else {
-                            const errorText = await pushResponse.text();
-                            throw new Error(`Push failed: ${errorText}`);
+                        } catch (e) {
+                            console.log('Bin fetch failed, will try to create new:', e.message);
                         }
-                    } else {
-                        const errorText = await pullResponse.text();
-                        throw new Error(`Fetch failed: ${errorText}`);
                     }
-                } else {
-                    // No bin ID, create new bin
+                    
+                    // Create new bin if no binId or fetch failed
                     console.log('Creating new bin...');
-                    const createResponse = await fetch(`https://api.jsonbin.io/v3/b`, {
+                    const createUrl = 'https://api.jsonbin.io/v3/b';
+                    const createResponse = await fetch(createUrl, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -2957,214 +3094,163 @@
                         body: JSON.stringify(data)
                     });
                     
-                    console.log('Create response status:', createResponse.status);
-                    
                     if (createResponse.ok) {
                         const result = await createResponse.json();
-                        data.settings.binId = result.metadata.id;
-                        document.getElementById('bin-id').value = result.metadata.id;
+                        const newBinId = result.metadata.id;
+                        
+                        data.settings.binId = newBinId;
                         data.lastSync = new Date().toISOString();
+                        
+                        // Update the bin ID in the settings form
+                        const binIdInput = document.getElementById('bin-id');
+                        if (binIdInput) {
+                            binIdInput.value = newBinId;
+                        }
+                        
                         saveData();
                         updateLastSyncDisplay();
                         
                         syncButton.classList.remove('syncing');
-                        syncText.textContent = '✅ Created & Synced';
-                        showToast(`Cloud storage created! Bin ID: ${result.metadata.id}`, 'success');
-                        console.log('New bin created:', result.metadata.id);
+                        syncText.textContent = '✅ Created';
+                        showToast(`Cloud storage created! Bin ID: ${newBinId}`, 'success');
                         
                         setTimeout(() => {
                             syncText.textContent = '☁️ Sync';
                         }, 2000);
+                        
+                        renderHome();
+                        renderProjects();
+                        resolve({ added: 0, updated: 0, conflicts: 0 });
                     } else {
-                        const errorText = await createResponse.text();
-                        throw new Error(`Create failed: ${errorText}`);
+                        const errorData = await createResponse.text();
+                        throw new Error(`Failed to create bin: ${errorData}`);
                     }
+                    
+                } catch (error) {
+                    console.error('Sync error:', error);
+                    syncButton.classList.remove('syncing');
+                    syncText.textContent = '❌ Error';
+                    
+                    let errorMsg = 'Sync failed: ';
+                    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+                        errorMsg = 'Invalid API key. Please check your JSONBin API key.';
+                    } else if (error.message.includes('network')) {
+                        errorMsg = 'Network error. Check your internet connection.';
+                    } else {
+                        errorMsg += error.message.substring(0, 50);
+                    }
+                    
+                    showToast(errorMsg, 'error');
+                    
+                    setTimeout(() => {
+                        syncText.textContent = '☁️ Sync';
+                    }, 3000);
+                    
+                    reject(new Error(errorMsg));
                 }
-                
-                // Refresh current view
-                renderHome();
-                renderProjects();
-                
-            } catch (error) {
-                console.error('Sync error:', error);
-                syncButton.classList.remove('syncing');
-                syncText.textContent = '❌ Sync Error';
-                
-                // Provide more helpful error messages
-                let errorMessage = 'Smart Sync failed: ';
-                if (error.message.includes('401')) {
-                    errorMessage += 'Invalid API key. Please check your JSONBin API key.';
-                } else if (error.message.includes('404')) {
-                    errorMessage += 'Bin not found. Clear Bin ID to create a new one.';
-                } else if (error.message.includes('Failed to fetch')) {
-                    errorMessage += 'Network error. Check your internet connection.';
-                } else {
-                    errorMessage += error.message;
-                }
-                
-                showToast(errorMessage, 'error');
-                setTimeout(() => {
-                    syncText.textContent = '☁️ Sync';
-                }, 3000);
-            }
+            });
         }
 
         // Add timestamps to data items
         function addTimestamps() {
             const now = new Date().toISOString();
             
+            // Ensure arrays exist
+            initializeDataArrays();
+            
             // Add timestamps to projects
-            data.projects.forEach(project => {
-                if (!project.createdAt) project.createdAt = now;
-                if (!project.updatedAt) project.updatedAt = now;
-            });
+            if (data.projects && Array.isArray(data.projects)) {
+                data.projects.forEach(project => {
+                    if (!project.createdAt) project.createdAt = now;
+                    if (!project.updatedAt) project.updatedAt = now;
+                });
+            }
             
             // Add timestamps to tasks
-            data.tasks.forEach(task => {
-                if (!task.createdAt) task.createdAt = now;
-                if (!task.updatedAt) task.updatedAt = now;
-            });
+            if (data.tasks && Array.isArray(data.tasks)) {
+                data.tasks.forEach(task => {
+                    if (!task.createdAt) task.createdAt = now;
+                    if (!task.updatedAt) task.updatedAt = now;
+                });
+            }
             
             // Add timestamps to transactions
-            data.transactions.forEach(transaction => {
-                if (!transaction.createdAt) transaction.createdAt = now;
-                if (!transaction.updatedAt) transaction.updatedAt = now;
-            });
+            if (data.transactions && Array.isArray(data.transactions)) {
+                data.transactions.forEach(transaction => {
+                    if (!transaction.createdAt) transaction.createdAt = now;
+                    if (!transaction.updatedAt) transaction.updatedAt = now;
+                });
+            }
         }
 
-        // Smart Merge Data Function
+        // Smart Merge Data Function (Simplified)
         function smartMergeData(remoteData) {
             if (!remoteData) return { added: 0, updated: 0, conflicts: 0 };
             
+            // Ensure local data arrays exist
+            initializeDataArrays();
+            
             let syncStats = { added: 0, updated: 0, conflicts: 0 };
             
-            // Smart merge projects
-            if (remoteData.projects) {
-                remoteData.projects.forEach(remoteProject => {
-                    const localProject = data.projects.find(p => p.id === remoteProject.id);
-                    
-                    if (!localProject) {
-                        // New project from remote
-                        data.projects.push(remoteProject);
-                        syncStats.added++;
-                    } else if (remoteProject.updatedAt && localProject.updatedAt) {
-                        // Compare timestamps and keep the newer version
-                        if (new Date(remoteProject.updatedAt) > new Date(localProject.updatedAt)) {
-                            Object.assign(localProject, remoteProject);
-                            syncStats.updated++;
-                        } else if (new Date(remoteProject.updatedAt) < new Date(localProject.updatedAt)) {
-                            // Local is newer, keep local version
-                            syncStats.conflicts++;
-                        }
-                    }
-                });
-                
-                // Check for local projects not in remote (need to be added to remote)
-                data.projects.forEach(localProject => {
-                    const remoteProject = remoteData.projects.find(p => p.id === localProject.id);
-                    if (!remoteProject) {
-                        // This is a new local project that needs to be synced
-                        if (!localProject.updatedAt) {
-                            localProject.updatedAt = new Date().toISOString();
-                        }
-                    }
-                });
-            }
-            
-            // Smart merge tasks
-            if (remoteData.tasks) {
-                remoteData.tasks.forEach(remoteTask => {
-                    const localTask = data.tasks.find(t => t.id === remoteTask.id);
-                    
-                    if (!localTask) {
-                        // New task from remote
-                        data.tasks.push(remoteTask);
-                        syncStats.added++;
-                    } else if (remoteTask.updatedAt && localTask.updatedAt) {
-                        // Compare timestamps and keep the newer version
-                        if (new Date(remoteTask.updatedAt) > new Date(localTask.updatedAt)) {
-                            Object.assign(localTask, remoteTask);
-                            syncStats.updated++;
-                        } else if (new Date(remoteTask.updatedAt) < new Date(localTask.updatedAt)) {
-                            // Local is newer, keep local version
-                            syncStats.conflicts++;
-                        }
-                    }
-                });
-                
-                // Check for local tasks not in remote
-                data.tasks.forEach(localTask => {
-                    const remoteTask = remoteData.tasks.find(t => t.id === localTask.id);
-                    if (!remoteTask) {
-                        if (!localTask.updatedAt) {
-                            localTask.updatedAt = new Date().toISOString();
-                        }
-                    }
-                });
-            }
-            
-            // Smart merge transactions
-            if (remoteData.transactions) {
-                remoteData.transactions.forEach(remoteTrans => {
-                    const localTrans = data.transactions.find(t => t.id === remoteTrans.id);
-                    
-                    if (!localTrans) {
-                        // New transaction from remote
-                        data.transactions.push(remoteTrans);
-                        syncStats.added++;
-                    } else if (remoteTrans.updatedAt && localTrans.updatedAt) {
-                        // Compare timestamps and keep the newer version
-                        if (new Date(remoteTrans.updatedAt) > new Date(localTrans.updatedAt)) {
-                            Object.assign(localTrans, remoteTrans);
-                            syncStats.updated++;
-                        } else if (new Date(remoteTrans.updatedAt) < new Date(localTrans.updatedAt)) {
-                            // Local is newer, keep local version
-                            syncStats.conflicts++;
-                        }
-                    }
-                });
-                
-                // Check for local transactions not in remote
-                data.transactions.forEach(localTrans => {
-                    const remoteTrans = remoteData.transactions.find(t => t.id === localTrans.id);
-                    if (!remoteTrans) {
-                        if (!localTrans.updatedAt) {
-                            localTrans.updatedAt = new Date().toISOString();
-                        }
-                    }
-                });
-            }
-            
-            // Smart merge settings - keep the most recently modified
-            if (remoteData.settings) {
-                // Preserve API settings
-                const currentApiKey = data.settings.apiKey;
-                const currentBinId = data.settings.binId;
-                
-                // Check if remote settings are newer
-                if (remoteData.lastSync && data.lastSync) {
-                    if (new Date(remoteData.lastSync) > new Date(data.lastSync)) {
-                        // Remote is newer, use remote settings but preserve API keys
-                        data.settings = { ...remoteData.settings };
-                        data.settings.apiKey = currentApiKey;
-                        data.settings.binId = currentBinId;
-                        syncStats.updated++;
-                    }
-                } else {
-                    // Merge settings intelligently
-                    Object.keys(remoteData.settings).forEach(key => {
-                        if (key !== 'apiKey' && key !== 'binId' && remoteData.settings[key] !== data.settings[key]) {
-                            // Only update if remote has a value and local doesn't
-                            if (remoteData.settings[key] && !data.settings[key]) {
-                                data.settings[key] = remoteData.settings[key];
-                            }
+            try {
+                // Merge projects
+                if (remoteData.projects && Array.isArray(remoteData.projects)) {
+                    remoteData.projects.forEach(remoteProject => {
+                        const exists = data.projects.some(p => p.id === remoteProject.id);
+                        if (!exists) {
+                            data.projects.push(remoteProject);
+                            syncStats.added++;
                         }
                     });
                 }
+                
+                // Merge tasks
+                if (remoteData.tasks && Array.isArray(remoteData.tasks)) {
+                    remoteData.tasks.forEach(remoteTask => {
+                        const exists = data.tasks.some(t => t.id === remoteTask.id);
+                        if (!exists) {
+                            data.tasks.push(remoteTask);
+                            syncStats.added++;
+                        }
+                    });
+                }
+                
+                // Merge transactions
+                if (remoteData.transactions && Array.isArray(remoteData.transactions)) {
+                    remoteData.transactions.forEach(remoteTrans => {
+                        const exists = data.transactions.some(t => t.id === remoteTrans.id);
+                        if (!exists) {
+                            data.transactions.push(remoteTrans);
+                            syncStats.added++;
+                        }
+                    });
+                }
+                
+                // Merge settings (keep local API settings)
+                if (remoteData.settings) {
+                    const localApiKey = data.settings.apiKey;
+                    const localBinId = data.settings.binId;
+                    
+                    // Only update non-API settings
+                    Object.keys(remoteData.settings).forEach(key => {
+                        if (key !== 'apiKey' && key !== 'binId' && remoteData.settings[key]) {
+                            if (data.settings[key] !== remoteData.settings[key]) {
+                                data.settings[key] = remoteData.settings[key];
+                                syncStats.updated++;
+                            }
+                        }
+                    });
+                    
+                    // Preserve local API settings
+                    data.settings.apiKey = localApiKey;
+                    data.settings.binId = localBinId;
+                }
+                
+                saveData();
+                
+            } catch (error) {
+                console.error('Merge error:', error);
             }
-            
-            saveData();
-            applySettings();
             
             return syncStats;
         }
