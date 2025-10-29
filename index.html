@@ -244,70 +244,87 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* iPhone 15 Pro Max Optimization */
+        /* iPhone 15 Pro Max Optimization - OPTIMIZED VERSION */
         @media screen and (max-width: 430px) and (max-height: 932px) {
             body {
-                padding-bottom: calc(130px + var(--safe-area-inset-bottom)) !important;
+                padding-bottom: calc(100px + var(--safe-area-inset-bottom)) !important;
             }
             
             .header {
-                padding-top: calc(74px + var(--safe-area-inset-top)) !important;
-                height: calc(120px + var(--safe-area-inset-top)) !important;
+                padding-top: calc(50px + var(--safe-area-inset-top)) !important;
+                height: calc(85px + var(--safe-area-inset-top)) !important;
+                padding-bottom: 15px !important;
+            }
+            
+            .header-title {
+                font-size: calc(20px * var(--font-scale)) !important;
+                padding: 6px 10px !important;
+                min-width: 150px !important;
+            }
+            
+            .sync-button {
+                padding: 6px 12px !important;
+                font-size: calc(13px * var(--font-scale)) !important;
+                min-width: 80px !important;
             }
             
             .bottom-nav {
-                height: calc(120px + var(--safe-area-inset-bottom)) !important;
-                padding-bottom: calc(45px + var(--safe-area-inset-bottom)) !important;
-                padding-top: 18px !important;
+                height: calc(90px + var(--safe-area-inset-bottom)) !important;
+                padding-bottom: calc(25px + var(--safe-area-inset-bottom)) !important;
+                padding-top: 12px !important;
             }
             
             .nav-item {
-                padding: 16px 8px !important;
+                padding: 10px 6px !important;
             }
             
             .nav-item svg {
-                width: 32px !important;
-                height: 32px !important;
+                width: 28px !important;
+                height: 28px !important;
             }
             
             .nav-item span {
-                font-size: 13px !important;
-                margin-top: 8px !important;
+                font-size: 12px !important;
+                margin-top: 6px !important;
             }
             
             .container {
-                padding-top: calc(135px + var(--safe-area-inset-top)) !important;
-                padding-bottom: calc(140px + var(--safe-area-inset-bottom)) !important;
+                padding-top: calc(95px + var(--safe-area-inset-top)) !important;
+                padding-bottom: calc(105px + var(--safe-area-inset-bottom)) !important;
             }
             
             .modal-content {
                 width: calc(100% - 24px) !important;
                 margin: 12px !important;
-                max-height: calc(100vh - 140px) !important;
+                max-height: calc(100vh - 120px) !important;
             }
             
             .card {
-                padding: 22px !important;
-                margin-bottom: 22px !important;
+                padding: 18px !important;
+                margin-bottom: 16px !important;
             }
             
             .btn {
-                padding: 16px 28px !important;
-                font-size: 17px !important;
-                min-height: 48px !important;
+                padding: 14px 24px !important;
+                font-size: 16px !important;
+                min-height: 44px !important;
             }
             
             .stat-card {
-                padding: 22px !important;
-                min-height: 100px !important;
+                padding: 18px !important;
+                min-height: 90px !important;
             }
             
             .stat-value {
-                font-size: 28px !important;
+                font-size: 26px !important;
             }
             
             .stat-label {
-                font-size: 14px !important;
+                font-size: 13px !important;
+            }
+            
+            .toast {
+                top: calc(70px + var(--safe-area-inset-top)) !important;
             }
         }
 
@@ -3214,45 +3231,6 @@
             saveData();
             updateHeaderTitle();
             showToast('Settings saved successfully!', 'success');
-        }
-        
-        // Clear Bin ID helper
-        function clearBinId() {
-            document.getElementById('bin-id').value = '';
-            data.settings.binId = '';
-            saveData();
-            showToast('Bin ID cleared. Next sync will create a new storage.', 'success');
-        }
-        
-        // Copy Bin ID helper
-        function copyBinId() {
-            const binIdInput = document.getElementById('bin-id');
-            if (binIdInput.value) {
-                navigator.clipboard.writeText(binIdInput.value).then(() => {
-                    showToast('Bin ID copied to clipboard!', 'success');
-                }).catch(() => {
-                    // Fallback method
-                    binIdInput.select();
-                    document.execCommand('copy');
-                    showToast('Bin ID copied!', 'success');
-                });
-            } else {
-                showToast('No Bin ID to copy', 'warning');
-            }
-        }
-        
-        // Toggle API key visibility
-        function toggleApiKeyVisibility() {
-            const apiKeyInput = document.getElementById('api-key');
-            const toggleBtn = document.getElementById('api-key-toggle');
-            
-            if (apiKeyInput.type === 'password') {
-                apiKeyInput.type = 'text';
-                toggleBtn.textContent = '🙈 Hide';
-            } else {
-                apiKeyInput.type = 'password';
-                toggleBtn.textContent = '👁️ Show';
-            }
         }
 
         // Smart Sync Functions
