@@ -1472,18 +1472,30 @@
                 </div>
                 
                 <div class="form-group">
-                    <label>🔑 JSONBin API Key</label>
-                    <input type="password" class="form-control" id="api-key" placeholder="Enter your JSONBin API key">
+                    <label>🔑 JSONBin Master Key <span style="color: red;">*</span></label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="password" class="form-control" id="api-key" placeholder="Enter your JSONBin Master Key (X-Master-Key)" style="flex: 1;">
+                        <button class="btn btn-secondary" onclick="toggleApiKeyVisibility()" id="api-key-toggle">👁️ Show</button>
+                    </div>
                     <small style="color: var(--text-secondary); margin-top: 5px; display: block;">
-                        Get your free API key from <a href="https://jsonbin.io" target="_blank" style="color: var(--highlight-color);">JSONBin.io</a>
+                        Get your Master Key from <a href="https://jsonbin.io/api-keys" target="_blank" style="color: var(--highlight-color);">JSONBin API Keys</a><br>
+                        1. Sign up for free account<br>
+                        2. Go to API Keys section<br>
+                        3. Copy your <strong>Master Key</strong> (starts with $2a$ or $2b$)<br>
+                        ⚠️ <strong style="color: var(--danger);">Important:</strong> Use the Master Key (X-Master-Key), NOT the Access Key!
                     </small>
                 </div>
                 
                 <div class="form-group">
-                    <label>📦 Bin ID</label>
-                    <input type="text" class="form-control" id="bin-id" placeholder="Enter your Bin ID or leave empty to create new">
+                    <label>📦 Bin ID <span style="color: var(--text-secondary);">(optional)</span></label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="text" class="form-control" id="bin-id" placeholder="Leave empty to auto-create" style="flex: 1;">
+                        <button class="btn btn-secondary" onclick="copyBinId()" id="copy-bin-btn" style="white-space: nowrap;">📋 Copy</button>
+                        <button class="btn btn-secondary" onclick="clearBinId()" style="white-space: nowrap;">🗑️ Clear</button>
+                    </div>
                     <small style="color: var(--text-secondary); margin-top: 5px; display: block;">
-                        Leave empty to auto-create a new bin on first sync
+                        Leave empty to auto-create a new bin on first sync<br>
+                        If sync fails, try clearing this field to create a fresh bin
                     </small>
                 </div>
                 
@@ -1493,6 +1505,26 @@
                 </div>
                 
                 <div id="sync-status" style="padding: 10px; border-radius: 8px; margin-top: 10px; display: none;"></div>
+                
+                <div style="background: var(--accent-color); padding: 15px; border-radius: 10px; margin-top: 20px;">
+                    <h4 style="margin-top: 0;">📚 Quick Sync Setup Guide</h4>
+                    <ol style="margin: 10px 0; padding-left: 20px;">
+                        <li>Sign up for free at <a href="https://jsonbin.io" target="_blank" style="color: var(--highlight-color);">jsonbin.io</a></li>
+                        <li>Go to <a href="https://jsonbin.io/api-keys" target="_blank" style="color: var(--highlight-color);">API Keys</a> in your dashboard</li>
+                        <li>Find your <strong>Master Key</strong> (X-Master-Key)</li>
+                        <li>Copy the Master Key (starts with $2a$ or $2b$)</li>
+                        <li>Paste it in the Master Key field above</li>
+                        <li>Leave Bin ID empty (auto-creates)</li>
+                        <li>Click "Save Settings" then "Test Sync"</li>
+                    </ol>
+                    <div style="background: rgba(255,255,255,0.2); padding: 10px; border-radius: 5px; margin-top: 10px;">
+                        ⚠️ <strong>Important:</strong> You must use the <strong>Master Key</strong> (X-Master-Key), NOT the Access Key!<br>
+                        Master Keys start with $2a$ or $2b$ and are found in the API Keys section.
+                    </div>
+                    <small style="opacity: 0.9;">
+                        💡 <strong>Tip:</strong> Save your Bin ID after first sync to access the same data on other devices!
+                    </small>
+                </div>
             </div>
         </div>
     </div>
@@ -1992,7 +2024,7 @@
             }
         }
 
-        // Update Header Title
+        // Update Header Title with Enhanced Video Support
         function updateHeaderTitle() {
             const title = data.settings.appTitle || '🏗️ Builder Pro v3';
             const headerText = document.getElementById('header-text');
@@ -2010,20 +2042,56 @@
                     const videoId = extractYouTubeId(title);
                     if (videoId) {
                         headerText.innerHTML = `
+                            <div style="display: flex; align-items: center; gap: 10px;">
+                                <iframe 
+                                    width="160" 
+                                    height="40" 
+                                    src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&modestbranding=1&loop=1&playlist=${videoId}&rel=0&fs=0&iv_load_policy=3&disablekb=1&playsinline=1" 
+                                    frameborder="0" 
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                    style="border-radius: 8px; pointer-events: none;"
+                                    title="Header Video">
+                                </iframe>
+                            </div>
+                        `;
+                    }
+                } 
+                // Check for Vimeo video
+                else if (title.includes('vimeo.com')) {
+                    const vimeoId = title.match(/vimeo\.com\/(\d+)/);
+                    if (vimeoId && vimeoId[1]) {
+                        headerText.innerHTML = `
                             <iframe 
+                                src="https://player.vimeo.com/video/${vimeoId[1]}?autoplay=1&muted=1&loop=1&background=1&quality=360p" 
                                 width="160" 
                                 height="40" 
-                                src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&modestbranding=1&loop=1&playlist=${videoId}" 
                                 frameborder="0" 
-                                allow="autoplay; encrypted-media" 
                                 style="border-radius: 8px; pointer-events: none;"
+                                allow="autoplay; fullscreen; picture-in-picture" 
                                 title="Header Video">
                             </iframe>
                         `;
                     }
-                } 
-                // Check for video files
-                else if (title.match(/\.(mp4|webm|ogg|mov)$/i)) {
+                }
+                // Check for video files (including Google Drive, Dropbox)
+                else if (title.match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i) || 
+                         title.includes('drive.google.com') || 
+                         title.includes('dropbox.com')) {
+                    let videoUrl = title;
+                    
+                    // Convert Google Drive link to direct link
+                    if (title.includes('drive.google.com')) {
+                        const fileId = title.match(/[-\w]{25,}/);
+                        if (fileId) {
+                            videoUrl = `https://drive.google.com/uc?export=download&id=${fileId[0]}`;
+                        }
+                    }
+                    
+                    // Convert Dropbox link
+                    if (title.includes('dropbox.com')) {
+                        videoUrl = title.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
+                    }
+                    
                     headerText.innerHTML = `
                         <video 
                             width="160" 
@@ -2032,40 +2100,91 @@
                             muted 
                             loop 
                             playsinline
-                            style="border-radius: 8px; object-fit: cover;">
-                            <source src="${title}" type="video/${title.split('.').pop()}">
+                            webkit-playsinline
+                            x5-playsinline
+                            x5-video-player-type="h5"
+                            x5-video-player-fullscreen="false"
+                            style="border-radius: 8px; object-fit: cover; pointer-events: none;"
+                            onerror="this.style.display='none'; document.getElementById('header-text').innerHTML='🎬 Video Error';">
+                            <source src="${videoUrl}" type="video/mp4">
+                            <source src="${videoUrl}" type="video/webm">
+                            <source src="${videoUrl}" type="video/ogg">
                         </video>
+                    `;
+                    
+                    // Force autoplay on mobile with user interaction
+                    setTimeout(() => {
+                        const video = headerText.querySelector('video');
+                        if (video) {
+                            video.muted = true; // Ensure muted for autoplay
+                            const playPromise = video.play();
+                            if (playPromise !== undefined) {
+                                playPromise.then(() => {
+                                    console.log('Video autoplay started');
+                                }).catch(error => {
+                                    console.log('Video autoplay prevented:', error);
+                                    // Try again on first user interaction
+                                    document.addEventListener('click', function playVideo() {
+                                        video.play();
+                                        document.removeEventListener('click', playVideo);
+                                    }, { once: true });
+                                });
+                            }
+                        }
+                    }, 100);
+                }
+                // Check for GIF
+                else if (title.match(/\.(gif)$/i)) {
+                    headerText.innerHTML = `
+                        <img src="${title}" style="height: 50px; border-radius: 8px; object-fit: cover;" alt="Header Animation">
                     `;
                 }
                 // Check for image
-                else if (title.match(/\.(jpg|jpeg|png|gif|webp|svg)$/i)) {
+                else if (title.match(/\.(jpg|jpeg|png|webp|svg)$/i)) {
                     headerText.style.display = 'none';
                     headerMedia.src = title;
                     headerMedia.style.display = 'block';
-                    headerMedia.style.maxHeight = '40px';
+                    headerMedia.style.maxHeight = '50px';
                     headerMedia.style.borderRadius = '8px';
                 }
                 // Check for Instagram
                 else if (title.includes('instagram.com')) {
                     headerText.innerHTML = `
                         <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 20px;">📷</span> Instagram
+                            <span style="font-size: 24px;">📷</span> Instagram
                         </a>
                     `;
                 }
-                // Check for Facebook
+                // Check for Facebook video
                 else if (title.includes('facebook.com') || title.includes('fb.com')) {
-                    headerText.innerHTML = `
-                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 20px;">📘</span> Facebook
-                        </a>
-                    `;
+                    if (title.includes('/videos/') || title.includes('fb.watch')) {
+                        headerText.innerHTML = `
+                            <div style="color: white; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 24px;">📹</span> FB Video
+                                <a href="${title}" target="_blank" style="color: white; font-size: 10px;">[Open]</a>
+                            </div>
+                        `;
+                    } else {
+                        headerText.innerHTML = `
+                            <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                                <span style="font-size: 24px;">📘</span> Facebook
+                            </a>
+                        `;
+                    }
                 }
                 // Check for TikTok
                 else if (title.includes('tiktok.com')) {
                     headerText.innerHTML = `
                         <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 20px;">🎵</span> TikTok
+                            <span style="font-size: 24px;">🎵</span> TikTok
+                        </a>
+                    `;
+                }
+                // Check for Twitter/X video
+                else if (title.includes('twitter.com') || title.includes('x.com')) {
+                    headerText.innerHTML = `
+                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
+                            <span style="font-size: 24px;">🐦</span> X/Twitter
                         </a>
                     `;
                 }
@@ -2941,19 +3060,54 @@
             statusDiv.innerHTML = '⏳ Testing sync connection...';
             statusDiv.style.background = '#f0f0f0';
             statusDiv.style.color = '#333';
+            statusDiv.style.wordBreak = 'break-word';
+            statusDiv.style.maxHeight = '200px';
+            statusDiv.style.overflowY = 'auto';
             
             // Save settings first
             saveSettings();
             
+            // Check API key
+            const apiKey = (data.settings.apiKey || '').trim();
+            const binId = (data.settings.binId || '').trim();
+            
+            if (!apiKey) {
+                statusDiv.innerHTML = '❌ No API key entered. Please enter your JSONBin API key first.';
+                statusDiv.style.background = '#f8d7da';
+                statusDiv.style.color = '#721c24';
+                return;
+            }
+            
+            statusDiv.innerHTML = `⏳ Testing with Master Key: ${apiKey.substring(0, 8)}...${apiKey.substring(apiKey.length - 4)}<br>`;
+            statusDiv.innerHTML += `<small style="opacity: 0.7;">Key starts with: ${apiKey.substring(0, 4)} ${apiKey.startsWith('$2a$') || apiKey.startsWith('$2b$') ? '✅ (Looks like Master Key)' : '⚠️ (May not be Master Key)'}</small><br>`;
+            if (binId) {
+                statusDiv.innerHTML += `Bin ID: ${binId}<br>`;
+            } else {
+                statusDiv.innerHTML += `No Bin ID - will create new<br>`;
+            }
+            statusDiv.innerHTML += `<br>Attempting sync...`;
+            
             // Wait a moment for settings to save
             setTimeout(() => {
                 // Try to sync
-                syncData().then(() => {
-                    statusDiv.innerHTML = '✅ Sync test successful! Your data is now synced.';
+                syncData().then((result) => {
+                    statusDiv.innerHTML = '✅ Sync test successful!<br>';
+                    statusDiv.innerHTML += `Bin ID: ${data.settings.binId}<br>`;
+                    if (result) {
+                        statusDiv.innerHTML += `Added: ${result.added}, Updated: ${result.updated}`;
+                    }
                     statusDiv.style.background = '#d4edda';
                     statusDiv.style.color = '#155724';
                 }).catch(error => {
-                    statusDiv.innerHTML = `❌ Sync test failed: ${error.message || 'Unknown error'}`;
+                    console.error('Test sync error:', error);
+                    statusDiv.innerHTML = `❌ Sync test failed<br><br>`;
+                    statusDiv.innerHTML += `<strong>Error:</strong> ${error.message}<br><br>`;
+                    statusDiv.innerHTML += `<strong>Troubleshooting:</strong><br>`;
+                    statusDiv.innerHTML += `1. Make sure you're using the <strong>Master Key</strong> (X-Master-Key), NOT Access Key<br>`;
+                    statusDiv.innerHTML += `2. Master Keys start with $2a$ or $2b$<br>`;
+                    statusDiv.innerHTML += `3. Get your Master Key from <a href="https://jsonbin.io/api-keys" target="_blank">JSONBin API Keys</a><br>`;
+                    statusDiv.innerHTML += `4. If error says "Invalid API key", you're likely using an Access Key instead of Master Key<br>`;
+                    statusDiv.innerHTML += `5. If you have a Bin ID, make sure it's valid or clear it to create a new one`;
                     statusDiv.style.background = '#f8d7da';
                     statusDiv.style.color = '#721c24';
                 });
@@ -2986,28 +3140,131 @@
             saveData();
         }
 
+        // Toggle API Key Visibility
+        function toggleApiKeyVisibility() {
+            const apiKeyInput = document.getElementById('api-key');
+            const toggleBtn = document.getElementById('api-key-toggle');
+            
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+                toggleBtn.textContent = '🙈 Hide';
+            } else {
+                apiKeyInput.type = 'password';
+                toggleBtn.textContent = '👁️ Show';
+            }
+        }
+
+        // Copy Bin ID to Clipboard
+        function copyBinId() {
+            const binIdInput = document.getElementById('bin-id');
+            const binId = binIdInput.value.trim();
+            
+            if (!binId) {
+                showToast('No Bin ID to copy', 'warning');
+                return;
+            }
+            
+            // Copy to clipboard
+            navigator.clipboard.writeText(binId).then(() => {
+                const btn = document.getElementById('copy-bin-btn');
+                const originalText = btn.textContent;
+                btn.textContent = '✅ Copied!';
+                showToast('Bin ID copied to clipboard', 'success');
+                setTimeout(() => {
+                    btn.textContent = originalText;
+                }, 2000);
+            }).catch(() => {
+                // Fallback for older browsers
+                binIdInput.select();
+                document.execCommand('copy');
+                showToast('Bin ID copied to clipboard', 'success');
+            });
+        }
+
+        // Clear Bin ID Function
+        function clearBinId() {
+            if (confirm('Are you sure you want to clear the Bin ID? Next sync will create a new bin.')) {
+                document.getElementById('bin-id').value = '';
+                data.settings.binId = '';
+                saveData();
+                showToast('Bin ID cleared. Next sync will create a new bin.', 'success');
+            }
+        }
+
+        // Settings Functions
         function saveSettings() {
+            const apiKeyInput = document.getElementById('api-key');
+            const apiKey = apiKeyInput.value.trim();
+            
+            // Validate Master Key format
+            if (apiKey) {
+                if (apiKey.length < 20) {
+                    showToast('API key seems too short. JSONBin Master Keys usually start with $2a$ or $2b$ and are 50+ characters.', 'warning');
+                } else if (!apiKey.startsWith('$2a$') && !apiKey.startsWith('$2b$')) {
+                    showToast('⚠️ This doesn\'t look like a Master Key. Master Keys start with $2a$ or $2b$. Make sure you\'re using the Master Key (X-Master-Key), not an Access Key!', 'warning');
+                }
+            }
+            
             data.settings.userName = document.getElementById('user-name').value;
             data.settings.userPosition = document.getElementById('user-position').value;
             data.settings.appTitle = document.getElementById('app-title').value || '🏗️ Builder Pro v3';
-            data.settings.apiKey = document.getElementById('api-key').value;
-            data.settings.binId = document.getElementById('bin-id').value;
+            data.settings.apiKey = apiKey;
+            data.settings.binId = document.getElementById('bin-id').value.trim();
             
             saveData();
             updateHeaderTitle();
-            showToast('Settings saved', 'success');
+            showToast('Settings saved successfully!', 'success');
+        }
+        
+        // Clear Bin ID helper
+        function clearBinId() {
+            document.getElementById('bin-id').value = '';
+            data.settings.binId = '';
+            saveData();
+            showToast('Bin ID cleared. Next sync will create a new storage.', 'success');
+        }
+        
+        // Copy Bin ID helper
+        function copyBinId() {
+            const binIdInput = document.getElementById('bin-id');
+            if (binIdInput.value) {
+                navigator.clipboard.writeText(binIdInput.value).then(() => {
+                    showToast('Bin ID copied to clipboard!', 'success');
+                }).catch(() => {
+                    // Fallback method
+                    binIdInput.select();
+                    document.execCommand('copy');
+                    showToast('Bin ID copied!', 'success');
+                });
+            } else {
+                showToast('No Bin ID to copy', 'warning');
+            }
+        }
+        
+        // Toggle API key visibility
+        function toggleApiKeyVisibility() {
+            const apiKeyInput = document.getElementById('api-key');
+            const toggleBtn = document.getElementById('api-key-toggle');
+            
+            if (apiKeyInput.type === 'password') {
+                apiKeyInput.type = 'text';
+                toggleBtn.textContent = '🙈 Hide';
+            } else {
+                apiKeyInput.type = 'password';
+                toggleBtn.textContent = '👁️ Show';
+            }
         }
 
         // Smart Sync Functions
         async function syncData() {
             return new Promise(async (resolve, reject) => {
-                const syncButton = document.getElementById('sync-text').parentElement;
+                const syncButton = document.getElementById('sync-text')?.parentElement;
                 const syncText = document.getElementById('sync-text');
                 
                 // Check for API key
                 const apiKey = (data.settings.apiKey || '').trim();
                 if (!apiKey) {
-                    const error = 'Please enter your JSONBin API key in Settings';
+                    const error = 'Please enter your JSONBin Master Key (X-Master-Key) in Settings';
                     showToast(error, 'warning');
                     switchTab('settings');
                     reject(new Error(error));
@@ -3017,8 +3274,10 @@
                 // Get or create bin ID
                 let binId = (data.settings.binId || '').trim();
                 
-                syncButton.classList.add('syncing');
-                syncText.textContent = 'Syncing...';
+                if (syncButton && syncText) {
+                    syncButton.classList.add('syncing');
+                    syncText.textContent = 'Syncing...';
+                }
                 
                 try {
                     // Add timestamps before sync
@@ -3026,18 +3285,23 @@
                     
                     if (binId) {
                         // Try to fetch existing bin
+                        console.log('Attempting to fetch bin:', binId);
                         try {
                             const fetchUrl = `https://api.jsonbin.io/v3/b/${binId}/latest`;
                             const fetchResponse = await fetch(fetchUrl, {
                                 method: 'GET',
                                 headers: {
-                                    'X-Access-Key': apiKey
+                                    'X-Master-Key': apiKey,
+                                    'X-Bin-Meta': 'false'
                                 }
                             });
                             
+                            console.log('Fetch response status:', fetchResponse.status);
+                            
                             if (fetchResponse.ok) {
                                 const remoteData = await fetchResponse.json();
-                                const syncResult = smartMergeData(remoteData.record);
+                                console.log('Remote data fetched successfully');
+                                const syncResult = smartMergeData(remoteData);
                                 
                                 // Update the bin with merged data
                                 const updateUrl = `https://api.jsonbin.io/v3/b/${binId}`;
@@ -3045,7 +3309,7 @@
                                     method: 'PUT',
                                     headers: {
                                         'Content-Type': 'application/json',
-                                        'X-Access-Key': apiKey
+                                        'X-Master-Key': apiKey
                                     },
                                     body: JSON.stringify(data)
                                 });
@@ -3055,8 +3319,10 @@
                                     saveData();
                                     updateLastSyncDisplay();
                                     
-                                    syncButton.classList.remove('syncing');
-                                    syncText.textContent = '✅ Synced';
+                                    if (syncButton && syncText) {
+                                        syncButton.classList.remove('syncing');
+                                        syncText.textContent = '✅ Synced';
+                                    }
                                     
                                     let message = 'Sync Complete! ';
                                     if (syncResult.added > 0 || syncResult.updated > 0) {
@@ -3067,83 +3333,165 @@
                                     showToast(message, 'success');
                                     
                                     setTimeout(() => {
-                                        syncText.textContent = '☁️ Sync';
+                                        if (syncText) syncText.textContent = '☁️ Sync';
                                     }, 2000);
                                     
                                     renderHome();
                                     renderProjects();
                                     resolve(syncResult);
                                     return;
+                                } else {
+                                    const errorText = await updateResponse.text();
+                                    console.error('Update failed:', errorText);
+                                    throw new Error(`Update failed: ${updateResponse.status}`);
                                 }
+                            } else if (fetchResponse.status === 401) {
+                                throw new Error('Authentication failed. You must use the Master Key (X-Master-Key) from JSONBin, not the Access Key. Master Keys start with $2a$ or $2b$.');
+                            } else if (fetchResponse.status === 404) {
+                                console.log('Bin not found, will create new one');
+                                binId = ''; // Clear bin ID to create new
+                            } else {
+                                const errorText = await fetchResponse.text();
+                                console.error('Fetch failed:', errorText);
+                                throw new Error(`Fetch failed: ${fetchResponse.status}`);
                             }
                         } catch (e) {
-                            console.log('Bin fetch failed, will try to create new:', e.message);
+                            if (e.message.includes('Invalid API key')) {
+                                throw e;
+                            }
+                            console.log('Bin fetch error:', e.message);
+                            if (!binId || e.message.includes('404')) {
+                                binId = ''; // Try to create new bin
+                            } else {
+                                throw e;
+                            }
                         }
                     }
                     
                     // Create new bin if no binId or fetch failed
-                    console.log('Creating new bin...');
-                    const createUrl = 'https://api.jsonbin.io/v3/b';
-                    const createResponse = await fetch(createUrl, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-Access-Key': apiKey,
-                            'X-Bin-Name': 'Builder Pro Data'
-                        },
-                        body: JSON.stringify(data)
-                    });
-                    
-                    if (createResponse.ok) {
-                        const result = await createResponse.json();
-                        const newBinId = result.metadata.id;
+                    if (!binId) {
+                        console.log('Creating new bin...');
+                        const createUrl = 'https://api.jsonbin.io/v3/b';
                         
-                        data.settings.binId = newBinId;
-                        data.lastSync = new Date().toISOString();
+                        // Prepare the data
+                        const bodyData = JSON.stringify(data);
                         
-                        // Update the bin ID in the settings form
-                        const binIdInput = document.getElementById('bin-id');
-                        if (binIdInput) {
-                            binIdInput.value = newBinId;
+                        // Create the request with proper headers
+                        const createResponse = await fetch(createUrl, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': apiKey,  // Use X-Master-Key for JSONBin API v3
+                                'X-Bin-Name': 'Builder Pro Data'
+                            },
+                            body: bodyData
+                        });
+                        
+                        const responseText = await createResponse.text();
+                        console.log('Create response status:', createResponse.status);
+                        
+                        if (createResponse.ok) {
+                            try {
+                                const result = JSON.parse(responseText);
+                                const newBinId = result.metadata?.id;
+                                
+                                if (!newBinId) {
+                                    throw new Error('No bin ID received from server');
+                                }
+                                
+                                console.log('Bin created successfully:', newBinId);
+                                
+                                data.settings.binId = newBinId;
+                                data.lastSync = new Date().toISOString();
+                                
+                                // Update the bin ID in the settings form
+                                const binIdInput = document.getElementById('bin-id');
+                                if (binIdInput) {
+                                    binIdInput.value = newBinId;
+                                }
+                                
+                                saveData();
+                                updateLastSyncDisplay();
+                                
+                                if (syncButton && syncText) {
+                                    syncButton.classList.remove('syncing');
+                                    syncText.textContent = '✅ Created';
+                                }
+                                
+                                showToast(`Cloud storage created! Bin ID: ${newBinId}`, 'success');
+                                
+                                setTimeout(() => {
+                                    if (syncText) syncText.textContent = '☁️ Sync';
+                                }, 2000);
+                                
+                                renderHome();
+                                renderProjects();
+                                resolve({ added: 0, updated: 0, conflicts: 0 });
+                            } catch (parseError) {
+                                console.error('Parse error:', parseError);
+                                throw new Error('Invalid response from server');
+                            }
+                        } else {
+                            // Handle error response
+                            let errorMsg = '';
+                            
+                            try {
+                                const errorData = JSON.parse(responseText);
+                                console.error('Error data:', errorData);
+                                
+                                if (errorData.message) {
+                                    if (errorData.message.includes('X-Master-Key') || errorData.message.includes('X-Access-Key')) {
+                                        errorMsg = 'Wrong API Key type! You MUST use the Master Key (X-Master-Key) from JSONBin, not the Access Key. Master Keys start with $2a$ or $2b$. Go to jsonbin.io/api-keys to find your Master Key.';
+                                    } else {
+                                        errorMsg = errorData.message;
+                                    }
+                                } else {
+                                    errorMsg = 'Unknown error from JSONBin';
+                                }
+                            } catch {
+                                // If response is not JSON
+                                if (createResponse.status === 401) {
+                                    errorMsg = 'Authentication failed. You must use the Master Key (X-Master-Key) from JSONBin, not the Access Key. Master Keys start with $2a$ or $2b$.';
+                                } else if (createResponse.status === 400) {
+                                    errorMsg = 'Bad request. Make sure you are using the Master Key (starts with $2a$ or $2b$), not an Access Key.';
+                                } else if (createResponse.status === 403) {
+                                    errorMsg = 'Access forbidden. Check that you are using the Master Key with proper permissions.';
+                                } else {
+                                    errorMsg = `Server error (${createResponse.status})`;
+                                }
+                            }
+                            
+                            throw new Error(errorMsg);
                         }
-                        
-                        saveData();
-                        updateLastSyncDisplay();
-                        
-                        syncButton.classList.remove('syncing');
-                        syncText.textContent = '✅ Created';
-                        showToast(`Cloud storage created! Bin ID: ${newBinId}`, 'success');
-                        
-                        setTimeout(() => {
-                            syncText.textContent = '☁️ Sync';
-                        }, 2000);
-                        
-                        renderHome();
-                        renderProjects();
-                        resolve({ added: 0, updated: 0, conflicts: 0 });
-                    } else {
-                        const errorData = await createResponse.text();
-                        throw new Error(`Failed to create bin: ${errorData}`);
                     }
                     
                 } catch (error) {
                     console.error('Sync error:', error);
-                    syncButton.classList.remove('syncing');
-                    syncText.textContent = '❌ Error';
+                    
+                    if (syncButton && syncText) {
+                        syncButton.classList.remove('syncing');
+                        syncText.textContent = '❌ Error';
+                    }
                     
                     let errorMsg = 'Sync failed: ';
-                    if (error.message.includes('401') || error.message.includes('Unauthorized')) {
-                        errorMsg = 'Invalid API key. Please check your JSONBin API key.';
-                    } else if (error.message.includes('network')) {
+                    if (error.message.includes('Invalid API key') || error.message.includes('X-Access-Key') || error.message.includes('X-Master-Key')) {
+                        errorMsg = 'Invalid API key. You must use the Master Key (X-Master-Key) from JSONBin, not the Access Key. Master Keys start with $2a$ or $2b$.';
+                    } else if (error.message.includes('401') || error.message.includes('Unauthorized')) {
+                        errorMsg = 'Authentication failed. Please ensure you are using the Master Key (X-Master-Key), not Access Key.';
+                    } else if (error.message.includes('Failed to fetch') || error.message.includes('network')) {
                         errorMsg = 'Network error. Check your internet connection.';
+                    } else if (error.message.includes('403')) {
+                        errorMsg = 'Access denied. Check your API key permissions.';
+                    } else if (error.message.includes('404')) {
+                        errorMsg = 'Bin not found. Clear the Bin ID field to create a new bin.';
                     } else {
-                        errorMsg += error.message.substring(0, 50);
+                        errorMsg = error.message;
                     }
                     
                     showToast(errorMsg, 'error');
                     
                     setTimeout(() => {
-                        syncText.textContent = '☁️ Sync';
+                        if (syncText) syncText.textContent = '☁️ Sync';
                     }, 3000);
                     
                     reject(new Error(errorMsg));
@@ -3187,6 +3535,9 @@
         function smartMergeData(remoteData) {
             if (!remoteData) return { added: 0, updated: 0, conflicts: 0 };
             
+            // Handle both direct data and wrapped data
+            const dataToMerge = remoteData.record || remoteData;
+            
             // Ensure local data arrays exist
             initializeDataArrays();
             
@@ -3194,8 +3545,8 @@
             
             try {
                 // Merge projects
-                if (remoteData.projects && Array.isArray(remoteData.projects)) {
-                    remoteData.projects.forEach(remoteProject => {
+                if (dataToMerge.projects && Array.isArray(dataToMerge.projects)) {
+                    dataToMerge.projects.forEach(remoteProject => {
                         const exists = data.projects.some(p => p.id === remoteProject.id);
                         if (!exists) {
                             data.projects.push(remoteProject);
@@ -3205,8 +3556,8 @@
                 }
                 
                 // Merge tasks
-                if (remoteData.tasks && Array.isArray(remoteData.tasks)) {
-                    remoteData.tasks.forEach(remoteTask => {
+                if (dataToMerge.tasks && Array.isArray(dataToMerge.tasks)) {
+                    dataToMerge.tasks.forEach(remoteTask => {
                         const exists = data.tasks.some(t => t.id === remoteTask.id);
                         if (!exists) {
                             data.tasks.push(remoteTask);
@@ -3216,8 +3567,8 @@
                 }
                 
                 // Merge transactions
-                if (remoteData.transactions && Array.isArray(remoteData.transactions)) {
-                    remoteData.transactions.forEach(remoteTrans => {
+                if (dataToMerge.transactions && Array.isArray(dataToMerge.transactions)) {
+                    dataToMerge.transactions.forEach(remoteTrans => {
                         const exists = data.transactions.some(t => t.id === remoteTrans.id);
                         if (!exists) {
                             data.transactions.push(remoteTrans);
@@ -3227,15 +3578,15 @@
                 }
                 
                 // Merge settings (keep local API settings)
-                if (remoteData.settings) {
+                if (dataToMerge.settings) {
                     const localApiKey = data.settings.apiKey;
                     const localBinId = data.settings.binId;
                     
                     // Only update non-API settings
-                    Object.keys(remoteData.settings).forEach(key => {
-                        if (key !== 'apiKey' && key !== 'binId' && remoteData.settings[key]) {
-                            if (data.settings[key] !== remoteData.settings[key]) {
-                                data.settings[key] = remoteData.settings[key];
+                    Object.keys(dataToMerge.settings).forEach(key => {
+                        if (key !== 'apiKey' && key !== 'binId' && dataToMerge.settings[key]) {
+                            if (data.settings[key] !== dataToMerge.settings[key]) {
+                                data.settings[key] = dataToMerge.settings[key];
                                 syncStats.updated++;
                             }
                         }
