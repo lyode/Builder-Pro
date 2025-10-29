@@ -7,8 +7,8 @@
     <!-- PWA Meta Tags -->
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="application-name" content="Builder Pro">
-    <meta name="apple-mobile-web-app-title" content="Builder Pro">
+    <meta name="application-name" content="Smart Sync">
+    <meta name="apple-mobile-web-app-title" content="Smart Sync">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#E8A9B3">
     <meta name="msapplication-navbutton-color" content="#E8A9B3">
@@ -22,7 +22,7 @@
     <link rel="icon" type="image/png" id="favicon">
     <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiQnVpbGRlciBQcm8gdjMiLCJzaG9ydF9uYW1lIjoiQnVpbGRlciBQcm8iLCJzdGFydF91cmwiOiIvIiwiZGlzcGxheSI6InN0YW5kYWxvbmUiLCJiYWNrZ3JvdW5kX2NvbG9yIjoiI0U4QTlCMyIsInRoZW1lX2NvbG9yIjoiI0U4QTlCMyJ9">
     
-    <title>Builder Pro</title>
+    <title>Smart Sync</title>
     
     <style>
         :root {
@@ -251,8 +251,8 @@
             }
             
             .header {
-                padding-top: calc(50px + var(--safe-area-inset-top)) !important;
-                height: calc(85px + var(--safe-area-inset-top)) !important;
+                padding-top: calc(30px + var(--safe-area-inset-top)) !important;
+                height: calc(65px + var(--safe-area-inset-top)) !important;
                 padding-bottom: 15px !important;
                 display: flex !important;
                 align-items: center !important;
@@ -296,7 +296,7 @@
             }
             
             .container {
-                padding-top: calc(75px + var(--safe-area-inset-top)) !important;
+                padding-top: calc(55px + var(--safe-area-inset-top)) !important;
                 padding-bottom: calc(105px + var(--safe-area-inset-bottom)) !important;
             }
             
@@ -331,7 +331,7 @@
             }
             
             .toast {
-                top: calc(60px + var(--safe-area-inset-top)) !important;
+                top: calc(40px + var(--safe-area-inset-top)) !important;
             }
         }
 
@@ -1356,7 +1356,7 @@
     <div class="header">
         <div class="header-content">
             <div class="header-title" id="header-title" onclick="editHeaderTitle()" title="Click to edit app title">
-                <span id="header-text">🏗️ Builder Pro v3</span>
+                <span id="header-text">⚡ Smart Sync</span>
                 <img id="header-media" class="header-media" style="display: none;">
                 <span style="margin-left: 8px; opacity: 0.7; font-size: 16px;">✏️</span>
             </div>
@@ -1809,7 +1809,7 @@
                 binId: '',
                 nightMode: false,
                 fontSize: 'm',
-                appTitle: '🏗️ Builder Pro v3'
+                appTitle: '⚡ Smart Sync'
             },
             lastSync: null
         };
@@ -1945,9 +1945,9 @@
             
             // Also set up manifest for PWA
             const manifest = {
-                name: 'Builder Pro v3',
-                short_name: 'Builder Pro',
-                description: 'Professional Project Management App',
+                name: 'Smart Sync',
+                short_name: 'Smart Sync',
+                description: 'Smart Project Management & Sync App',
                 start_url: '/',
                 display: 'standalone',
                 background_color: '#E8A9B3',
@@ -1999,7 +1999,7 @@
 
         // Load Data
         function loadData() {
-            const stored = localStorage.getItem('builderProData');
+            const stored = localStorage.getItem('smartSyncData');
             if (stored) {
                 data = JSON.parse(stored);
                 initializeDataArrays(); // Ensure arrays exist
@@ -2009,7 +2009,7 @@
 
         // Save Data
         function saveData() {
-            localStorage.setItem('builderProData', JSON.stringify(data));
+            localStorage.setItem('smartSyncData', JSON.stringify(data));
         }
 
         // Apply Settings
@@ -2050,7 +2050,7 @@
 
         // Update Header Title with Enhanced Video Support
         function updateHeaderTitle() {
-            const title = data.settings.appTitle || '🏗️ Builder Pro v3';
+            const title = data.settings.appTitle || '⚡ Smart Sync';
             const headerText = document.getElementById('header-text');
             const headerMedia = document.getElementById('header-media');
             
@@ -2259,7 +2259,7 @@
         // Save Header Title
         function saveHeaderTitle() {
             const newTitle = document.getElementById('header-input').value.trim();
-            data.settings.appTitle = newTitle || '🏗️ Builder Pro v3';
+            data.settings.appTitle = newTitle || '⚡ Smart Sync';
             saveData();
             updateHeaderTitle();
             closeModal('header-edit-modal');
@@ -3231,7 +3231,7 @@
             
             data.settings.userName = document.getElementById('user-name').value;
             data.settings.userPosition = document.getElementById('user-position').value;
-            data.settings.appTitle = document.getElementById('app-title').value || '🏗️ Builder Pro v3';
+            data.settings.appTitle = document.getElementById('app-title').value || '⚡ Smart Sync';
             data.settings.apiKey = apiKey;
             data.settings.binId = document.getElementById('bin-id').value.trim();
             
@@ -3367,7 +3367,7 @@
                             headers: {
                                 'Content-Type': 'application/json',
                                 'X-Master-Key': apiKey,  // Use X-Master-Key for JSONBin API v3
-                                'X-Bin-Name': 'Builder Pro Data'
+                                'X-Bin-Name': 'Smart Sync Data'
                             },
                             body: bodyData
                         });
