@@ -30,7 +30,7 @@
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
             --safe-area-inset-left: env(safe-area-inset-left, 0px);
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
-            --mobile-header-offset: 40px;
+            --mobile-header-offset: 0px;
             
             --bg-color: #F4EDEB;
             --accent-color: #E8A9B3;
@@ -245,96 +245,57 @@
             transition: background-color 0.3s, color 0.3s;
         }
 
-        /* iPhone 15 Pro Max Optimization - OPTIMIZED VERSION */
+        /* iPhone 15 Pro Max Optimization - IMPROVED VERSION */
         @media screen and (max-width: 430px) and (max-height: 932px) {
             body {
-                --mobile-header-offset: -0px;
                 padding-bottom: calc(8px + var(--safe-area-inset-bottom)) !important;
             }
             
             .header {
-                padding-top: calc(20px + var(--safe-area-inset-top)) !important;
-                height: calc(35px + var(--safe-area-inset-top)) !important;
-                padding-bottom: 15px !important;
-                display: flex !important;
-                align-items: center !important;
-                transform: translateY(var(--mobile-header-offset));
+                padding-top: calc(10px + var(--safe-area-inset-top)) !important;
+                height: calc(70px + var(--safe-area-inset-top)) !important;
+                padding-bottom: 10px !important;
             }
             
             .header-content {
-                margin-top: auto !important;
-                margin-bottom: auto !important;
+                height: 100%;
+                display: flex;
+                align-items: center;
             }
             
             .header-title {
-                font-size: calc(18px * var(--font-scale)) !important;
+                font-size: calc(20px * var(--font-scale)) !important;
                 padding: 10px 15px !important;
-                min-width: 150px !important;
             }
             
             .sync-button {
-                padding: 6px 12px !important;
-                font-size: calc(13px * var(--font-scale)) !important;
-                min-width: 80px !important;
+                padding: 8px 14px !important;
+                font-size: calc(14px * var(--font-scale)) !important;
             }
             
             .bottom-nav {
-                height: calc(50px + var(--safe-area-inset-bottom)) !important;
-                padding-bottom: calc(25px + var(--safe-area-inset-bottom)) !important;
-                padding-top: 10px !important;
+                height: calc(70px + var(--safe-area-inset-bottom)) !important;
+                padding-bottom: var(--safe-area-inset-bottom) !important;
+                padding-top: 8px !important;
             }
             
             .nav-item {
-                padding: 10px 6px !important;
+                padding: 8px 6px !important;
             }
             
             .nav-item svg {
-                width: 28px !important;
-                height: 28px !important;
+                width: 26px !important;
+                height: 26px !important;
             }
             
             .nav-item span {
-                font-size: 12px !important;
-                margin-top: 6px !important;
+                font-size: 11px !important;
+                margin-top: 4px !important;
             }
             
             .container {
-                padding-top: calc(55px + var(--safe-area-inset-top)) !important;
-                padding-bottom: calc(105px + var(--safe-area-inset-bottom)) !important;
-            }
-            
-            .modal-content {
-                width: calc(100% - 24px) !important;
-                margin: 12px !important;
-                max-height: calc(100vh - 120px) !important;
-            }
-            
-            .card {
-                padding: 18px !important;
-                margin-bottom: 16px !important;
-            }
-            
-            .btn {
-                padding: 14px 24px !important;
-                font-size: 16px !important;
-                min-height: 44px !important;
-            }
-            
-            .stat-card {
-                padding: 18px !important;
-                min-height: 90px !important;
-            }
-            
-            .stat-value {
-                font-size: 26px !important;
-            }
-            
-            .stat-label {
-                font-size: 13px !important;
-            }
-            
-            .toast {
-                top: calc(40px + var(--safe-area-inset-top)) !important;
+                padding-top: calc(85px + var(--safe-area-inset-top)) !important;
+                padding-bottom: calc(85px + var(--safe-area-inset-bottom)) !important;
             }
         }
 
@@ -349,7 +310,7 @@
             z-index: 1000;
             padding-left: calc(10px + var(--safe-area-inset-left));
             padding-right: calc(10px + var(--safe-area-inset-right));
-            height: calc(40px + var(--safe-area-inset-top));
+            height: calc(80px + var(--safe-area-inset-top));
         }
 
         .header-content {
@@ -372,7 +333,6 @@
             border-radius: 3px;
             background: rgba(255, 255, 255, 0.1);
             transition: all 0.3s;
-            min-width: 180px;
         }
 
         .header-title:hover {
@@ -380,25 +340,17 @@
             transform: scale(1.05);
         }
 
-        .header-media {
-            max-height: 40px;
-            border-radius: 8px;
-            object-fit: cover;
-        }
-
         .sync-button {
             background: rgba(242, 239, 225, 100);
             color: offwhite;
             border: none;
-            padding: 8px 16px;
+            padding: 10px 18px;
             border-radius: 20px;
             cursor: pointer;
             font-size: calc(14px * var(--font-scale));
             backdrop-filter: blur(10px);
             transition: all 0.3s;
-            min-width: 100px;
             text-align: center;
-            position: relative;
         }
 
         .sync-button:hover {
@@ -417,7 +369,7 @@
         }
 
         .container {
-            padding: calc(115px + var(--safe-area-inset-top)) 20px calc(110px + var(--safe-area-inset-bottom)) 20px;
+            padding: calc(105px + var(--safe-area-inset-top)) 20px calc(90px + var(--safe-area-inset-bottom)) 20px;
             max-width: 1200px;
             margin: 0 auto;
             padding-left: calc(20px + var(--safe-area-inset-left));
@@ -508,9 +460,9 @@
             display: flex;
             justify-content: space-around;
             align-items: center;
-            padding: 15px 10px calc(15px + var(--safe-area-inset-bottom));
+            padding: 12px 10px calc(12px + var(--safe-area-inset-bottom));
             z-index: 1000;
-            height: calc(90px + var(--safe-area-inset-bottom));
+            height: calc(75px + var(--safe-area-inset-bottom));
         }
 
         .nav-item {
@@ -788,15 +740,12 @@
             min-width: 20px;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             padding: 0 12px;
             color: white;
             font-size: calc(11px * var(--font-scale));
             font-weight: 500;
             box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            line-height: 1.4;
         }
 
         .timeline-bar.completed {
@@ -1358,10 +1307,8 @@
 <body>
     <div class="header">
         <div class="header-content">
-            <div class="header-title" id="header-title" onclick="editHeaderTitle()" title="Click to edit app title">
-                <span id="header-text">⚡ Smart Sync</span>
-                <img id="header-media" class="header-media" style="display: none;">
-                <span style="margin-left: 8px; opacity: 0.7; font-size: 16px;">✏️</span>
+            <div class="header-title" onclick="switchTab('home')">
+                🏗️ Builder Pro
             </div>
             <button class="sync-button" onclick="syncData()" title="Click to sync">
                 <span id="sync-text">☁️ Sync</span>
@@ -1380,7 +1327,7 @@
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="pending-tasks">0</div>
-                    <div class="stat-label">Pending Tasks</div>
+                    <div class="stat-label">Active Tasks</div>
                 </div>
                 <div class="stat-card">
                     <div class="stat-value" id="total-budget">$0</div>
@@ -1451,15 +1398,6 @@
         <div id="settings" class="tab-content">
             <div class="card">
                 <h2>⚙️ Settings</h2>
-                
-                <div class="form-group">
-                    <label>🏗️ App Title (Click header to edit)</label>
-                    <input type="text" class="form-control" id="app-title" placeholder="Enter app title or media URL">
-                    <small style="color: var(--text-secondary); margin-top: 5px; display: block;">
-                        <strong>Quick tip:</strong> Click the app name in the top-left corner to edit it directly!<br>
-                        Supports: Text, YouTube videos (autoplay), Images, Video files (.mp4), Social media links
-                    </small>
-                </div>
                 
                 <div class="form-group">
                     <label>Your Name</label>
@@ -1764,35 +1702,6 @@
         </div>
     </div>
 
-    <!-- Header Edit Modal -->
-    <div id="header-edit-modal" class="modal">
-        <div class="modal-backdrop" onclick="closeModal('header-edit-modal')"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Edit App Title</h2>
-                <button class="modal-close" onclick="closeModal('header-edit-modal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Enter Title or Media URL</label>
-                    <input type="text" class="form-control" id="header-input" placeholder="Text, YouTube/FB/IG link, video URL, or image URL">
-                    <small style="color: var(--text-secondary); margin-top: 8px; display: block;">
-                        <strong>Supported formats:</strong><br>
-                        • Text: Any text or emoji (e.g., "🏗️ My Company")<br>
-                        • YouTube: Full URL (will autoplay muted)<br>
-                        • Video: Direct .mp4, .webm, .mov links (will autoplay)<br>
-                        • Image: Direct .jpg, .png, .gif links<br>
-                        • Social: Instagram, Facebook, TikTok links
-                    </small>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('header-edit-modal')">Cancel</button>
-                <button class="btn btn-primary" onclick="saveHeaderTitle()">Save</button>
-            </div>
-        </div>
-    </div>
-
     <!-- Toast Container -->
     <div id="toast" class="toast">
         <span id="toast-message"></span>
@@ -1811,13 +1720,12 @@
                 apiKey: '',
                 binId: '',
                 nightMode: false,
-                fontSize: 'm',
-                appTitle: '🏗️ Builder Pro'
+                fontSize: 'm'
             },
             lastSync: null
         };
 
-        // Initialize data arrays if missing (for compatibility)
+        // Initialize data arrays if missing
         function initializeDataArrays() {
             if (!data.projects) data.projects = [];
             if (!data.tasks) data.tasks = [];
@@ -1856,12 +1764,9 @@
             loadData();
             renderHome();
             renderThemeOptions();
-            generateIcons();
-            checkViewportHeight();
-            updateHeaderTitle();
             updateLastSyncDisplay();
             
-            // Auto-sync on load if configured (with delay to ensure everything is loaded)
+            // Auto-sync on load if configured
             if (data.settings.apiKey) {
                 setTimeout(() => {
                     syncData().catch(error => {
@@ -1880,7 +1785,7 @@
                         console.log('Periodic sync failed:', error.message);
                     });
                 }
-            }, 300000); // 5 minutes
+            }, 300000);
         });
 
         // Update Last Sync Display
@@ -1914,126 +1819,36 @@
             }
         }
 
-        // Set PWA Icons using the GitHub image
-        function generateIcons() {
-            // Use the actual image from your GitHub repository
-            // The correct raw GitHub URL format
-            const iconUrl = 'https://raw.githubusercontent.com/lyode/Builder-Pro/main/images_copy.png';
-            
-            // Create an image element to load the icon
-            const img = new Image();
-            img.crossOrigin = 'anonymous';
-            img.onload = function() {
-                // Set all icon sizes to use the same image
-                document.getElementById('icon180').href = iconUrl;
-                document.getElementById('icon152').href = iconUrl;
-                document.getElementById('icon120').href = iconUrl;
-                document.getElementById('favicon').href = iconUrl;
-                
-                console.log('Icons loaded successfully');
-            };
-            
-            img.onerror = function() {
-                // Fallback to a data URL icon if GitHub image fails
-                console.log('Failed to load GitHub icon, using fallback');
-                const fallbackIcon = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIj48ZGVmcz48bGluZWFyR3JhZGllbnQgaWQ9ImEiIHgxPSIwJSIgeTE9IjAlIiB4Mj0iMTAwJSIgeTI9IjEwMCUiPjxzdG9wIG9mZnNldD0iMCUiIHN0b3AtY29sb3I9IiNFOEE5QjMiLz48c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNENDdDOTAiLz48L2xpbmVhckdyYWRpZW50PjwvZGVmcz48cmVjdCB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiIgcng9IjEwMCIgZmlsbD0idXJsKCNhKSIvPjx0ZXh0IHg9IjI1NiIgeT0iMjgwIiBmb250LWZhbWlseT0iQXJpYWwiIGZvbnQtc2l6ZT0iMjAwIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0id2hpdGUiIHRleHQtYW5jaG9yPSJtaWRkbGUiPkI8L3RleHQ+PC9zdmc+';
-                
-                document.getElementById('icon180').href = fallbackIcon;
-                document.getElementById('icon152').href = fallbackIcon;
-                document.getElementById('icon120').href = fallbackIcon;
-                document.getElementById('favicon').href = fallbackIcon;
-            };
-            
-            img.src = iconUrl;
-            
-            // Also set up manifest for PWA
-            const manifest = {
-                name: 'Smart Sync',
-                short_name: 'Smart Sync',
-                description: 'Smart Project Management & Sync App',
-                start_url: '/',
-                display: 'standalone',
-                background_color: '#E8A9B3',
-                theme_color: '#E8A9B3',
-                orientation: 'portrait',
-                icons: [
-                    {
-                        src: iconUrl,
-                        sizes: '192x192',
-                        type: 'image/png',
-                        purpose: 'any maskable'
-                    },
-                    {
-                        src: iconUrl,
-                        sizes: '512x512',
-                        type: 'image/png',
-                        purpose: 'any maskable'
-                    }
-                ]
-            };
-            
-            // Create and inject manifest
-            const manifestBlob = new Blob([JSON.stringify(manifest)], { type: 'application/json' });
-            const manifestUrl = URL.createObjectURL(manifestBlob);
-            
-            let manifestLink = document.querySelector('link[rel="manifest"]');
-            if (!manifestLink) {
-                manifestLink = document.createElement('link');
-                manifestLink.rel = 'manifest';
-                document.head.appendChild(manifestLink);
-            }
-            manifestLink.href = manifestUrl;
-            
-            // Set meta theme color
-            const metaTheme = document.querySelector('meta[name="theme-color"]');
-            if (metaTheme) {
-                metaTheme.content = '#E8A9B3';
-            }
-        }
-
-        // Check viewport height for iPhone
-        function checkViewportHeight() {
-            const vh = window.innerHeight * 0.01;
-            document.documentElement.style.setProperty('--vh', `${vh}px`);
-        }
-
-        window.addEventListener('resize', checkViewportHeight);
-        window.addEventListener('orientationchange', checkViewportHeight);
-
         // Load Data
         function loadData() {
-            const stored = localStorage.getItem('smartSyncData');
+            const stored = localStorage.getItem('builderProData');
             if (stored) {
                 data = JSON.parse(stored);
-                initializeDataArrays(); // Ensure arrays exist
+                initializeDataArrays();
                 applySettings();
             }
         }
 
         // Save Data
         function saveData() {
-            localStorage.setItem('smartSyncData', JSON.stringify(data));
+            localStorage.setItem('builderProData', JSON.stringify(data));
         }
 
         // Apply Settings
         function applySettings() {
-            // Apply theme
             if (data.settings.theme) {
                 document.body.className = `theme-${data.settings.theme}`;
             }
             
-            // Apply night mode
             if (data.settings.nightMode) {
                 document.body.classList.add('night-mode');
                 document.getElementById('night-mode-toggle').checked = true;
             }
             
-            // Apply font size
             if (data.settings.fontSize) {
                 changeFontSize(data.settings.fontSize, false);
             }
             
-            // Update user info
             if (data.settings.userName) {
                 document.getElementById('user-name').value = data.settings.userName;
             }
@@ -2046,227 +1861,6 @@
             if (data.settings.binId) {
                 document.getElementById('bin-id').value = data.settings.binId;
             }
-            if (data.settings.appTitle) {
-                document.getElementById('app-title').value = data.settings.appTitle;
-            }
-        }
-
-        // Update Header Title with Enhanced Video Support
-        function updateHeaderTitle() {
-            const title = data.settings.appTitle || '⚡ Smart Sync';
-            const headerText = document.getElementById('header-text');
-            const headerMedia = document.getElementById('header-media');
-            
-            // Reset display
-            headerText.style.display = 'block';
-            headerMedia.style.display = 'none';
-            headerText.innerHTML = '';
-            
-            // Check if it's a URL
-            if (title.includes('http') || title.includes('www')) {
-                // Check for YouTube video
-                if (title.includes('youtube.com') || title.includes('youtu.be')) {
-                    const videoId = extractYouTubeId(title);
-                    if (videoId) {
-                        headerText.innerHTML = `
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <iframe 
-                                    width="160" 
-                                    height="40" 
-                                    src="https://www.youtube.com/embed/${videoId}?autoplay=1&mute=1&controls=0&showinfo=0&modestbranding=1&loop=1&playlist=${videoId}&rel=0&fs=0&iv_load_policy=3&disablekb=1&playsinline=1" 
-                                    frameborder="0" 
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                    style="border-radius: 8px; pointer-events: none;"
-                                    title="Header Video">
-                                </iframe>
-                            </div>
-                        `;
-                    }
-                } 
-                // Check for Vimeo video
-                else if (title.includes('vimeo.com')) {
-                    const vimeoId = title.match(/vimeo\.com\/(\d+)/);
-                    if (vimeoId && vimeoId[1]) {
-                        headerText.innerHTML = `
-                            <iframe 
-                                src="https://player.vimeo.com/video/${vimeoId[1]}?autoplay=1&muted=1&loop=1&background=1&quality=360p" 
-                                width="160" 
-                                height="40" 
-                                frameborder="0" 
-                                style="border-radius: 8px; pointer-events: none;"
-                                allow="autoplay; fullscreen; picture-in-picture" 
-                                title="Header Video">
-                            </iframe>
-                        `;
-                    }
-                }
-                // Check for video files (including Google Drive, Dropbox)
-                else if (title.match(/\.(mp4|webm|ogg|mov|avi|mkv)$/i) || 
-                         title.includes('drive.google.com') || 
-                         title.includes('dropbox.com')) {
-                    let videoUrl = title;
-                    
-                    // Convert Google Drive link to direct link
-                    if (title.includes('drive.google.com')) {
-                        const fileId = title.match(/[-\w]{25,}/);
-                        if (fileId) {
-                            videoUrl = `https://drive.google.com/uc?export=download&id=${fileId[0]}`;
-                        }
-                    }
-                    
-                    // Convert Dropbox link
-                    if (title.includes('dropbox.com')) {
-                        videoUrl = title.replace('www.dropbox.com', 'dl.dropboxusercontent.com').replace('?dl=0', '');
-                    }
-                    
-                    headerText.innerHTML = `
-                        <video 
-                            width="160" 
-                            height="40" 
-                            autoplay 
-                            muted 
-                            loop 
-                            playsinline
-                            webkit-playsinline
-                            x5-playsinline
-                            x5-video-player-type="h5"
-                            x5-video-player-fullscreen="false"
-                            style="border-radius: 8px; object-fit: cover; pointer-events: none;"
-                            onerror="this.style.display='none'; document.getElementById('header-text').innerHTML='🎬 Video Error';">
-                            <source src="${videoUrl}" type="video/mp4">
-                            <source src="${videoUrl}" type="video/webm">
-                            <source src="${videoUrl}" type="video/ogg">
-                        </video>
-                    `;
-                    
-                    // Force autoplay on mobile with user interaction
-                    setTimeout(() => {
-                        const video = headerText.querySelector('video');
-                        if (video) {
-                            video.muted = true; // Ensure muted for autoplay
-                            const playPromise = video.play();
-                            if (playPromise !== undefined) {
-                                playPromise.then(() => {
-                                    console.log('Video autoplay started');
-                                }).catch(error => {
-                                    console.log('Video autoplay prevented:', error);
-                                    // Try again on first user interaction
-                                    document.addEventListener('click', function playVideo() {
-                                        video.play();
-                                        document.removeEventListener('click', playVideo);
-                                    }, { once: true });
-                                });
-                            }
-                        }
-                    }, 100);
-                }
-                // Check for GIF
-                else if (title.match(/\.(gif)$/i)) {
-                    headerText.innerHTML = `
-                        <img src="${title}" style="height: 50px; border-radius: 8px; object-fit: cover;" alt="Header Animation">
-                    `;
-                }
-                // Check for image
-                else if (title.match(/\.(jpg|jpeg|png|webp|svg)$/i)) {
-                    headerText.style.display = 'none';
-                    headerMedia.src = title;
-                    headerMedia.style.display = 'block';
-                    headerMedia.style.maxHeight = '50px';
-                    headerMedia.style.borderRadius = '8px';
-                }
-                // Check for Instagram
-                else if (title.includes('instagram.com')) {
-                    headerText.innerHTML = `
-                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 24px;">📷</span> Instagram
-                        </a>
-                    `;
-                }
-                // Check for Facebook video
-                else if (title.includes('facebook.com') || title.includes('fb.com')) {
-                    if (title.includes('/videos/') || title.includes('fb.watch')) {
-                        headerText.innerHTML = `
-                            <div style="color: white; display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 24px;">📹</span> FB Video
-                                <a href="${title}" target="_blank" style="color: white; font-size: 10px;">[Open]</a>
-                            </div>
-                        `;
-                    } else {
-                        headerText.innerHTML = `
-                            <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                                <span style="font-size: 24px;">📘</span> Facebook
-                            </a>
-                        `;
-                    }
-                }
-                // Check for TikTok
-                else if (title.includes('tiktok.com')) {
-                    headerText.innerHTML = `
-                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 24px;">🎵</span> TikTok
-                        </a>
-                    `;
-                }
-                // Check for Twitter/X video
-                else if (title.includes('twitter.com') || title.includes('x.com')) {
-                    headerText.innerHTML = `
-                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 24px;">🐦</span> X/Twitter
-                        </a>
-                    `;
-                }
-                // Other links
-                else {
-                    headerText.innerHTML = `
-                        <a href="${title}" target="_blank" style="color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;">
-                            <span style="font-size: 20px;">🔗</span> Link
-                        </a>
-                    `;
-                }
-            } 
-            // Check for emoji at start
-            else if (title.match(/^[\u{1F300}-\u{1F9FF}]/u)) {
-                headerText.innerHTML = title;
-            }
-            // Regular text
-            else {
-                headerText.textContent = title;
-            }
-        }
-
-        // Extract YouTube Video ID
-        function extractYouTubeId(url) {
-            // Handle different YouTube URL formats
-            const patterns = [
-                /(?:youtube\.com\/watch\?v=|youtu\.be\/|youtube\.com\/embed\/)([^&\n?#]+)/,
-                /youtube\.com\/watch\?.*v=([^&\n?#]+)/,
-                /youtube\.com\/v\/([^&\n?#]+)/
-            ];
-            
-            for (const pattern of patterns) {
-                const match = url.match(pattern);
-                if (match) return match[1];
-            }
-            return null;
-        }
-
-        // Edit Header Title
-        function editHeaderTitle() {
-            const modal = document.getElementById('header-edit-modal');
-            if (modal) {
-                document.getElementById('header-input').value = data.settings.appTitle || '';
-                openModal('header-edit-modal');
-            }
-        }
-
-        // Save Header Title
-        function saveHeaderTitle() {
-            const newTitle = document.getElementById('header-input').value.trim();
-            data.settings.appTitle = newTitle || '⚡ Smart Sync';
-            saveData();
-            updateHeaderTitle();
-            closeModal('header-edit-modal');
-            showToast('Header updated successfully!', 'success');
         }
 
         // Render Theme Options
@@ -2298,13 +1892,9 @@
 
         // Change Font Size
         function changeFontSize(size, save = true) {
-            // Remove all font size classes
             document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl', 'font-super-xl');
-            
-            // Add new font size class
             document.body.classList.add(`font-${size}`);
             
-            // Update button states
             document.querySelectorAll('.font-size-btn').forEach(btn => {
                 btn.classList.remove('selected');
                 if (btn.dataset.size === size) {
@@ -2321,23 +1911,17 @@
 
         // Switch Tab
         function switchTab(tabName) {
-            // Hide all tabs
             document.querySelectorAll('.tab-content').forEach(tab => {
                 tab.classList.remove('active');
             });
             
-            // Remove active from nav items
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
             
-            // Show selected tab
             document.getElementById(tabName).classList.add('active');
-            
-            // Add active to selected nav item
             event.currentTarget.classList.add('active');
             
-            // Render tab content
             switch(tabName) {
                 case 'home':
                     renderHome();
@@ -2353,15 +1937,13 @@
 
         // Render Home
         function renderHome() {
-            // Ensure arrays exist
             initializeDataArrays();
             
-            // Update stats
             document.getElementById('total-projects').textContent = data.projects.length;
             
-            // Filter out completed tasks
-            const pendingTasks = data.tasks.filter(t => t.status !== 'Completed');
-            document.getElementById('pending-tasks').textContent = pendingTasks.length;
+            // Filter out completed tasks for display
+            const activeTasks = data.tasks.filter(t => t.status !== 'Completed');
+            document.getElementById('pending-tasks').textContent = activeTasks.length;
             
             // Calculate financials
             let totalBudget = data.projects.reduce((sum, p) => sum + (parseFloat(p.budget) || 0), 0);
@@ -2372,100 +1954,15 @@
             document.getElementById('total-budget').textContent = `$${totalBudget.toFixed(2)}`;
             document.getElementById('net-balance').textContent = `$${netProfit.toFixed(2)}`;
             
-            // Update financial summary
             document.getElementById('total-income').textContent = `$${totalIncome.toFixed(2)}`;
             document.getElementById('total-expenses').textContent = `$${totalExpense.toFixed(2)}`;
             document.getElementById('net-profit').textContent = `$${netProfit.toFixed(2)}`;
             
-            // Render Gantt Chart
             renderGanttChart('home-gantt');
         }
 
         // Render Projects
-        // Open Project Management Modal
-function openProjectManagement(projectId) {
-    currentManagingProjectId = projectId;
-    const project = data.projects.find(p => p.id === projectId);
-    
-    if (project) {
-        document.getElementById('project-mgmt-title').textContent = `🏗️ ${project.name}`;
-        openModal('project-management-modal');
-    }
-}
-
-// Project Management Actions
-function editProjectFromManagement() {
-    if (currentManagingProjectId) {
-        editProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-
-function addTaskFromManagement() {
-    if (currentManagingProjectId) {
-        openTaskModalForProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-
-function addIncomeFromManagement() {
-    if (currentManagingProjectId) {
-        document.getElementById('transaction-type').value = 'income';
-        openTransactionModalForProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-
-function addExpenseFromManagement() {
-    if (currentManagingProjectId) {
-        document.getElementById('transaction-type').value = 'expense';
-        openTransactionModalForProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
         function renderProjects() {
-            // Open Project Management Modal
-function openProjectManagement(projectId) {
-    currentManagingProjectId = projectId;
-    const project = data.projects.find(p => p.id === projectId);
-    
-    if (project) {
-        document.getElementById('project-mgmt-title').textContent = `🏗️ ${project.name}`;
-        openModal('project-management-modal');
-    }
-}
-
-// Project Management Actions
-function editProjectFromManagement() {
-    if (currentManagingProjectId) {
-        editProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-
-function addTaskFromManagement() {
-    if (currentManagingProjectId) {
-        openTaskModalForProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-
-function addIncomeFromManagement() {
-    if (currentManagingProjectId) {
-        document.getElementById('transaction-type').value = 'income';
-        openTransactionModalForProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-
-function addExpenseFromManagement() {
-    if (currentManagingProjectId) {
-        document.getElementById('transaction-type').value = 'expense';
-        openTransactionModalForProject(currentManagingProjectId);
-        closeModal('project-management-modal');
-    }
-}
-            // Ensure arrays exist
             initializeDataArrays();
             
             const container = document.getElementById('projects-list');
@@ -2476,8 +1973,8 @@ function addExpenseFromManagement() {
             }
             
             container.innerHTML = data.projects.map(project => {
-                // Filter tasks - exclude completed ones
-                const tasks = data.tasks.filter(t => t.projectId === project.id && t.status !== 'Completed');
+                // Filter out completed tasks
+                const activeTasks = data.tasks.filter(t => t.projectId === project.id && t.status !== 'Completed');
                 const completedTasks = data.tasks.filter(t => t.projectId === project.id && t.status === 'Completed');
                 const income = data.transactions.filter(t => t.projectId === project.id && t.type === 'income');
                 const expenses = data.transactions.filter(t => t.projectId === project.id && t.type === 'expense');
@@ -2513,16 +2010,16 @@ function addExpenseFromManagement() {
                             </div>
                         </div>
                         
-                        <!-- Project Timeline Chart -->
+                        <!-- Project Timeline Chart with Dates -->
                         <div class="project-timeline-chart" id="project-timeline-${project.id}">
                             ${renderProjectTimeline(project)}
                         </div>
                         
                         <!-- Active Tasks Section -->
                         <div style="margin-top: 20px;">
-                            <h4>Active Tasks (${tasks.length}) ${completedTasks.length > 0 ? `<span style="color: var(--text-secondary); font-size: 12px;">[${completedTasks.length} completed]</span>` : ''}</h4>
+                            <h4>Active Tasks (${activeTasks.length})${completedTasks.length > 0 ? ` <span style="color: var(--text-secondary); font-size: 12px;">[${completedTasks.length} completed]</span>` : ''}</h4>
                             <div class="task-list">
-                                ${tasks.length > 0 ? tasks.map(task => `
+                                ${activeTasks.length > 0 ? activeTasks.map(task => `
                                     <div class="task-item">
                                         <div class="task-header">
                                             <div>
@@ -2581,16 +2078,16 @@ function addExpenseFromManagement() {
             }).join('');
         }
 
-        // Render Project Timeline
+        // Render Project Timeline WITH DATE RANGES
         function renderProjectTimeline(project) {
-            const tasks = data.tasks.filter(t => t.projectId === project.id && t.dueDate);
+            const tasks = data.tasks.filter(t => t.projectId === project.id && t.dueDate && t.status !== 'Completed');
             
             if (!project.startDate || !project.endDate) {
                 return '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">No timeline dates set</div>';
             }
             
             if (tasks.length === 0) {
-                return '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">No tasks with due dates</div>';
+                return '<div style="text-align: center; color: var(--text-secondary); padding: 20px;">No active tasks with due dates</div>';
             }
             
             const startDate = new Date(project.startDate);
@@ -2616,9 +2113,9 @@ function addExpenseFromManagement() {
             
             let html = `
                 <div class="timeline-header">
-                    <span>📅 ${formatDate(project.startDate)}</span>
+                    <span>📅 ${formatDateShort(project.startDate)}</span>
                     <span style="font-weight: bold;">Duration: ${durationText}</span>
-                    <span>🏁 ${formatDate(project.endDate)}</span>
+                    <span>🏁 ${formatDateShort(project.endDate)}</span>
                 </div>
                 <div class="timeline-bars-container">
             `;
@@ -2628,7 +2125,7 @@ function addExpenseFromManagement() {
                 html += `<div class="today-line" style="left: ${todayPercent}%;"></div>`;
             }
             
-            // Add task bars with dates
+            // Add task bars with FROM & TO dates
             tasks.forEach(task => {
                 const taskDate = new Date(task.dueDate);
                 const taskPosition = Math.ceil((taskDate - startDate) / (1000 * 60 * 60 * 24));
@@ -2648,21 +2145,30 @@ function addExpenseFromManagement() {
                 }
                 
                 let statusClass = '';
-                if (task.status === 'Completed') statusClass = 'completed';
-                else if (task.status === 'In Progress') statusClass = 'in-progress';
-                else if (taskDate < today && task.status !== 'Completed') statusClass = 'overdue';
+                if (task.status === 'In Progress') statusClass = 'in-progress';
+                else if (taskDate < today) statusClass = 'overdue';
                 
                 html += `
                     <div class="timeline-bar ${statusClass}" 
                          style="width: ${Math.max(15, 100 - taskPercent)}%; margin-left: ${Math.min(85, taskPercent)}%;"
-                         title="${task.name} - ${formatDate(task.dueDate)} (${daysText})">
-                        <span style="font-size: 10px; opacity: 0.9;">${formatDate(task.dueDate).split(',')[0]}</span> ${task.name}
+                         title="${task.name} - Due: ${formatDate(task.dueDate)} (${daysText})">
+                        <span style="flex: 1; overflow: hidden; text-overflow: ellipsis;">${task.name}</span>
+                        <span style="font-size: 10px; white-space: nowrap; opacity: 0.9; margin-left: 8px;">
+                            ${formatDateShort(project.startDate)} → ${formatDateShort(task.dueDate)}
+                        </span>
                     </div>
                 `;
             });
             
             html += '</div>';
             return html;
+        }
+
+        // Format date short (for timeline)
+        function formatDateShort(dateStr) {
+            if (!dateStr) return '';
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
         }
 
         // Render Schedule
@@ -2738,7 +2244,7 @@ function addExpenseFromManagement() {
             container.innerHTML = html;
         }
 
-        // Get Events for Date
+        // Get Events for Date (exclude completed tasks)
         function getEventsForDate(dateStr) {
             const events = [];
             
@@ -2773,7 +2279,6 @@ function addExpenseFromManagement() {
             const eventsContainer = document.getElementById('selected-date-events');
             const events = getEventsForDate(dateStr);
             
-            // Display events for selected date
             if (events.length > 0) {
                 eventsContainer.innerHTML = `
                     <h3>Events on ${formatDate(dateStr)}</h3>
@@ -2811,7 +2316,7 @@ function addExpenseFromManagement() {
             modal.classList.add('active');
         }
 
-        // Open Project Modal for Date
+        // Open Modal Functions
         function openProjectModalForDate() {
             closeModal('calendar-date-modal');
             openProjectModal();
@@ -2820,7 +2325,6 @@ function addExpenseFromManagement() {
             }
         }
 
-        // Open Task Modal for Date
         function openTaskModalForDate() {
             closeModal('calendar-date-modal');
             openTaskModal();
@@ -2829,13 +2333,11 @@ function addExpenseFromManagement() {
             }
         }
 
-        // Open Task Modal for Project
         function openTaskModalForProject(projectId) {
             openTaskModal();
             document.getElementById('task-project').value = projectId;
         }
 
-        // Open Transaction Modal for Date
         function openTransactionModalForDate() {
             closeModal('calendar-date-modal');
             openTransactionModal();
@@ -2844,7 +2346,6 @@ function addExpenseFromManagement() {
             }
         }
 
-        // Open Transaction Modal for Project
         function openTransactionModalForProject(projectId) {
             openTransactionModal();
             document.getElementById('transaction-project').value = projectId;
@@ -2870,24 +2371,21 @@ function addExpenseFromManagement() {
                 <div class="gantt-tasks" style="position: relative; min-height: ${projects.length * 60}px;">
             `;
             
-            // Calculate today position
             const firstDate = new Date(months[0] + ' 1');
             const lastDate = new Date(months[months.length - 1] + ' 28');
             const totalDays = Math.ceil((lastDate - firstDate) / (1000 * 60 * 60 * 24));
             const todayPosition = Math.ceil((today - firstDate) / (1000 * 60 * 60 * 24));
             const todayPercent = (todayPosition / totalDays) * 100;
             
-            // Add today line
             if (todayPercent >= 0 && todayPercent <= 100) {
                 html += `<div class="today-line" style="left: ${todayPercent}%;"></div>`;
             }
             
-            // Add project bars with duration info
+            // Add project bars with FROM & TO dates
             projects.forEach((project, index) => {
                 const startDate = new Date(project.startDate);
                 const endDate = new Date(project.endDate);
                 
-                // Calculate duration
                 const durationDays = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
                 const durationWeeks = Math.floor(durationDays / 7);
                 const remainingDays = durationDays % 7;
@@ -2916,19 +2414,11 @@ function addExpenseFromManagement() {
                         align-items: center;
                         justify-content: space-between;
                         padding: 8px 12px;
-                    " title="${project.name}: ${formatDate(project.startDate)} - ${formatDate(project.endDate)} (${durationText})">
-                        <span style="font-weight: bold;">${project.name}</span>
-                        <span style="font-size: 11px; opacity: 0.9;">${durationText}</span>
-                    </div>
-                    <div style="
-                        position: absolute;
-                        top: ${index * 60 + 35}px;
-                        left: ${Math.max(0, left)}%;
-                        font-size: 10px;
-                        color: var(--text-secondary);
-                        white-space: nowrap;
-                    ">
-                        ${formatDate(project.startDate).split(',')[0]} → ${formatDate(project.endDate).split(',')[0]}
+                    " title="${project.name}: ${formatDate(project.startDate)} → ${formatDate(project.endDate)} (${durationText})">
+                        <span style="font-weight: bold; flex: 1; overflow: hidden; text-overflow: ellipsis;">${project.name}</span>
+                        <span style="font-size: 10px; opacity: 0.9; white-space: nowrap; margin-left: 8px;">
+                            ${formatDateShort(project.startDate)} → ${formatDateShort(project.endDate)}
+                        </span>
                     </div>
                 `;
             });
@@ -2975,7 +2465,6 @@ function addExpenseFromManagement() {
                 document.getElementById('task-due-date').value = task.dueDate || '';
                 document.getElementById('task-description').value = task.description || '';
                 
-                // Store task ID for update
                 document.getElementById('task-modal').dataset.editId = taskId;
                 
                 openModal('task-modal');
@@ -3003,7 +2492,6 @@ function addExpenseFromManagement() {
                 document.getElementById('project-end-date').value = project.endDate;
                 document.getElementById('project-description').value = project.description || '';
                 
-                // Store project ID for update
                 document.getElementById('project-modal').dataset.editId = projectId;
                 
                 openModal('project-modal');
@@ -3173,10 +2661,8 @@ function addExpenseFromManagement() {
             statusDiv.style.maxHeight = '200px';
             statusDiv.style.overflowY = 'auto';
             
-            // Save settings first
             saveSettings();
             
-            // Check API key
             const apiKey = (data.settings.apiKey || '').trim();
             const binId = (data.settings.binId || '').trim();
             
@@ -3196,9 +2682,7 @@ function addExpenseFromManagement() {
             }
             statusDiv.innerHTML += `<br>Attempting sync...`;
             
-            // Wait a moment for settings to save
             setTimeout(() => {
-                // Try to sync
                 syncData().then((result) => {
                     statusDiv.innerHTML = '✅ Sync test successful!<br>';
                     statusDiv.innerHTML += `Bin ID: ${data.settings.binId}<br>`;
@@ -3225,19 +2709,16 @@ function addExpenseFromManagement() {
 
         // Settings Functions
         function changeTheme(theme) {
-            // Remove all theme classes
             themeColors.forEach(t => {
                 if (t.value) {
                     document.body.classList.remove(`theme-${t.value}`);
                 }
             });
             
-            // Add new theme class
             if (theme) {
                 document.body.classList.add(`theme-${theme}`);
             }
             
-            // Update selection state
             document.querySelectorAll('.theme-option').forEach(option => {
                 option.classList.remove('selected');
                 if (option.dataset.theme === theme) {
@@ -3249,7 +2730,6 @@ function addExpenseFromManagement() {
             saveData();
         }
 
-        // Toggle API Key Visibility
         function toggleApiKeyVisibility() {
             const apiKeyInput = document.getElementById('api-key');
             const toggleBtn = document.getElementById('api-key-toggle');
@@ -3263,7 +2743,6 @@ function addExpenseFromManagement() {
             }
         }
 
-        // Copy Bin ID to Clipboard
         function copyBinId() {
             const binIdInput = document.getElementById('bin-id');
             const binId = binIdInput.value.trim();
@@ -3273,7 +2752,6 @@ function addExpenseFromManagement() {
                 return;
             }
             
-            // Copy to clipboard
             navigator.clipboard.writeText(binId).then(() => {
                 const btn = document.getElementById('copy-bin-btn');
                 const originalText = btn.textContent;
@@ -3283,14 +2761,12 @@ function addExpenseFromManagement() {
                     btn.textContent = originalText;
                 }, 2000);
             }).catch(() => {
-                // Fallback for older browsers
                 binIdInput.select();
                 document.execCommand('copy');
                 showToast('Bin ID copied to clipboard', 'success');
             });
         }
 
-        // Clear Bin ID Function
         function clearBinId() {
             if (confirm('Are you sure you want to clear the Bin ID? Next sync will create a new bin.')) {
                 document.getElementById('bin-id').value = '';
@@ -3300,12 +2776,10 @@ function addExpenseFromManagement() {
             }
         }
 
-        // Settings Functions
         function saveSettings() {
             const apiKeyInput = document.getElementById('api-key');
             const apiKey = apiKeyInput.value.trim();
             
-            // Validate Master Key format
             if (apiKey) {
                 if (apiKey.length < 20) {
                     showToast('API key seems too short. JSONBin Master Keys usually start with $2a$ or $2b$ and are 50+ characters.', 'warning');
@@ -3316,12 +2790,10 @@ function addExpenseFromManagement() {
             
             data.settings.userName = document.getElementById('user-name').value;
             data.settings.userPosition = document.getElementById('user-position').value;
-            data.settings.appTitle = document.getElementById('app-title').value || '⚡ Smart Sync';
             data.settings.apiKey = apiKey;
             data.settings.binId = document.getElementById('bin-id').value.trim();
             
             saveData();
-            updateHeaderTitle();
             showToast('Settings saved successfully!', 'success');
         }
 
@@ -3331,7 +2803,6 @@ function addExpenseFromManagement() {
                 const syncButton = document.getElementById('sync-text')?.parentElement;
                 const syncText = document.getElementById('sync-text');
                 
-                // Check for API key
                 const apiKey = (data.settings.apiKey || '').trim();
                 if (!apiKey) {
                     const error = 'Please enter your JSONBin Master Key (X-Master-Key) in Settings';
@@ -3341,7 +2812,6 @@ function addExpenseFromManagement() {
                     return;
                 }
                 
-                // Get or create bin ID
                 let binId = (data.settings.binId || '').trim();
                 
                 if (syncButton && syncText) {
@@ -3350,11 +2820,9 @@ function addExpenseFromManagement() {
                 }
                 
                 try {
-                    // Add timestamps before sync
                     addTimestamps();
                     
                     if (binId) {
-                        // Try to fetch existing bin
                         console.log('Attempting to fetch bin:', binId);
                         try {
                             const fetchUrl = `https://api.jsonbin.io/v3/b/${binId}/latest`;
@@ -3373,7 +2841,6 @@ function addExpenseFromManagement() {
                                 console.log('Remote data fetched successfully');
                                 const syncResult = smartMergeData(remoteData);
                                 
-                                // Update the bin with merged data
                                 const updateUrl = `https://api.jsonbin.io/v3/b/${binId}`;
                                 const updateResponse = await fetch(updateUrl, {
                                     method: 'PUT',
@@ -3419,7 +2886,7 @@ function addExpenseFromManagement() {
                                 throw new Error('Authentication failed. You must use the Master Key (X-Master-Key) from JSONBin, not the Access Key. Master Keys start with $2a$ or $2b$.');
                             } else if (fetchResponse.status === 404) {
                                 console.log('Bin not found, will create new one');
-                                binId = ''; // Clear bin ID to create new
+                                binId = '';
                             } else {
                                 const errorText = await fetchResponse.text();
                                 console.error('Fetch failed:', errorText);
@@ -3431,28 +2898,25 @@ function addExpenseFromManagement() {
                             }
                             console.log('Bin fetch error:', e.message);
                             if (!binId || e.message.includes('404')) {
-                                binId = ''; // Try to create new bin
+                                binId = '';
                             } else {
                                 throw e;
                             }
                         }
                     }
                     
-                    // Create new bin if no binId or fetch failed
                     if (!binId) {
                         console.log('Creating new bin...');
                         const createUrl = 'https://api.jsonbin.io/v3/b';
                         
-                        // Prepare the data
                         const bodyData = JSON.stringify(data);
                         
-                        // Create the request with proper headers
                         const createResponse = await fetch(createUrl, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
-                                'X-Master-Key': apiKey,  // Use X-Master-Key for JSONBin API v3
-                                'X-Bin-Name': 'Smart Sync Data'
+                                'X-Master-Key': apiKey,
+                                'X-Bin-Name': 'Builder Pro Data'
                             },
                             body: bodyData
                         });
@@ -3474,7 +2938,6 @@ function addExpenseFromManagement() {
                                 data.settings.binId = newBinId;
                                 data.lastSync = new Date().toISOString();
                                 
-                                // Update the bin ID in the settings form
                                 const binIdInput = document.getElementById('bin-id');
                                 if (binIdInput) {
                                     binIdInput.value = newBinId;
@@ -3502,7 +2965,6 @@ function addExpenseFromManagement() {
                                 throw new Error('Invalid response from server');
                             }
                         } else {
-                            // Handle error response
                             let errorMsg = '';
                             
                             try {
@@ -3519,7 +2981,6 @@ function addExpenseFromManagement() {
                                     errorMsg = 'Unknown error from JSONBin';
                                 }
                             } catch {
-                                // If response is not JSON
                                 if (createResponse.status === 401) {
                                     errorMsg = 'Authentication failed. You must use the Master Key (X-Master-Key) from JSONBin, not the Access Key. Master Keys start with $2a$ or $2b$.';
                                 } else if (createResponse.status === 400) {
@@ -3573,10 +3034,8 @@ function addExpenseFromManagement() {
         function addTimestamps() {
             const now = new Date().toISOString();
             
-            // Ensure arrays exist
             initializeDataArrays();
             
-            // Add timestamps to projects
             if (data.projects && Array.isArray(data.projects)) {
                 data.projects.forEach(project => {
                     if (!project.createdAt) project.createdAt = now;
@@ -3584,7 +3043,6 @@ function addExpenseFromManagement() {
                 });
             }
             
-            // Add timestamps to tasks
             if (data.tasks && Array.isArray(data.tasks)) {
                 data.tasks.forEach(task => {
                     if (!task.createdAt) task.createdAt = now;
@@ -3592,7 +3050,6 @@ function addExpenseFromManagement() {
                 });
             }
             
-            // Add timestamps to transactions
             if (data.transactions && Array.isArray(data.transactions)) {
                 data.transactions.forEach(transaction => {
                     if (!transaction.createdAt) transaction.createdAt = now;
@@ -3601,20 +3058,17 @@ function addExpenseFromManagement() {
             }
         }
 
-        // Smart Merge Data Function (Simplified)
+        // Smart Merge Data Function
         function smartMergeData(remoteData) {
             if (!remoteData) return { added: 0, updated: 0, conflicts: 0 };
             
-            // Handle both direct data and wrapped data
             const dataToMerge = remoteData.record || remoteData;
             
-            // Ensure local data arrays exist
             initializeDataArrays();
             
             let syncStats = { added: 0, updated: 0, conflicts: 0 };
             
             try {
-                // Merge projects
                 if (dataToMerge.projects && Array.isArray(dataToMerge.projects)) {
                     dataToMerge.projects.forEach(remoteProject => {
                         const exists = data.projects.some(p => p.id === remoteProject.id);
@@ -3625,7 +3079,6 @@ function addExpenseFromManagement() {
                     });
                 }
                 
-                // Merge tasks
                 if (dataToMerge.tasks && Array.isArray(dataToMerge.tasks)) {
                     dataToMerge.tasks.forEach(remoteTask => {
                         const exists = data.tasks.some(t => t.id === remoteTask.id);
@@ -3636,7 +3089,6 @@ function addExpenseFromManagement() {
                     });
                 }
                 
-                // Merge transactions
                 if (dataToMerge.transactions && Array.isArray(dataToMerge.transactions)) {
                     dataToMerge.transactions.forEach(remoteTrans => {
                         const exists = data.transactions.some(t => t.id === remoteTrans.id);
@@ -3647,12 +3099,10 @@ function addExpenseFromManagement() {
                     });
                 }
                 
-                // Merge settings (keep local API settings)
                 if (dataToMerge.settings) {
                     const localApiKey = data.settings.apiKey;
                     const localBinId = data.settings.binId;
                     
-                    // Only update non-API settings
                     Object.keys(dataToMerge.settings).forEach(key => {
                         if (key !== 'apiKey' && key !== 'binId' && dataToMerge.settings[key]) {
                             if (data.settings[key] !== dataToMerge.settings[key]) {
@@ -3662,7 +3112,6 @@ function addExpenseFromManagement() {
                         }
                     });
                     
-                    // Preserve local API settings
                     data.settings.apiKey = localApiKey;
                     data.settings.binId = localBinId;
                 }
@@ -3681,11 +3130,6 @@ function addExpenseFromManagement() {
             if (!dateStr) return '';
             const date = new Date(dateStr);
             return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-        }
-
-        function getProjectName(projectId) {
-            const project = data.projects.find(p => p.id === projectId);
-            return project ? project.name : 'Unknown Project';
         }
 
         function getStatusColor(status) {
@@ -3719,49 +3163,6 @@ function addExpenseFromManagement() {
             setTimeout(() => {
                 toast.classList.remove('show');
             }, 3000);
-        }
-
-        // PWA Installation
-        let deferredPrompt;
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-        });
-        
-        // Service Worker Registration
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('sw.js').catch(err => {
-                console.log('Service worker registration failed:', err);
-            });
-        }
-    </script>
-    
-    <script>
-        // Service Worker for PWA
-        const swCode = `
-            self.addEventListener('install', event => {
-                self.skipWaiting();
-            });
-            
-            self.addEventListener('activate', event => {
-                event.waitUntil(clients.claim());
-            });
-            
-            self.addEventListener('fetch', event => {
-                event.respondWith(
-                    fetch(event.request).catch(() => {
-                        return new Response('Offline');
-                    })
-                );
-            });
-        `;
-        
-        // Create service worker file
-        if ('serviceWorker' in navigator && window.location.protocol === 'https:') {
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-            navigator.serviceWorker.register(swUrl);
         }
     </script>
 </body>
