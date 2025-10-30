@@ -30,6 +30,7 @@
             --safe-area-inset-bottom: env(safe-area-inset-bottom, 0px);
             --safe-area-inset-left: env(safe-area-inset-left, 0px);
             --safe-area-inset-right: env(safe-area-inset-right, 0px);
+            --mobile-header-offset: 0px;
             
             --bg-color: #F4EDEB;
             --accent-color: #E8A9B3;
@@ -247,6 +248,7 @@
         /* iPhone 15 Pro Max Optimization - OPTIMIZED VERSION */
         @media screen and (max-width: 430px) and (max-height: 932px) {
             body {
+                --mobile-header-offset: -50px;
                 padding-bottom: calc(100px + var(--safe-area-inset-bottom)) !important;
             }
             
@@ -256,6 +258,7 @@
                 padding-bottom: 15px !important;
                 display: flex !important;
                 align-items: center !important;
+                transform: translateY(var(--mobile-header-offset));
             }
             
             .header-content {
@@ -1809,7 +1812,7 @@
                 binId: '',
                 nightMode: false,
                 fontSize: 'm',
-                appTitle: '⚡ Smart Sync'
+                appTitle: '🏗️ Builder Pro'
             },
             lastSync: null
         };
@@ -2379,7 +2382,89 @@
         }
 
         // Render Projects
+        // Open Project Management Modal
+function openProjectManagement(projectId) {
+    currentManagingProjectId = projectId;
+    const project = data.projects.find(p => p.id === projectId);
+    
+    if (project) {
+        document.getElementById('project-mgmt-title').textContent = `🏗️ ${project.name}`;
+        openModal('project-management-modal');
+    }
+}
+
+// Project Management Actions
+function editProjectFromManagement() {
+    if (currentManagingProjectId) {
+        editProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
+
+function addTaskFromManagement() {
+    if (currentManagingProjectId) {
+        openTaskModalForProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
+
+function addIncomeFromManagement() {
+    if (currentManagingProjectId) {
+        document.getElementById('transaction-type').value = 'income';
+        openTransactionModalForProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
+
+function addExpenseFromManagement() {
+    if (currentManagingProjectId) {
+        document.getElementById('transaction-type').value = 'expense';
+        openTransactionModalForProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
         function renderProjects() {
+            // Open Project Management Modal
+function openProjectManagement(projectId) {
+    currentManagingProjectId = projectId;
+    const project = data.projects.find(p => p.id === projectId);
+    
+    if (project) {
+        document.getElementById('project-mgmt-title').textContent = `🏗️ ${project.name}`;
+        openModal('project-management-modal');
+    }
+}
+
+// Project Management Actions
+function editProjectFromManagement() {
+    if (currentManagingProjectId) {
+        editProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
+
+function addTaskFromManagement() {
+    if (currentManagingProjectId) {
+        openTaskModalForProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
+
+function addIncomeFromManagement() {
+    if (currentManagingProjectId) {
+        document.getElementById('transaction-type').value = 'income';
+        openTransactionModalForProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
+
+function addExpenseFromManagement() {
+    if (currentManagingProjectId) {
+        document.getElementById('transaction-type').value = 'expense';
+        openTransactionModalForProject(currentManagingProjectId);
+        closeModal('project-management-modal');
+    }
+}
             // Ensure arrays exist
             initializeDataArrays();
             
