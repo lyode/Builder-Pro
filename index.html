@@ -63,6 +63,38 @@
             font-size: calc(14px * var(--font-scale));
         }
 
+        /* Floating text effect - 4px elevation */
+        body, button, input, select, textarea, .logo, .header-subtitle,
+        .nav-item, .stat-card, .project-card, .task-item, .transaction-item,
+        .modal-content, h1, h2, h3, h4, h5, h6, p, span, div, label {
+            text-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.15),
+                0 2px 4px rgba(0, 0, 0, 0.1);
+            transform: translateZ(4px);
+        }
+
+        .night-mode body, 
+        .night-mode button, 
+        .night-mode input, 
+        .night-mode select, 
+        .night-mode textarea,
+        .night-mode .logo,
+        .night-mode .header-subtitle,
+        .night-mode .nav-item,
+        .night-mode .stat-card,
+        .night-mode .project-card,
+        .night-mode .task-item,
+        .night-mode .transaction-item,
+        .night-mode .modal-content,
+        .night-mode h1, .night-mode h2, .night-mode h3, 
+        .night-mode h4, .night-mode h5, .night-mode h6, 
+        .night-mode p, .night-mode span, .night-mode div, .night-mode label {
+            text-shadow: 
+                0 4px 8px rgba(0, 0, 0, 0.4),
+                0 2px 4px rgba(0, 0, 0, 0.3);
+            transform: translateZ(4px);
+        }
+
         /* 75% Glass-morphism transparency effect */
         .header,
         .nav,
