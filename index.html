@@ -63,6 +63,33 @@
             font-size: calc(14px * var(--font-scale));
         }
 
+        /* 75% Glass-morphism transparency effect */
+        .header,
+        .nav,
+        .stats-container,
+        .projects-container,
+        .project-card,
+        .task-item,
+        .transaction-item,
+        .modal-content {
+            background: rgba(224, 229, 236, 0.25) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .night-mode .header,
+        .night-mode .nav,
+        .night-mode .stats-container,
+        .night-mode .projects-container,
+        .night-mode .project-card,
+        .night-mode .task-item,
+        .night-mode .transaction-item,
+        .night-mode .modal-content {
+            background: rgba(45, 55, 72, 0.25) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
         /* Neumorphic Header */
         .header {
             padding: 20px 32px;
@@ -1205,6 +1232,10 @@
 
         /* Responsive */
         @media (max-width: 768px) {
+            .header {
+                margin-top: 7vh;
+            }
+
             .header, .nav, .stats-container, .container {
                 padding-left: 20px;
                 padding-right: 20px;
