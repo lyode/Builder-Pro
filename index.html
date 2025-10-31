@@ -53,14 +53,12 @@
             --income-color: #48BB78;
             --expense-color: #F56565;
             
-            --font-scale: 1.15;
+            --font-scale: 1.0;
         }
 
-        body.font-s { --font-scale: 0.74; }
-        body.font-m { --font-scale: 0.87; }
-        body.font-l { --font-scale: 1; }
-        body.font-xl { --font-scale: 1.13; }
-        body.font-xxl { --font-scale: 1.30; }
+        body.font-l { --font-scale: 1.0; }
+        body.font-xl { --font-scale: 1.15; }
+        body.font-xxl { --font-scale: 1.35; }
 
         .night-mode {
             --bg: #2D3748 !important;
@@ -1159,7 +1157,7 @@
 
         .contrast-controls {
             display: grid;
-            grid-template-columns: repeat(4, 1fr);
+            grid-template-columns: repeat(3, 1fr);
             gap: 8px;
         }
 
@@ -1427,7 +1425,7 @@
         }
     </style>
 </head>
-<body>
+<body class="font-l">
     <div class="settings-backdrop" id="settingsBackdrop" onclick="toggleSettings()"></div>
 
     <header class="header">
@@ -1520,10 +1518,8 @@
 
         <div class="settings-section">
             <label class="settings-label">🔤 Font Size</label>
-            <div class="contrast-controls" style="grid-template-columns: repeat(5, 1fr);">
-                <button class="contrast-btn" onclick="setFontSize('s')">S</button>
-                <button class="contrast-btn active" onclick="setFontSize('m')">M</button>
-                <button class="contrast-btn" onclick="setFontSize('l')">L</button>
+            <div class="contrast-controls">
+                <button class="contrast-btn active" onclick="setFontSize('l')">L</button>
                 <button class="contrast-btn" onclick="setFontSize('xl')">XL</button>
                 <button class="contrast-btn" onclick="setFontSize('xxl')">XXL</button>
             </div>
@@ -1772,7 +1768,7 @@
             transactions: [],
             permanentlyDeleted: [],
             nightMode: false,
-            fontSize: 'm',
+            fontSize: 'l',
             lastUpdated: null
         };
 
@@ -1873,7 +1869,7 @@
                 document.body.classList.add('night-mode');
                 document.getElementById('nightToggle').checked = true;
             }
-            setFontSize(data.fontSize || 'm');
+            setFontSize(data.fontSize || 'l');
             updateHeader();
         }
 
@@ -1882,13 +1878,13 @@
         }
 
         function setFontSize(size) {
-            document.body.classList.remove('font-s', 'font-m', 'font-l', 'font-xl', 'font-xxl');
+            document.body.classList.remove('font-l', 'font-xl', 'font-xxl');
             document.body.classList.add('font-' + size);
             data.fontSize = size;
             saveData();
             
             document.querySelectorAll('.contrast-btn').forEach(btn => btn.classList.remove('active'));
-            const sizeMap = { s: 0, m: 1, l: 2, xl: 3, xxl: 4 };
+            const sizeMap = { l: 0, xl: 1, xxl: 2 };
             const fontControls = document.querySelectorAll('.contrast-controls')[0];
             if (fontControls) {
                 fontControls.querySelectorAll('.contrast-btn')[sizeMap[size]]?.classList.add('active');
