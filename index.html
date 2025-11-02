@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     
-    <title>Builder Pro - Neumorphism Edition</title>
+    <!-- PWA Meta Tags -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Builder Pro">
+    <meta name="apple-mobile-web-app-title" content="Builder Pro">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="theme-color" content="#E0E5EC">
     
-    <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
+    <title>Builder Pro - Neumorphism Edition</title>
     
     <style>
         * {
@@ -156,143 +161,37 @@
             transform: translateZ(20px);
         }
 
-        /* Full Glass-morphism transparency - everything transparent except text */
+        /* 75% Glass-morphism transparency effect */
         .header,
         .nav,
-        .nav-container,
         .stats-container,
+        .projects-container,
         .project-card,
-        .project-header,
-        .project-body,
-        .project-stat,
         .task-item,
         .transaction-item,
-        .modal-content,
-        .modal-header,
-        .modal-body,
-        .modal-footer,
-        .stat-card,
-        .stat-icon-wrapper,
-        .gantt-container,
-        .gantt-timeline,
-        .gantt-month,
-        .calendar-container,
-        .calendar-day,
-        .settings-panel,
-        .empty-state,
-        .sync-status-bar,
-        .neuro-btn,
-        .btn,
-        .icon-btn,
-        .action-btn,
-        .fab-option,
-        .toast,
-        input,
-        select,
-        textarea,
-        .theme-option,
-        .contrast-btn,
-        .settings-section {
-            background: rgba(224, 229, 236, 0.12) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.2) !important;
+        .modal-content {
+            background: rgba(224, 229, 236, 0.25) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         .night-mode .header,
         .night-mode .nav,
-        .night-mode .nav-container,
         .night-mode .stats-container,
+        .night-mode .projects-container,
         .night-mode .project-card,
-        .night-mode .project-header,
-        .night-mode .project-body,
-        .night-mode .project-stat,
         .night-mode .task-item,
         .night-mode .transaction-item,
-        .night-mode .modal-content,
-        .night-mode .modal-header,
-        .night-mode .modal-body,
-        .night-mode .modal-footer,
-        .night-mode .stat-card,
-        .night-mode .stat-icon-wrapper,
-        .night-mode .gantt-container,
-        .night-mode .gantt-timeline,
-        .night-mode .gantt-month,
-        .night-mode .calendar-container,
-        .night-mode .calendar-day,
-        .night-mode .settings-panel,
-        .night-mode .empty-state,
-        .night-mode .sync-status-bar,
-        .night-mode .neuro-btn,
-        .night-mode .btn,
-        .night-mode .icon-btn,
-        .night-mode .action-btn,
-        .night-mode .fab-option,
-        .night-mode .toast,
-        .night-mode input,
-        .night-mode select,
-        .night-mode textarea,
-        .night-mode .theme-option,
-        .night-mode .contrast-btn,
-        .night-mode .settings-section {
-            background: rgba(45, 55, 72, 0.12) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.08) !important;
-        }
-
-        /* FAB keeps gradient but transparent base */
-        .fab {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(159, 122, 234, 0.7)) !important;
-            backdrop-filter: blur(20px) !important;
-            -webkit-backdrop-filter: blur(20px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.3) !important;
-        }
-
-        /* Button gradients also transparent */
-        .btn-primary {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.6), rgba(159, 122, 234, 0.6)) !important;
-            backdrop-filter: blur(15px) !important;
-        }
-
-        .btn-success {
-            background: rgba(72, 187, 120, 0.6) !important;
-            backdrop-filter: blur(15px) !important;
-        }
-
-        .btn-danger {
-            background: rgba(245, 101, 101, 0.6) !important;
-            backdrop-filter: blur(15px) !important;
-        }
-
-        /* Project header gradient transparent */
-        .project-header {
-            background: linear-gradient(135deg, 
-                rgba(102, 126, 234, 0.05) 0%, 
-                rgba(159, 122, 234, 0.05) 100%) !important;
-        }
-
-        /* Calendar today transparent */
-        .calendar-day.today {
-            background: linear-gradient(135deg, rgba(245, 101, 101, 0.6) 0%, rgba(220, 38, 38, 0.6) 100%) !important;
-            backdrop-filter: blur(15px) !important;
-        }
-
-        /* Gantt bar transparent */
-        .gantt-bar {
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(159, 122, 234, 0.7)) !important;
-            backdrop-filter: blur(10px) !important;
-        }
-
-        /* Calendar event transparent */
-        .calendar-event {
-            background: rgba(102, 126, 234, 0.7) !important;
-            backdrop-filter: blur(10px) !important;
+        .night-mode .modal-content {
+            background: rgba(45, 55, 72, 0.25) !important;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
         }
 
         /* Neumorphic Header */
         .header {
             padding: 20px 32px;
+            background: var(--bg);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -338,6 +237,7 @@
             width: 44px;
             height: 44px;
             border-radius: 50%;
+            background: var(--bg);
             border: none;
             color: var(--text-primary);
             font-size: calc(18px * var(--font-scale));
@@ -386,6 +286,7 @@
         /* Sync Status Bar */
         .sync-status-bar {
             padding: 8px 32px;
+            background: var(--bg);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -401,6 +302,7 @@
         /* Soft Navigation */
         .nav {
             padding: 16px 32px;
+            background: var(--bg);
         }
 
         .nav-container {
@@ -409,6 +311,7 @@
             display: flex;
             gap: 12px;
             padding: 8px;
+            background: var(--bg);
             border-radius: 50px;
             box-shadow: 
                 inset 3px 3px 6px var(--shadow-dark),
@@ -418,6 +321,7 @@
 
         .nav-item {
             padding: 12px 24px;
+            background: var(--bg);
             border: none;
             color: var(--text-secondary);
             font-weight: 700;
@@ -455,6 +359,7 @@
 
         .stat-card {
             padding: 28px;
+            background: var(--bg);
             border-radius: 28px;
             box-shadow: 
                 8px 8px 16px var(--shadow-dark),
@@ -496,6 +401,7 @@
             width: 64px;
             height: 64px;
             border-radius: 18px;
+            background: var(--bg);
             display: flex;
             align-items: center;
             justify-content: center;
@@ -538,6 +444,7 @@
 
         /* Soft Project Card */
         .project-card {
+            background: var(--bg);
             border-radius: 32px;
             overflow: visible;
             margin-bottom: 32px;
@@ -556,6 +463,9 @@
 
         .project-header {
             padding: 32px;
+            background: linear-gradient(135deg, 
+                rgba(102, 126, 234, 0.08) 0%, 
+                rgba(159, 122, 234, 0.08) 100%);
             border-radius: 32px 32px 0 0;
             position: relative;
         }
@@ -586,6 +496,7 @@
 
         .project-stat {
             padding: 12px;
+            background: var(--bg);
             border-radius: 16px;
             text-align: center;
             box-shadow: 
@@ -617,6 +528,7 @@
 
         .action-btn {
             padding: 8px 16px;
+            background: var(--bg);
             border: none;
             color: var(--text-secondary);
             font-size: calc(11px * var(--font-scale));
@@ -657,6 +569,7 @@
         .task-item {
             padding: 16px;
             margin-bottom: 12px;
+            background: var(--bg);
             border-radius: 20px;
             display: flex;
             justify-content: space-between;
@@ -694,6 +607,7 @@
         /* Tactile Buttons */
         .btn {
             padding: 14px 28px;
+            background: var(--bg);
             border: none;
             border-radius: 50px;
             color: var(--text-primary);
@@ -722,6 +636,7 @@
 
         .btn-primary {
             color: white;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
             box-shadow: 
                 6px 6px 12px var(--shadow-dark),
                 -6px -6px 12px var(--shadow-light);
@@ -729,16 +644,19 @@
 
         .btn-success {
             color: white;
+            background: var(--success);
         }
 
         .btn-danger {
             color: white;
+            background: var(--danger);
         }
 
         .icon-btn {
             width: 36px;
             height: 36px;
             border-radius: 50%;
+            background: var(--bg);
             border: none;
             color: var(--text-secondary);
             font-size: calc(14px * var(--font-scale));
@@ -774,6 +692,7 @@
 
         /* Gantt Chart */
         .gantt-container {
+            background: var(--bg);
             border-radius: 24px;
             padding: 24px;
             box-shadow: 
@@ -805,6 +724,7 @@
             color: var(--text-secondary);
             font-weight: 700;
             padding: 8px 4px;
+            background: var(--bg);
             border-radius: 8px;
             box-shadow: 
                 inset 2px 2px 4px var(--shadow-dark),
@@ -833,6 +753,7 @@
             flex: 1;
             position: relative;
             height: 40px;
+            background: var(--bg);
             border-radius: 8px;
             box-shadow: 
                 inset 2px 2px 4px var(--shadow-dark),
@@ -842,6 +763,7 @@
         .gantt-bar {
             position: absolute;
             height: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
             border-radius: 8px;
             display: flex;
             flex-direction: column;
@@ -896,6 +818,7 @@
 
         /* Calendar */
         .calendar-container {
+            background: var(--bg);
             border-radius: 24px;
             padding: 24px;
             box-shadow: 
@@ -924,6 +847,7 @@
         .calendar-day {
             aspect-ratio: 1;
             padding: 8px;
+            background: var(--bg);
             border-radius: 12px;
             font-size: calc(11px * var(--font-scale));
             position: relative;
@@ -958,6 +882,7 @@
         }
 
         .calendar-day.today {
+            background: linear-gradient(135deg, var(--danger) 0%, #dc2626 100%);
             color: white;
             font-weight: 900;
             box-shadow: 
@@ -976,6 +901,7 @@
         .calendar-event {
             font-size: calc(8px * var(--font-scale));
             padding: 2px 4px;
+            background: var(--accent);
             color: white;
             border-radius: 4px;
             margin-top: 4px;
@@ -1003,6 +929,7 @@
         .modal.show { display: flex; }
 
         .modal-content {
+            background: var(--bg);
             border-radius: 28px;
             width: 100%;
             max-width: 500px;
@@ -1032,6 +959,7 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
+            background: var(--bg);
             border: none;
             color: var(--text-secondary);
             font-size: calc(20px * var(--font-scale));
@@ -1087,6 +1015,7 @@
         .form-group textarea {
             width: 100%;
             padding: 12px 16px;
+            background: var(--bg);
             border: none;
             border-radius: 16px;
             font-size: calc(14px * var(--font-scale));
@@ -1120,6 +1049,7 @@
             width: 90%;
             max-width: 450px;
             height: 100vh;
+            background: var(--bg);
             box-shadow: -8px 0 16px var(--shadow-dark);
             transition: right 0.3s;
             z-index: 1001;
@@ -1179,6 +1109,7 @@
             max-height: 400px;
             overflow-y: auto;
             padding: 12px;
+            background: var(--bg);
             border-radius: 16px;
             box-shadow: 
                 inset 3px 3px 6px var(--shadow-dark),
@@ -1190,6 +1121,7 @@
             border-radius: 16px;
             cursor: pointer;
             transition: all 0.3s;
+            background: var(--bg);
             box-shadow: 
                 3px 3px 6px var(--shadow-dark),
                 -3px -3px 6px var(--shadow-light);
@@ -1234,6 +1166,7 @@
 
         .contrast-btn {
             padding: 12px 8px;
+            background: var(--bg);
             border: none;
             border-radius: 12px;
             cursor: pointer;
@@ -1248,7 +1181,7 @@
 
         .contrast-btn.active {
             color: white;
-            background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(159, 122, 234, 0.7)) !important;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
         }
 
         .contrast-btn:active {
@@ -1269,6 +1202,7 @@
             width: 68px;
             height: 68px;
             border-radius: 22px;
+            background: linear-gradient(135deg, var(--accent), var(--accent-light));
             border: none;
             color: white;
             font-size: calc(32px * var(--font-scale));
@@ -1313,6 +1247,7 @@
             align-items: center;
             gap: 12px;
             padding: 12px 20px;
+            background: var(--bg);
             color: var(--text-primary);
             border-radius: 50px;
             box-shadow: 
@@ -1344,6 +1279,7 @@
             bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
+            background: var(--bg);
             color: var(--text-primary);
             padding: 16px 24px;
             border-radius: 50px;
@@ -1363,6 +1299,7 @@
         .empty-state {
             text-align: center;
             padding: 60px 32px;
+            background: var(--bg);
             border-radius: 28px;
             box-shadow: 
                 inset 6px 6px 12px var(--shadow-dark),
@@ -1585,7 +1522,7 @@
         <div class="settings-section">
             <label class="settings-label">🔑 Smart Sync API</label>
             <div style="display: flex; gap: 8px; margin-bottom: 12px;">
-                <input type="password" id="apiKeyInput" placeholder="JSONBin API Key" style="flex: 1; padding: 12px; border: none; border-radius: 12px; box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);">
+                <input type="password" id="apiKeyInput" placeholder="JSONBin API Key" style="flex: 1; padding: 12px; border: none; border-radius: 12px; background: var(--bg); box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);">
                 <button class="btn btn-primary" onclick="saveApiKey()">Save</button>
             </div>
             <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px;">
@@ -2221,8 +2158,8 @@
                 
                 const isOverdue = end < today && !project.locked;
                 const barStyle = isOverdue ? 
-                    'background: linear-gradient(135deg, rgba(245, 101, 101, 0.7), rgba(220, 38, 38, 0.7));' : 
-                    'background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(159, 122, 234, 0.7));';
+                    'background: linear-gradient(135deg, var(--danger), #dc2626);' : 
+                    'background: linear-gradient(135deg, var(--accent), var(--accent-light));';
                 
                 html += `
                     <div class="gantt-row">
@@ -2377,7 +2314,7 @@
             let html = '<div style="display: flex; gap: 16px; overflow-x: auto; padding-bottom: 20px;">';
             columns.forEach(column => {
                 html += `
-                    <div style="min-width: 300px; border-radius: 24px; padding: 20px; box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);">
+                    <div style="min-width: 300px; background: var(--bg); border-radius: 24px; padding: 20px; box-shadow: 8px 8px 16px var(--shadow-dark), -8px -8px 16px var(--shadow-light);">
                         <h3 style="font-size: 16px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 2px solid var(--bg); box-shadow: 0 2px 0 var(--shadow-dark); color: ${column.color}; font-weight: 800;">
                             ${column.title} (${column.tasks.length})
                         </h3>
@@ -2485,8 +2422,8 @@
                 
                 const isOverdue = end < today && !project.locked;
                 const barStyle = isOverdue ? 
-                    'background: linear-gradient(135deg, rgba(245, 101, 101, 0.7), rgba(220, 38, 38, 0.7));' : 
-                    'background: linear-gradient(135deg, rgba(102, 126, 234, 0.7), rgba(159, 122, 234, 0.7));';
+                    'background: linear-gradient(135deg, var(--danger), #dc2626);' : 
+                    'background: linear-gradient(135deg, var(--accent), var(--accent-light));';
                 
                 html += `
                     <div class="gantt-row">
@@ -2668,7 +2605,7 @@
             document.getElementById('projectDetailTitle').textContent = project.name;
             
             let html = `
-                <div style="padding: 16px; border-radius: 16px; margin-bottom: 20px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);">
+                <div style="background: var(--bg); padding: 16px; border-radius: 16px; margin-bottom: 20px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);">
                     <div style="font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">Project Info</div>
                     <div style="font-size: 13px; color: var(--text-secondary);">
                         <div><strong>Client:</strong> ${project.client}</div>
@@ -2676,7 +2613,7 @@
                     </div>
                 </div>
                 
-                <div style="padding: 16px; border-radius: 16px; margin-bottom: 20px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);">
+                <div style="background: var(--bg); padding: 16px; border-radius: 16px; margin-bottom: 20px; box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);">
                     <div style="font-weight: 700; margin-bottom: 12px; color: var(--text-primary);">💰 Finance</div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
                         <div style="text-align: center;">
@@ -3215,6 +3152,7 @@
                 reader.readAsText(file);
             }
         }
-        <script>
-    </body>
+    </script>
+</body>
 </html>
+
