@@ -1,56 +1,33 @@
-const CACHE_NAME = 'builder-pro-v2';
+// EMERGENCY SERVICE WORKER - This will unregister itself and clear all caches
 
-// Install - don't cache anything upfront to avoid errors
 self.addEventListener('install', (event) => {
-  console.log('Service Worker: Installed');
+  console.log('Emergency cleanup service worker installed');
   self.skipWaiting();
 });
 
-// Fetch - cache on demand (safer approach)
-self.addEventListener('fetch', (event) => {
-  // Skip non-GET requests
-  if (event.request.method !== 'GET') {
-    return;
-  }
-
-  event.respondWith(
-    caches.open(CACHE_NAME).then((cache) => {
-      return cache.match(event.request).then((cachedResponse) => {
-        // Return cached version if available
-        if (cachedResponse) {
-          return cachedResponse;
-        }
-
-        // Otherwise fetch from network
-        return fetch(event.request).then((networkResponse) => {
-          // Only cache successful responses
-          if (networkResponse && networkResponse.status === 200 && networkResponse.type === 'basic') {
-            cache.put(event.request, networkResponse.clone());
-          }
-          return networkResponse;
-        }).catch((error) => {
-          console.log('Fetch failed:', event.request.url, error);
-          // Could return a custom offline page here
-        });
-      });
-    })
-  );
-});
-
-// Activate - clean up old caches
 self.addEventListener('activate', (event) => {
-  console.log('Service Worker: Activated');
+  console.log('Emergency cleanup: Clearing all caches');
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheName !== CACHE_NAME) {
-            console.log('Service Worker: Clearing old cache:', cacheName);
-            return caches.delete(cacheName);
-          }
+          console.log('Deleting cache:', cacheName);
+          return caches.delete(cacheName);
         })
       );
+    }).then(() => {
+      console.log('All caches cleared. Unregistering service worker...');
+      return self.registration.unregister();
+    }).then(() => {
+      console.log('Service worker unregistered. Please refresh the page.');
+      return self.clients.matchAll();
+    }).then((clients) => {
+      clients.forEach(client => client.navigate(client.url));
     })
   );
-  self.clients.claim();
+});
+
+// Don't intercept any fetches
+self.addEventListener('fetch', (event) => {
+  event.respondWith(fetch(event.request));
 });
