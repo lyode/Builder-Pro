@@ -6,6 +6,9 @@
     
     <title>Builder Pro - Neumorphism Edition</title>
     
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+    
     <style>
         * {
             margin: 0;
@@ -3213,5 +3216,21 @@
             }
         }
         <script>
+            <script>
+  // Register Service Worker for PWA
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', function() {
+      navigator.serviceWorker.register('/Builder-Pro/service-worker.js')
+        .then(function(registration) {
+          console.log('SW registered:', registration.scope);
+        })
+        .catch(function(error) {
+          console.log('SW registration failed:', error);
+        });
+    });
+  }
+</script>
+</body>
+</html>
 </body>
 </html>
