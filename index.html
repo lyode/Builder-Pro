@@ -2137,8 +2137,9 @@
                                         </div>
                                     </div>
                                     <div class="task-actions">
-                                        <button class="icon-btn" onclick="editTask(${task.id})">✏️</button>
-                                        <button class="icon-btn danger" onclick="deleteTask(${task.id})">🗑️</button>
+                                        ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="completeTask(${task.id})" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                        <button class="icon-btn" onclick="editTask(${task.id})" title="Edit">✏️</button>
+                                        <button class="icon-btn danger" onclick="deleteTask(${task.id})" title="Delete">🗑️</button>
                                     </div>
                                 </div>
                             `).join('')}
@@ -2195,8 +2196,9 @@
                                 </div>
                             </div>
                             <div class="task-actions">
-                                <button class="icon-btn" onclick="editTask(${task.id})">✏️</button>
-                                <button class="icon-btn" onclick="completeTask(${task.id})" style="color: var(--success);">✅</button>
+                                ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="completeTask(${task.id})" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                <button class="icon-btn" onclick="editTask(${task.id})" title="Edit">✏️</button>
+                                <button class="icon-btn danger" onclick="deleteTask(${task.id})" title="Delete">🗑️</button>
                             </div>
                         </div>
                     `;
@@ -2438,7 +2440,11 @@
                                     <span>${task.status}</span>
                                 </div>
                             </div>
-                            <button class="icon-btn" onclick="closeModal('dayDetailModal'); editTask(${task.id});">✏️</button>
+                            <div class="task-actions">
+                                ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="closeModal('dayDetailModal'); completeTask(${task.id});" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                <button class="icon-btn" onclick="closeModal('dayDetailModal'); editTask(${task.id});" title="Edit">✏️</button>
+                                <button class="icon-btn danger" onclick="closeModal('dayDetailModal'); deleteTask(${task.id});" title="Delete">🗑️</button>
+                            </div>
                         </div>
                     `;
                 });
@@ -2505,7 +2511,11 @@
                                     <span>${task.status}</span>
                                 </div>
                             </div>
-                            <button class="icon-btn" onclick="closeModal('projectDetailModal'); editTask(${task.id});">✏️</button>
+                            <div class="task-actions">
+                                ${task.status !== 'Completed' ? `<button class="icon-btn" onclick="closeModal('projectDetailModal'); completeTask(${task.id});" style="color: var(--success);" title="Mark as Done">✅</button>` : ''}
+                                <button class="icon-btn" onclick="closeModal('projectDetailModal'); editTask(${task.id});" title="Edit">✏️</button>
+                                <button class="icon-btn danger" onclick="closeModal('projectDetailModal'); deleteTask(${task.id});" title="Delete">🗑️</button>
+                            </div>
                         </div>
                     `;
                 });
