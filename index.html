@@ -1983,7 +1983,12 @@
                 'fnn. relocate ac thermostat', 'ss3 winsum', 'usj 11. nicky',
                 'dsara damai. james house', 'william mockup 2', 'liam. production 50 crackle set',
                 'william. production 50 crackle set', 'elaine bu11/14', "adrian home. - d'clover residences",
-                'wong n carol no 37, ss3'
+                'wong n carol no 37, ss3',
+                'keong to update when installation',
+                'keong to update when instalation',
+                'Budget wuolei',
+                'Budget wuolet',
+                'Keong confirm timing of installation'
             ];
             
             const beforeCount = data.projects.length;
@@ -1994,7 +1999,18 @@
                     projectNameLower.includes(unwanted.toLowerCase().trim())
                 );
             });
-            
+        
+        // ADD THIS TASK CLEANUP SECTION:
+        const beforeTaskCount = data.tasks.length;
+        data.tasks = data.tasks.filter(task => {
+            const taskNameLower = task.name.toLowerCase().trim();
+            return !unwantedNames.some(unwanted => 
+                taskNameLower === unwanted.toLowerCase().trim() ||
+                taskNameLower.includes(unwanted.toLowerCase().trim())
+            );
+        });
+        
+        if (beforeCount !== data.projects.length || beforeTaskCount !== data.tasks.length) {
             if (beforeCount !== data.projects.length) {
                 const validProjectIds = data.projects.map(p => p.id);
                 data.tasks = data.tasks.filter(task => validProjectIds.includes(task.projectId));
